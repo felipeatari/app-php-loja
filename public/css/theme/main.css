@@ -1,0 +1,182 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+@font-face {
+  font-family: Poppins-SemiBold;
+  src: url({{url}}/public/assets/fonts/Poppins-SemiBold.ttf);
+}
+
+html, body {
+  font-family: Poppins-SemiBold;
+  scroll-behavior: smooth;
+  width: 100%;
+  height: 100vh;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.pagina-erro {
+  width: 100%;
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+header {
+  width: 100%;
+  background-color: white;
+  z-index: 1;
+}
+
+/* Bloco Topo */
+.topo {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  height: 100px;
+  color: rgb(0, 0, 0);
+  border-bottom: 1px solid rgb(234, 234, 234);
+}
+.social-e-rastreio {
+  display: flex;
+  align-items: center;
+}
+.social-icones {
+  fill: rgb(0, 0, 0);
+  height: 19px;
+  width: 19px;
+}
+.rastrear {
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgb(173, 171, 171);
+  background-color: white;
+  padding: 2px;
+  margin-left: 5px;
+}
+.rastrear-campo {
+  padding: 2px 3px;
+  border: none;
+}
+.conta-e-carrinho {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.conta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 3px;
+  border: 2px solid black;
+  border-radius: 50%;
+}
+.conta-icone {
+  fill: rgb(0, 0, 0);
+  height: 14px;
+  width: 14px;
+}
+.conta-texto {
+  font-size: 8pt;
+}
+.carrinho {
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+  border-radius: 10px;
+  padding: 2px;
+  cursor: pointer;
+}
+.carrinho-icone {
+  fill: rgb(0, 0, 0);
+  height: 20px;
+  width: 25px;
+}
+.carrinho-qnt-produtos {
+  font-size: 10pt;
+}
+
+/* Bloco Menu Desktop */
+.menu-desktop {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.items-menu-desktop {
+  width: 600px;
+  height: 50px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.items-menu-desktop li {
+  color: rgb(50, 44, 44);
+}
+.item-menu-desktop {
+  font-size: 11pt;
+  color: rgb(50, 44, 44);
+  padding: 5px;
+}
+.item-submenu-desktop {
+  width: 100%;
+  color: black;
+  text-decoration: none;
+  font-size: 9pt;
+  padding: 3px;
+  color: rgb(128, 124, 124);
+}
+.item-submenu-desktop-border-bottom {
+  border-bottom: 1px solid rgb(215, 210, 210);
+}
+.abrir-opcoes:hover .opcoes-abertas {
+  display: flex;
+}
+.opcoes-abertas {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  background-color: rgb(251, 251, 251);
+  width: 150px;
+  padding: 5px;
+}
+.opcoes-abertas li {
+  width: 100%;
+  padding: 3px;
+}
+
+/* Conteúdo Dinâmico */
+.content-dinamic {
+  width: 100%;
+}
+
+/* Bloco Rodapé */
+.rodape {
+  width: 100%;
+  height: 100px;
+  text-align: center;
+  font-size: 9pt;
+}
