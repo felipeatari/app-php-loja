@@ -6,8 +6,9 @@ use App\Controllers\PageErrorController;
 
 class View
 {
-  private static string $title;
-  private static string $page;
+  private static string $title = '';
+  private static string $page = '';
+  private static string $admin = '';
   private static array $minify_css = [];
   private static array $minify_js = [];
 
@@ -30,9 +31,14 @@ class View
    *
    * @return void
    */
-  public static function page(string $page = null): void
+  public static function page(string $page = ''): void
   {
     self::$page = $page;
+  }
+
+  public static function admin(string $admin = ''): void
+  {
+    self::$admin = $admin;
   }
 
   /**
@@ -69,8 +75,8 @@ class View
     $minify_file = self::minify($type_file);
 
     if (is_null($minify_file)) {
-      if (file_exists('storage/temp/minify/main.' . $type_file)) {
-        unlink('storage/temp/minify/main.' . $type_file);
+      if (file_exists('storage/minify/main.' . $type_file)) {
+        unlink('storage/minify/main.' . $type_file);
       }
 
       return null;
@@ -84,78 +90,84 @@ class View
     // Monta a minificação do CSS
     if ($type_file === 'css' and ! empty(self::$minify_css)) {
 
-      $file_css = '';
+      $load_css = '';
 
-      foreach (self::$minify_css as $css):
+      foreach (self::$minify_css as $file_css):
 
-        if ($css === 'reset' or $css === 'main') {
-          $css_path = 'theme/' . $css;
+        if ($file_css === 'main') {
+          $path_css = 'public/css/theme/' . $file_css;
         }
-        elseif ($css === self::$page) {
-          $css_path = 'pages/' . $css;
+        elseif ($file_css === self::$page) {
+          $path_css = 'public/css/pages/' . $file_css;
+        }
+        elseif ($file_css === self::$admin) {
+          $path_css = 'public/css/pages/' . $file_css;
         }
         else {
           continue;
         }
 
-        if (! file_exists('public/css/' . $css_path . '.css')) {
+        if (! file_exists($path_css . '.css')) {
           continue;
         }
 
-        $file_css .= file_get_contents('public/css/' . $css_path . '.css');
+        $load_css .= file_get_contents($path_css . '.css');
       endforeach;
 
-      $file_css = str_replace('{{url}}', URL, $file_css);
-      $file_css = preg_replace('/\/\*(.*?)*\*\//', '', trim($file_css));
-      $file_css = str_replace("\n", '', $file_css);
-      $file_css = str_replace(' {', '{', $file_css);
-      $file_css = str_replace('  ', '', $file_css);
-
-      if (empty($file_css)) {
+      if (empty($load_css)) {
         return null;
       }
 
-      file_put_contents('storage/temp/minify/main.css', $file_css);
+      $load_css = str_replace('{{url}}', URL, $load_css);
+      $load_css = preg_replace('/\/\*(.*?)*\*\//', '', trim($load_css));
+      $load_css = str_replace("\n", '', $load_css);
+      $load_css = str_replace(' {', '{', $load_css);
+      $load_css = str_replace('  ', '', $load_css);
 
-      return 'storage/temp/minify/main.css';
+      file_put_contents('storage/minify/main.css', $load_css);
+
+      return 'storage/minify/main.css';
     }
 
     // Monta a minificação do JavaScript
     if ($type_file === 'js' and ! empty(self::$minify_js)) {
 
-      $file_js = '';
+      $load_javascript = '';
 
-      foreach (self::$minify_js as $js):
+      foreach (self::$minify_js as $file_js):
 
-        if ($js === 'main') {
-          $js = 'theme/' . $js;
+        if ($file_js === 'main') {
+          $path_js = 'public/javascript/theme/' . $file_js . '.js';
         }
-        elseif ($js === self::$page) {
-          $js = 'pages/' . $js;
+        elseif ($file_js === self::$page) {
+          $path_js = 'public/javascript/pages/' . $file_js . '.js';
+        }
+        elseif ($file_js === self::$admin) {
+          $path_js = 'public/javascript/admin/' . $file_js . '.js';
         }
         else {
           continue;
         }
 
-        if (! file_exists('public/javascript/' . $js . '.js')) {
+        if (! file_exists($path_js)) {
           continue;
         }
 
-        $file_js .= file_get_contents('public/javascript/' . $js . '.js');
+        $load_javascript .= file_get_contents($path_js);
       endforeach;
 
-      $file_js = str_replace('{{url}}', URL, $file_js);
-      $file_js = preg_replace('/\/\*(.*?)*\*\//', '', trim($file_js));
-      $file_js = str_replace("\n", '', $file_js);
-      $file_js = str_replace('  ', '', $file_js);
-
-      if (empty($file_js)) {
+      if (empty($load_javascript)) {
         return null;
       }
 
-      file_put_contents('storage/temp/minify/main.js', $file_js);
+      $load_javascript = str_replace('{{url}}', URL, $load_javascript);
+      $load_javascript = preg_replace('/\/\*(.*?)*\*\//', '', trim($load_javascript));
+      $load_javascript = str_replace("\n", '', $load_javascript);
+      $load_javascript = str_replace('  ', '', $load_javascript);
 
-      return 'storage/temp/minify/main.js';
+      file_put_contents('storage/minify/main.js', $load_javascript);
+
+      return 'storage/minify/main.js';
     }
   }
 
@@ -166,9 +178,14 @@ class View
    * @param array $content Valores que serem substituídos dinamicamente
    * @return string Página com os campos substituídos
    */
-  public static function render(string $html, array $content = []): string
+  public static function render(string $html = '', array $content = []): string
   {
-    $load_html = 'public/views/pages/' . $html . '.html';
+    if (self::$page) {
+      $load_html = 'public/views/pages/' . self::$page . '.html';
+    }
+    elseif (self::$admin) {
+      $load_html = 'public/views/admin/' . self::$admin . '.html';
+    }
 
     // Carrega a página HTML
     if (file_exists($load_html)) {
@@ -184,11 +201,11 @@ class View
 
     // Carrega os dados dinâmicos 2
     $file_html = '{{'.implode('}}&{{', array_keys($content)).'}}';
-    $file_html = str_replace(explode('&', $file_html), array_values($content), $load_html);
-
-    // Após ter carregado a página HTML e o conteúdo, renderiza em linha e com um único espaço
-    $file_html = str_replace("\n", "", $file_html);
-    $file_html = preg_replace('/\s+/', ' ', trim($file_html));
+    $file_html = str_replace(
+      explode('&', $file_html),
+      array_values($content),
+      $load_html
+    );
 
     return $file_html;
   }
@@ -208,18 +225,23 @@ class View
       die;
     }
 
-    self::minify_add(['main', self::$page], 'js');
-    self::minify_add(['main', self::$page], 'css');
+    self::minify_add(['main', self::$page, self::$admin], 'css');
+    self::minify_add(['main', self::$page, self::$admin], 'js');
 
     $title = self::$title;
     $main_css = self::minify_file('css');
     $main_js = self::minify_file('js');
 
     ob_start();
-    require_once __DIR__ . '/../../public/views/theme/main.php';
-    $body = ob_get_contents();
+    require_once __DIR__ . '/../../public/theme/main.php';
+    $template = ob_get_contents();
     ob_clean();
 
-    echo $body;die;
+    // Renderiza em linha e sem espaço entre as tags
+    $template = str_replace("\n", "", $template);
+    $template = preg_replace('/\s+/', ' ', trim($template));
+    $template = str_replace('> <', '><', $template);
+
+    echo $template;die;
   }
 }

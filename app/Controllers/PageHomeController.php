@@ -11,7 +11,7 @@ class PageHomeController
     View::title('Pagina Home');
     View::page('home');
 
-    return View::render('home', [
+    return View::render(content: [
       'url' => URL
     ]);
   }
