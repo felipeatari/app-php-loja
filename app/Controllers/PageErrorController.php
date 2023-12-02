@@ -9,10 +9,11 @@ class PageErrorController
   public static function error($code, $message)
   {
     View::title('Erro ' . $code);
+    View::error('error');
 
     http_response_code($code);
 
-    return View::render('error', [
+    return View::render([
       'code' => $code,
       'message' => $message
     ]);

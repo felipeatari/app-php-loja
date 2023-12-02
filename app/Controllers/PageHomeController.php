@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\View;
+use App\Controllers\PageErrorController;
 
 class PageHomeController
 {
@@ -11,7 +12,7 @@ class PageHomeController
     View::title('Pagina Home');
     View::page('home');
 
-    return View::render(content: [
+    return View::render([
       'url' => URL
     ]);
   }

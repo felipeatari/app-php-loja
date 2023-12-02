@@ -7,11 +7,12 @@ error_reporting(E_ERROR | E_WARNING);
 
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$controller = new App\Core\Controller();
+$controller = new App\Core\Controller;
 
 include_once(__DIR__ . '/config/routes.php');
 
 $controller->router();
-$dispatcher = $controller->dispatcher();
 
-App\Core\View::template($dispatcher);
+$end = $controller->dispatcher();
+
+App\Core\View::template($end);

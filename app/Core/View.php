@@ -9,6 +9,7 @@ class View
   private static string $title = '';
   private static string $page = '';
   private static string $admin = '';
+  private static string $error = '';
   private static array $minify_css = [];
   private static array $minify_js = [];
 
@@ -24,13 +25,6 @@ class View
     self::$title = $title;
   }
 
-  /**
-   * Método responsável por carregar o nome da página atual
-   *
-   * @param string $page Nome da página atual
-   *
-   * @return void
-   */
   public static function page(string $page = ''): void
   {
     self::$page = $page;
@@ -39,6 +33,11 @@ class View
   public static function admin(string $admin = ''): void
   {
     self::$admin = $admin;
+  }
+
+  public static function error(string $error = ''): void
+  {
+    self::$error = $error;
   }
 
   /**
@@ -98,10 +97,10 @@ class View
           $path_css = 'public/css/theme/' . $file_css;
         }
         elseif ($file_css === self::$page) {
-          $path_css = 'public/css/pages/' . $file_css;
+          $path_css = 'public/css/page/' . $file_css;
         }
         elseif ($file_css === self::$admin) {
-          $path_css = 'public/css/pages/' . $file_css;
+          $path_css = 'public/css/page/' . $file_css;
         }
         else {
           continue;
@@ -140,7 +139,7 @@ class View
           $path_js = 'public/javascript/theme/' . $file_js . '.js';
         }
         elseif ($file_js === self::$page) {
-          $path_js = 'public/javascript/pages/' . $file_js . '.js';
+          $path_js = 'public/javascript/page/' . $file_js . '.js';
         }
         elseif ($file_js === self::$admin) {
           $path_js = 'public/javascript/admin/' . $file_js . '.js';
@@ -178,22 +177,26 @@ class View
    * @param array $content Valores que serem substituídos dinamicamente
    * @return string Página com os campos substituídos
    */
-  public static function render(string $html = '', array $content = []): string
+  public static function render(array $content = []): ?string
   {
     if (self::$page) {
-      $load_html = 'public/views/pages/' . self::$page . '.html';
+      $load_html = 'public/views/page/' . self::$page . '.html';
     }
     elseif (self::$admin) {
       $load_html = 'public/views/admin/' . self::$admin . '.html';
     }
-
-    // Carrega a página HTML
-    if (file_exists($load_html)) {
-      $load_html = file_get_contents($load_html);
+    elseif (self::$error) {
+      $load_html = 'public/views/error/' . self::$error . '.html';
     }
     else {
-      $load_html = PageErrorController::error(404, 'Arquivo não encontrado');
+      return null;
     }
+
+    if (! file_exists($load_html)) {
+      return null;
+    }
+
+    $load_html = file_get_contents($load_html);
 
     // Carrega os dados dinâmicos 1
     // $file_html = array_map(fn($item)=> '{{' . $item . '}}', array_keys($content));
@@ -201,11 +204,7 @@ class View
 
     // Carrega os dados dinâmicos 2
     $file_html = '{{'.implode('}}&{{', array_keys($content)).'}}';
-    $file_html = str_replace(
-      explode('&', $file_html),
-      array_values($content),
-      $load_html
-    );
+    $file_html = str_replace(explode('&', $file_html), array_values($content), $load_html);
 
     return $file_html;
   }
@@ -213,7 +212,7 @@ class View
   /**
    * Método responsável por carregar todo o template
    *
-   * @param string|null $content Recebe o conteúdo da página
+   * @param string $content Recebe o conteúdo da página
    *
    * @return string
    */
@@ -225,15 +224,24 @@ class View
       die;
     }
 
-    self::minify_add(['main', self::$page, self::$admin], 'css');
-    self::minify_add(['main', self::$page, self::$admin], 'js');
+    if (isset($_SESSION['admin']) and $_SESSION['admin']) {
+      $theme = 'admin';
+      $view = self::$admin;
+    }
+    else {
+      $theme = 'main';
+      $view = self::$page;
+    }
 
-    $title = self::$title;
-    $main_css = self::minify_file('css');
-    $main_js = self::minify_file('js');
+    self::minify_add([$theme, $view], 'css');
+    self::minify_add([$theme, $view], 'js');
+
+    $theme_title = self::$title;
+    $theme_css = self::minify_file('css');
+    $theme_js = self::minify_file('js');
 
     ob_start();
-    require_once __DIR__ . '/../../public/theme/main.php';
+    require_once __DIR__ . '/../../public/theme/' . $theme . '.php';
     $template = ob_get_contents();
     ob_clean();
 
@@ -242,6 +250,6 @@ class View
     $template = preg_replace('/\s+/', ' ', trim($template));
     $template = str_replace('> <', '><', $template);
 
-    echo $template;die;
+    echo $template;
   }
 }

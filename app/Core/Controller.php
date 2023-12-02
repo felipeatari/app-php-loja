@@ -257,11 +257,11 @@ class Controller
 
     if ($this->http_status_code != 200) {
       if ($this->http_status_code == 405) {
-        $message_error = 'Error 405';
+        $message_error = 'Método não implementado';
       }
 
       if ($this->http_status_code == 404) {
-        $message_error = 'Error 404';
+        $message_error = 'Pagina não encontrada';
       }
 
       return PageErrorController::error($this->http_status_code, $message_error);
