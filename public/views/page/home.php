@@ -20,14 +20,16 @@
     <div class="lancamentos-titulo">
       <h3>Confira nossos lançamentos</h3>
     </div>
-      <div class="lancamentos">
-         <div class="lancamento">
+    <div class="lancamentos">
+      <?php for ($i = 0; $i < 3; $i++): ?>
+        <div class="lancamento">
           <div class="lancamento-items">
             <div class="lancamento-foto-produto"></div>
             <p>Camisa Oversize</p>
             <p>R$ 75,00</p>
           </div>
         </div>
-      </div>
+      <?php endfor ?>
+    </div>
   </div>
 </div>

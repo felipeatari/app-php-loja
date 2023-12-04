@@ -173,20 +173,21 @@ class View
   /**
    * Método responsável por renderizar o HTML
    *
-   * @param string $html ome da página
+   * @param string $extension Extensão do arquivo da visão: .php ou .html
    * @param array $content Valores que serem substituídos dinamicamente
+   *
    * @return string Página com os campos substituídos
    */
-  public static function render(array $content = []): ?string
+  public static function render(string $extension = '', array $content = []): ?string
   {
     if (self::$page) {
-      $load_html = 'public/views/page/' . self::$page . '.html';
+      $load_html = 'public/views/page/' . self::$page . '.' . $extension;
     }
     elseif (self::$admin) {
-      $load_html = 'public/views/admin/' . self::$admin . '.html';
+      $load_html = 'public/views/admin/' . self::$admin . '.' . $extension;
     }
     elseif (self::$error) {
-      $load_html = 'public/views/error/' . self::$error . '.html';
+      $load_html = 'public/views/error/' . self::$error . '.' . $extension;
     }
     else {
       return null;
@@ -196,15 +197,26 @@ class View
       return null;
     }
 
-    $load_html = file_get_contents($load_html);
+    if ($extension === 'php') {
+      ob_start();
+      require_once __DIR__ . '/../../' . $load_html;
+      $file_html = ob_get_contents();
+      ob_clean();
+    }
+    elseif ($extension === 'html') {
+      $load_html = file_get_contents($load_html);
 
-    // Carrega os dados dinâmicos 1
-    // $file_html = array_map(fn($item)=> '{{' . $item . '}}', array_keys($content));
-    // $file_html = str_replace($file_html, array_values($content), $load_html);
+      // Carrega os dados dinâmicos 1
+      $file_html = array_map(fn($item)=> '{{' . $item . '}}', array_keys($content));
+      $file_html = str_replace($file_html, array_values($content), $load_html);
 
-    // Carrega os dados dinâmicos 2
-    $file_html = '{{'.implode('}}&{{', array_keys($content)).'}}';
-    $file_html = str_replace(explode('&', $file_html), array_values($content), $load_html);
+      // Carrega os dados dinâmicos 2
+      $file_html = '{{'.implode('}}&{{', array_keys($content)).'}}';
+      $file_html = str_replace(explode('&', $file_html), array_values($content), $load_html);
+    }
+    else {
+      return null;
+    }
 
     return $file_html;
   }
