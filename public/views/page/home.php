@@ -22,7 +22,7 @@
     </div>
     <div class="lancamentos">
       <?php for ($i = 1; $i <= 10; $i++): ?>
-        <div class="lancamento">
+        <div class="lancamento" onclick="location.href='produto?id=<?=$i?>'">
           <div class="lancamento-items">
             <div class="lancamento-foto-produto"></div>
             <p>Produto <?=$i?></p>
