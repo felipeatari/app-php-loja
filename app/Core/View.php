@@ -181,38 +181,43 @@ class View
   public static function render(string $extension = '', array $content = []): ?string
   {
     if (self::$page) {
-      $load_html = 'public/views/page/' . self::$page . '.' . $extension;
+      $load_view = 'public/views/page/' . self::$page . '.' . $extension;
     }
     elseif (self::$admin) {
-      $load_html = 'public/views/admin/' . self::$admin . '.' . $extension;
+      $load_view = 'public/views/admin/' . self::$admin . '.' . $extension;
     }
     elseif (self::$error) {
-      $load_html = 'public/views/error/' . self::$error . '.' . $extension;
+      $load_view = 'public/views/error/' . self::$error . '.' . $extension;
     }
     else {
       return null;
     }
 
-    if (! file_exists($load_html)) {
+    if (! file_exists($load_view)) {
       return null;
     }
 
     if ($extension === 'php') {
+
+      if (! empty($content)) {
+        extract($content);
+      }
+
       ob_start();
-      require_once __DIR__ . '/../../' . $load_html;
+      require_once __DIR__ . '/../../' . $load_view;
       $file_html = ob_get_contents();
       ob_clean();
     }
     elseif ($extension === 'html') {
-      $load_html = file_get_contents($load_html);
+      $load_view = file_get_contents($load_view);
 
       // Carrega os dados dinâmicos 1
       $file_html = array_map(fn($item)=> '{{' . $item . '}}', array_keys($content));
-      $file_html = str_replace($file_html, array_values($content), $load_html);
+      $file_html = str_replace($file_html, array_values($content), $load_view);
 
       // Carrega os dados dinâmicos 2
       $file_html = '{{'.implode('}}&{{', array_keys($content)).'}}';
-      $file_html = str_replace(explode('&', $file_html), array_values($content), $load_html);
+      $file_html = str_replace(explode('&', $file_html), array_values($content), $load_view);
     }
     else {
       return null;

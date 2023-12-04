@@ -1,4 +1,4 @@
 <div class="pagina-erro">
-  <h1>{{code}}</h1>
-  <p>{{message}}</p>
+  <h1><?=$code?></h1>
+  <p><?=$message?></p>
 </div>

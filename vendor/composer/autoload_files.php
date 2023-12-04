@@ -7,5 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'f8ba2370829fa4dfbab3cf973cb9426d' => $baseDir . '/config/env.php',
+    '0c5751cf3d93b08895f358610d275c62' => $baseDir . '/config/routes.php',
     'c6e1bc82eff695097f8aaa2d0b4a6563' => $baseDir . '/tests/config/debug.php',
 );

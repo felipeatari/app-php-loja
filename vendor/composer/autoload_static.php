@@ -8,6 +8,7 @@ class ComposerStaticInitb7563e1099711e1d87d86da2e7341a51
 {
     public static $files = array (
         'f8ba2370829fa4dfbab3cf973cb9426d' => __DIR__ . '/../..' . '/config/env.php',
+        '0c5751cf3d93b08895f358610d275c62' => __DIR__ . '/../..' . '/config/routes.php',
         'c6e1bc82eff695097f8aaa2d0b4a6563' => __DIR__ . '/../..' . '/tests/config/debug.php',
     );
 

@@ -21,6 +21,7 @@ class Controller
   {
     $this->uri = $_GET['url'] ?? '/';
     $this->http_method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+    $this->routes();
   }
 
   /**
@@ -39,6 +40,24 @@ class Controller
       'route' => $route,
       'action' => $action
     ];
+  }
+
+  /**
+   * Carrega as rotas GET do sistema
+   *
+   * @return void
+   */
+  private function routes(): void
+  {
+    if (defined('ROUTES')) {
+      foreach (ROUTES as $linha):
+        if (empty($linha)) {
+          continue;
+        }
+
+        $this->addRoute('get', $linha[0], $linha[1]);
+      endforeach;
+    }
   }
 
   /**
@@ -142,7 +161,7 @@ class Controller
       $this->method = $action;
     }
     else {
-      $action = explode('@', $action);
+      $action = explode('->', $action);
       $this->controllers[] = 'App\\Controllers\\' . ucfirst($action[0] . 'Controller');
       $this->method = $action[1];
     }
