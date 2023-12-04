@@ -55,7 +55,7 @@ class Controller
           continue;
         }
 
-        $this->addRoute('get', $linha[0], $linha[1]);
+        $this->addRoute($linha[0], $linha[1], $linha[2]);
       endforeach;
     }
   }
@@ -162,7 +162,7 @@ class Controller
     }
     else {
       $action = explode('->', $action);
-      $this->controllers[] = 'App\\Controllers\\' . ucfirst($action[0] . 'Controller');
+      $this->controllers[] = 'App\\Controllers\\' . ucfirst($action[0]) . 'Controller';
       $this->method = $action[1];
     }
 
@@ -208,7 +208,7 @@ class Controller
         // Verifica se a rota e a URI tem a mesma extensão e se os campos estáticos de ambas são iguais
         if ((count($get_route) == count($uri)) and ($uri_static_fields == $route_static_fields)) {
           // Verifica se método HTTP requisitado é o mesmo que foi definido para a rota
-          if ($route['http_method'] != $http_method) {
+          if ($route['http_method'] !== $http_method) {
             $error_405 = true;
           }
 
@@ -219,7 +219,7 @@ class Controller
       // Verifica se a rota é estática
       if (($get_route == $uri)) {
         // Verifica se método HTTP requisitado é o mesmo que foi definido para a rota
-        if ($route['http_method'] != $http_method) {
+        if ($route['http_method'] !== $http_method) {
           $error_405 = true;
         }
 

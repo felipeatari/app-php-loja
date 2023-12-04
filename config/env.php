@@ -5,6 +5,7 @@ define('CHARSET', 'UTF-8');
 
 // Define a URL principal
 define('URL', 'http://localhost:8888');
+// define('URL', 'http://10.0.0.30:8888');
 // define('URL', 'https://localhost:8443/app-felipe');
 
 // Define as rotas do projeto

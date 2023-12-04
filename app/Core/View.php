@@ -229,20 +229,18 @@ class View
    *
    * @return string
    */
-  public static function template(?string $content = '')
+  public static function template(string $theme = 'main', ?string $content = '')
   {
-    if (empty($content)) {
-      header('HTTP/2 404 Bad Request');
-      header('Content-Type: text/plain');
-      die;
-    }
+    // if (empty($content)) {
+    //   header('HTTP/2 404 Bad Request');
+    //   header('Content-Type: text/plain');
+    //   die;
+    // }
 
-    if (isset($_SESSION['admin']) and $_SESSION['admin']) {
-      $theme = 'admin';
+    if ($theme === 'admin') {
       $view = self::$admin;
     }
     else {
-      $theme = 'main';
       $view = self::$page;
     }
 

@@ -2,21 +2,14 @@
 
 namespace App\Controllers;
 
-use App\Core\Model;
+use App\Source\Admin;
 
-class AdminHomeController
+class AdminHomeController extends Admin
 {
   public function index()
   {
-    $teste = Model::init('nome');
-
-    if (is_null($teste)) {
-      pr('Model não encontrada');die;
-    }
-
-    // json_validate();
-    // libxml_use_internal_errors();
-
-    pr($teste->find(['sort' => 'asc']));die;
+    parent::title('Admin Home');
+    parent::admin('home');
+    parent::content(['teste' => 'Testando...']);
   }
 }

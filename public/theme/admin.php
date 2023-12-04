@@ -13,7 +13,7 @@
     <header>
     </header>
     <!-- Carrega o conteúdo dinâmico -->
-    <div class="content-dinamic"><?= 'Conteúdo dinâmico' ?></div>
+    <div class="content-dinamic"><?= $content ?></div>
     <!-- Carrega todo o JavaScript do site -->
     <script src="<?= $theme_js ?>"></script>
     <footer class="rodape">

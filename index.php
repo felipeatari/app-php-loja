@@ -13,4 +13,4 @@ $controller->router();
 
 $end = $controller->dispatcher();
 
-App\Core\View::template($end);
+App\Core\View::template(content: $end);

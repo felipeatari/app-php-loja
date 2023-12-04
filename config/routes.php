@@ -2,10 +2,13 @@
 
 $routes = [
   // Rotas da main
-  ['/', 'PageHome->index'],
-  ['/home', 'PageHome->index'],
-  ['/teste', 'PageTeste->index'],
+  ['get', '/', 'PageHome->index'],
+  ['get', '/home', 'PageHome->index'],
+  ['get', '/teste', 'PageTeste->index'],
+  ['get', '/login', 'PageLogin->index'],
+  ['post', '/entrar', 'PageLogin->entrar'],
   // Rotas do admin
+  ['get', '/admin', 'AdminHome->index'],
 ];
 
 define('ROUTES', $routes);

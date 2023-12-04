@@ -21,11 +21,11 @@
       <h3>Confira nossos lançamentos</h3>
     </div>
     <div class="lancamentos">
-      <?php for ($i = 0; $i < 3; $i++): ?>
+      <?php for ($i = 1; $i <= 10; $i++): ?>
         <div class="lancamento">
           <div class="lancamento-items">
             <div class="lancamento-foto-produto"></div>
-            <p>Camisa Oversize</p>
+            <p>Produto <?=$i?></p>
             <p>R$ 75,00</p>
           </div>
         </div>
