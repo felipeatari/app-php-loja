@@ -171,59 +171,55 @@ class View
   }
 
   /**
+   * Carrega arquivos PHP
+   *
+   * @param string $path_file Caminho do arquivos
+   * @param array $vars_dynamic Dados que serão carregados dinamicamente
+   *
+   * @return string
+   */
+  private static function load_file_php(string $path_file, array $vars_dynamic = []): string
+  {
+    if (! empty($vars_dynamic)) {
+      extract($vars_dynamic);
+    }
+
+    ob_start();
+    require_once __DIR__ . '/../../' . $path_file;
+    $load_file = ob_get_contents();
+    ob_clean();
+
+    return $load_file;
+  }
+
+  /**
    * Método responsável por renderizar o HTML
    *
    * @param string $extension Extensão do arquivo da visão: .php ou .html
-   * @param array $content Valores que serem substituídos dinamicamente
+   * @param array $vars_dynamic Dados que serão carregados dinamicamente
    *
    * @return string Página com os campos substituídos
    */
-  public static function render(string $extension = '', array $content = []): ?string
+  public static function render(array $vars_dynamic = []): ?string
   {
     if (self::$page) {
-      $load_view = 'public/views/page/' . self::$page . '.' . $extension;
+      $view = 'public/views/page/' . self::$page . '.php';
     }
     elseif (self::$admin) {
-      $load_view = 'public/views/admin/' . self::$admin . '.' . $extension;
+      $view = 'public/views/admin/' . self::$admin . '.php';
     }
     elseif (self::$error) {
-      $load_view = 'public/views/error/' . self::$error . '.' . $extension;
+      $view = 'public/views/error/' . self::$error . '.php';
     }
     else {
       return null;
     }
 
-    if (! file_exists($load_view)) {
+    if (! file_exists($view)) {
       return null;
     }
 
-    if ($extension === 'php') {
-
-      if (! empty($content)) {
-        extract($content);
-      }
-
-      ob_start();
-      require_once __DIR__ . '/../../' . $load_view;
-      $file_html = ob_get_contents();
-      ob_clean();
-    }
-    elseif ($extension === 'html') {
-      $load_view = file_get_contents($load_view);
-
-      // Carrega os dados dinâmicos 1
-      $file_html = array_map(fn($item)=> '{{' . $item . '}}', array_keys($content));
-      $file_html = str_replace($file_html, array_values($content), $load_view);
-
-      // Carrega os dados dinâmicos 2
-      $file_html = '{{'.implode('}}&{{', array_keys($content)).'}}';
-      $file_html = str_replace(explode('&', $file_html), array_values($content), $load_view);
-    }
-    else {
-      return null;
-    }
-
-    return $file_html;
+    return self::load_file_php($view, $vars_dynamic);
   }
 
   /**
@@ -253,14 +249,18 @@ class View
     self::minify_add([$theme, $view], 'css');
     self::minify_add([$theme, $view], 'js');
 
-    $theme_title = self::$title;
-    $theme_css = self::minify_file('css');
-    $theme_js = self::minify_file('js');
+    $theme = 'public/theme/' . $theme . '.php';
 
-    ob_start();
-    require_once __DIR__ . '/../../public/theme/' . $theme . '.php';
-    $template = ob_get_contents();
-    ob_clean();
+    if (! file_exists($theme)) {
+      return null;
+    }
+
+    $template = self::load_file_php($theme, [
+      'theme_title' => self::$title,
+      'theme_css' => self::minify_file('css'),
+      'theme_js' => self::minify_file('js'),
+      'content' => $content
+    ]);
 
     // Renderiza em linha e sem espaço entre as tags
     $template = str_replace("\n", "", $template);

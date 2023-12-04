@@ -12,6 +12,6 @@ class PageHomeController
     View::title('Pagina Home');
     View::page('home');
 
-    return View::render('php');
+    return View::render();
   }
 }
