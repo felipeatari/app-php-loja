@@ -12,7 +12,7 @@ class PageHomeController
     View::title('Pagina Home');
     View::page('home');
 
-    return View::render([
+    return View::render('php', [
       'url' => URL
     ]);
   }

@@ -13,7 +13,7 @@ class PageErrorController
 
     http_response_code($code);
 
-    return View::render([
+    return View::render('php' ,[
       'code' => $code,
       'message' => $message
     ]);
