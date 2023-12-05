@@ -74,8 +74,8 @@ class View
     $minify_file = self::minify($type_file);
 
     if (is_null($minify_file)) {
-      if (file_exists('storage/minify/main.' . $type_file)) {
-        unlink('storage/minify/main.' . $type_file);
+      if (file_exists('storage/temp/minify/main.' . $type_file)) {
+        unlink('storage/temp/minify/main.' . $type_file);
       }
 
       return null;
@@ -123,9 +123,9 @@ class View
       $load_css = str_replace(' {', '{', $load_css);
       $load_css = str_replace('  ', '', $load_css);
 
-      file_put_contents('storage/minify/main.css', $load_css);
+      file_put_contents('storage/temp/minify/main.css', $load_css);
 
-      return 'storage/minify/main.css';
+      return 'storage/temp/minify/main.css';
     }
 
     // Monta a minificação do JavaScript
@@ -164,9 +164,9 @@ class View
       $load_javascript = str_replace("\n", '', $load_javascript);
       $load_javascript = str_replace('  ', '', $load_javascript);
 
-      file_put_contents('storage/minify/main.js', $load_javascript);
+      file_put_contents('storage/temp/minify/main.js', $load_javascript);
 
-      return 'storage/minify/main.js';
+      return 'storage/temp/minify/main.js';
     }
   }
 
