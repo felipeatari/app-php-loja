@@ -1,3 +1,2 @@
 tests/*
-storage/minify/main.css
-storage/minify/main.js
+storage/minify/*
