@@ -26,10 +26,10 @@ html, body {
 
 .container {
   width: 100%;
-  height: 100vh;
+  /* height: 100vh;
   display: flex;
   align-items: center;
-  flex-direction: column;
+  flex-direction: column; */
 }
 
 .pagina-erro {
@@ -42,10 +42,18 @@ html, body {
 
 header {
   width: 100%;
+  /* height: 150px; */
   background-color: white;
   z-index: 1;
+  /* position: fixed; */
+  /* background-color: blue; */
 }
-
+.bloco-header-desktop {
+  width: 100%;
+}
+.bloco-header-mobile {
+  display: none;
+}
 /* Bloco Topo */
 .topo {
   display: flex;
@@ -81,8 +89,8 @@ header {
 }
 .conta-e-carrinho {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center; */
+  /* align-items: center; */
 }
 .conta {
   display: flex;
@@ -91,7 +99,9 @@ header {
   justify-content: center;
   cursor: pointer;
   padding: 3px;
-  border: 2px solid black;
+  border: 1px solid black;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
 }
 .conta-icone {
@@ -171,6 +181,7 @@ header {
 /* Conteúdo Dinâmico */
 .content-dinamic {
   width: 100%;
+  /* margin-top: 150px; */
 }
 
 /* Bloco Rodapé */
@@ -179,4 +190,125 @@ header {
   height: 100px;
   text-align: center;
   font-size: 9pt;
+}
+
+.menu-mobile {
+  display: none;
+  align-items: center;
+  justify-content: space-around;
+}
+.items-menu-mobile {
+  display: none;
+  align-items: center;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100vh;
+  padding: 20px;
+  background-color: rgb(58, 58, 58);
+  font-size: 12pt;
+}
+.items-menu-mobile li {
+  width: 100%;
+  margin-bottom: 10px;
+  border-bottom: 1px solid grey;
+}
+.items-menu-mobile li a {
+  color: grey;
+}
+.btn-close {
+  display: flex;
+  align-self: flex-end;
+  margin-bottom: 40px;
+  color: rgb(211, 211, 211);
+  font-size: 21pt;
+  cursor: pointer;
+}
+
+@media (max-width: 500px) {
+  .topo {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+  }
+  .bloco-header-desktop {
+    display: none;
+  }
+  .bloco-header-mobile {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .logo {
+    margin-top: 20px;
+  }
+  .logo img {
+    width: 160px;
+  }
+  .btn-open {
+    font-size: 22pt;
+    width: 100px;
+  }
+  .menu-desktop {
+    display: none;
+  }
+  .menu-mobile {
+    display: flex;
+  }
+  .social-e-rastreio {
+    width: 100%;
+  }
+  .rastrear {
+    width: 100%;
+    height: 40px;
+    border-radius: 0px;
+    border: none;
+    margin-left: 0px;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  .bloco-social-icones {
+    width: 80px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .social-icones-instagram {
+    margin-left: 0px;
+  }
+  .conta-e-carrinho {
+    width: 100px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .rastrear-campo {
+    width: 100%;
+  }
+
+  @media (max-width: 400px) {
+    .btn-open {
+      font-size: 22pt;
+      width: 50px;
+    }
+    .bloco-social-icones {
+      width: 70px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .conta-e-carrinho {
+      width: 90px;
+    }
+  }
+
+  @media (max-width: 300px) {
+    .btn-open {
+      font-size: 22pt;
+      width: 50px;
+    }
+  }
 }

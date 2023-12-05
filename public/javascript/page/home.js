@@ -15,6 +15,7 @@ function voltar() {
 
   item.src = `${url}/storage/theme/banner-${inicia_slide}.jpg`;
 }
+
 function avancar() {
   inicia_slide++;
 

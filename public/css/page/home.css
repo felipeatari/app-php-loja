@@ -64,28 +64,28 @@
   justify-content: center;
   flex-direction: column;
   width: 100%;
-  padding: 20px;
+  /* padding: 20px; */
   text-align: center;
 }
 .lancamentos-titulo {
   padding: 10px;
  }
 .lancamentos {
-  width: 800px;
+  width: 900px;
   display: flex;
   align-items: center;
   border-radius: 5px;
   overflow-y: hidden;
   overflow-x: scroll;
   white-space: nowrap;
-  padding: 5px;
+  /* padding: 5px; */
 }
 .lancamento {
   font-size: 10pt;
   color: #04060f;
   border-radius: 3px;
-  padding: 10px;
-  margin: 5px;
+  /* padding: 10px;
+  margin: 5px; */
 }
 .lancamento-items {
   display: flex;
