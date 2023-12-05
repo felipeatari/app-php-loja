@@ -16,12 +16,15 @@ class Controller
   private string $controller;
   private string $method;
   private string $uri;
+  private string $end;
 
   public function __construct()
   {
     $this->uri = $_GET['url'] ?? '/';
     $this->http_method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
     $this->routes();
+    $this->router();
+    $this->dispatcher();
   }
 
   /**
@@ -177,7 +180,7 @@ class Controller
    *
    * @return void
    */
-  public function router(): void
+  private function router(): void
   {
     $uri = $this->convertURLStrToURLArr($this->uri);
     $http_method = strtolower($this->http_method);
@@ -268,9 +271,9 @@ class Controller
   /**
    * Carrega o conteúdo do controller
    *
-   * @return string|null
+   * @return void
    */
-  public function dispatcher(): ?string
+  private function dispatcher(): void
   {
     http_response_code($this->http_status_code);
 
@@ -283,13 +286,26 @@ class Controller
         $message_error = 'Pagina não encontrada';
       }
 
-      return PageErrorController::error($this->http_status_code, $message_error);
+      $this->end = PageErrorController::error($this->http_status_code, $message_error);
+
+      return;
     }
 
     if ($this->callback) {
-      return call_user_func_array($this->method, $this->params);
+      $this->end = call_user_func_array($this->method, $this->params);
     }
+    else {
+      $this->end = call_user_func_array([new $this->controller, $this->method], $this->params);
+    }
+  }
 
-    return call_user_func_array([new $this->controller, $this->method], $this->params);
+  /**
+   * Conteúdo da View
+   *
+   * @return string
+   */
+  public function end(): string
+  {
+    return $this->end;
   }
 }

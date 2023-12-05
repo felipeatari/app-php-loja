@@ -1,1 +1,3 @@
 tests/*
+storage/minify/minify.css
+storage/minify/minify.js

@@ -7,10 +7,6 @@ error_reporting(E_ERROR | E_WARNING);
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$controller = new App\Core\Controller;
-
-$controller->router();
-
-$end = $controller->dispatcher();
+$end = (new App\Core\Controller)->end();
 
 App\Core\View::template(content: $end);
