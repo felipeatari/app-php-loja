@@ -13,18 +13,18 @@ class DataBase extends Singleton
    *
    * @var mixed
    */
-  private static $pdo = null;
+  private static mixed $pdo = null;
 
-  private static $db_host = null;
-  private static $db_port = null;
-  private static $db_name = null;
-  private static $db_user = null;
-  private static $db_passwd = null;
-  private static $db_options = null;
+  private static string $db_host = null;
+  private static string $db_port = null;
+  private static string $db_name = null;
+  private static string $db_user = null;
+  private static string $db_passwd = null;
+  private static array $db_options = null;
 
-  private static $db_error = false;
-  private static $db_cod_error = 0;
-  private static $db_msg_error = '';
+  private static bool $db_error = false;
+  private static int $db_cod_error = 0;
+  private static string $db_msg_error = '';
 
   /**
    * Realiza a conexão

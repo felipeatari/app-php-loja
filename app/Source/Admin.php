@@ -4,10 +4,8 @@ namespace App\Source;
 
 use App\Core\View;
 
-class Admin
+abstract class Admin
 {
-  public string $content;
-
   public function __construct()
   {
     if (! isset($_SESSION['admin'])) {
