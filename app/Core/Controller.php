@@ -182,6 +182,7 @@ class Controller
    */
   private function router(): void
   {
+    // pr($this->controllers);
     $uri = $this->convertURLStrToURLArr($this->uri);
     $http_method = strtolower($this->http_method);
     $error_405 = false;

@@ -20,7 +20,7 @@
     <h4>Confira nossos lançamentos</h4>
     <div class="lancamentos">
       <?php for ($i = 1; $i <= 20; $i++): ?>
-      <div class="lancamento" onclick="location.href='produto?id=<?=$i?>'">
+      <div class="lancamento" onclick="location.href='produto/id/<?=$i?>'">
         <div class="lancamento-foto-produto"></div>
         <p>Produto <?=$i?></p>
         <p>R$ 75,00</p>
