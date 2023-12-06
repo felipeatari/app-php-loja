@@ -84,8 +84,6 @@ header {
 }
 .conta-e-carrinho {
   display: flex;
-  /* justify-content: center; */
-  /* align-items: center; */
 }
 .conta {
   display: flex;
@@ -95,8 +93,8 @@ header {
   cursor: pointer;
   padding: 3px;
   border: 1px solid black;
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
 }
 .conta-icone {
@@ -257,8 +255,7 @@ section {
     width: 160px;
   }
   .btn-open {
-    font-size: 22pt;
-    width: 100px;
+    font-size: 20pt;
   }
   .menu-desktop {
     display: none;
@@ -291,8 +288,19 @@ section {
     display: flex;
     justify-content: space-between;
   }
+  .conta {
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+  }
+  .conta-icone {
+    height: 12px;
+    width: 12px;
+  }
   .rastrear-campo {
     width: 100%;
+    background-color: white;
   }
 
   @media (max-width: 400px) {
@@ -305,9 +313,9 @@ section {
       display: flex;
       justify-content: space-between;
     }
-    .conta-e-carrinho {
+    /* .conta-e-carrinho {
       width: 90px;
-    }
+    } */
   }
 
   @media (max-width: 300px) {
