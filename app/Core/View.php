@@ -273,10 +273,10 @@ class View
     // self::minify_add([$theme, $view], 'css');
     // self::minify_add([$theme, $view], 'js');
 
-    $theme_css = URL . '/public/css/theme/' . $theme . '.css';
-    $theme_js = URL . '/public/css/javascript/' . $theme . '.js';
-    $view_css = URL . '/public/css/page/' . $view . '.css';
-    $view_js = URL . '/public/javascript/page/' . $view . '.js';
+    $theme_css = '/public/css/theme/' . $theme . '.css';
+    $theme_js = '/public/javascript/theme/' . $theme . '.js';
+    $view_css = '/public/css/page/' . $view . '.css';
+    $view_js = '/public/javascript/page/' . $view . '.js';
 
     $theme = 'public/theme/' . $theme . '.php';
 
