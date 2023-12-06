@@ -109,7 +109,7 @@
       </div>
     </header>
     <!-- Carrega o conteúdo dinâmico -->
-    <div class="content-dinamic"><?= $content ?></div>
+    <section class="content-dinamic"><?= $content ?></section>
     <!-- Carrega todo o JavaScript do site -->
     <script src="<?= $theme_js ?>"></script>
     <footer class="rodape">
