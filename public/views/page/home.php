@@ -17,18 +17,14 @@
 
   <!-- Lançamentos -->
   <div class="bloco-lancamentos">
-    <div class="lancamentos-titulo">
-      <h3>Confira nossos lançamentos</h3>
-    </div>
+    <h4>Confira nossos lançamentos</h4>
     <div class="lancamentos">
-      <?php for ($i = 1; $i <= 10; $i++): ?>
-        <div class="lancamento" onclick="location.href='produto?id=<?=$i?>'">
-          <div class="lancamento-items">
-            <div class="lancamento-foto-produto"></div>
-            <p>Produto <?=$i?></p>
-            <p>R$ 75,00</p>
-          </div>
-        </div>
+      <?php for ($i = 1; $i <= 20; $i++): ?>
+      <div class="lancamento" onclick="location.href='produto?id=<?=$i?>'">
+        <div class="lancamento-foto-produto"></div>
+        <p>Produto <?=$i?></p>
+        <p>R$ 75,00</p>
+      </div>
       <?php endfor ?>
     </div>
   </div>

@@ -6,17 +6,14 @@
   outline: none;
   list-style: none;
 }
-
 a {
   text-decoration: none;
   color: black;
 }
-
 @font-face {
   font-family: Poppins-SemiBold;
   src: url({{url}}/public/assets/fonts/Poppins-SemiBold.ttf);
 }
-
 html, body {
   font-family: Poppins-SemiBold;
   scroll-behavior: smooth;
@@ -26,10 +23,7 @@ html, body {
 
 .container {
   width: 100%;
-  /* height: 100vh;
-  display: flex;
-  align-items: center;
-  flex-direction: column; */
+  /* height: 100vh; */
 }
 
 .pagina-erro {
@@ -42,11 +36,12 @@ html, body {
 
 header {
   width: 100%;
-  /* height: 150px; */
+  height: 150px;
   background-color: white;
+  box-shadow: 0px 0px 8px rgb(37, 37, 37, 0.5);
+  top: 0;
   z-index: 1;
-  /* position: fixed; */
-  /* background-color: blue; */
+  position: fixed;
 }
 .bloco-header-desktop {
   width: 100%;
@@ -179,9 +174,9 @@ header {
 }
 
 /* Conteúdo Dinâmico */
-.content-dinamic {
+section {
   width: 100%;
-  /* margin-top: 150px; */
+  margin-top: 150px;
 }
 
 /* Bloco Rodapé */
@@ -230,6 +225,13 @@ header {
 }
 
 @media (max-width: 500px) {
+  header {
+    position: unset;
+    box-shadow: none;
+  }
+  section {
+    margin-top: 65px;
+  }
   .topo {
     width: 100%;
     justify-content: space-between;
