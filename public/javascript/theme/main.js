@@ -1,6 +1,6 @@
 'use strict';
 
-const url = '{{url}}';
+const url = 'teste';
 
 let btnOpen = document.querySelector('#btn-open');
 let btnClose = document.querySelector('#btn-close');

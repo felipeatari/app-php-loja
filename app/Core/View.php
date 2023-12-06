@@ -89,41 +89,47 @@ class View
     // Monta a minificação do CSS
     if ($type_file === 'css' and ! empty(self::$minify_css)) {
 
-      $load_css = '';
+      // $load_css = '';
+      $theme_css = '';
 
       foreach (self::$minify_css as $file_css):
 
         if ($file_css === 'main') {
-          $path_css = 'public/css/theme/' . $file_css;
+          $theme_css = 'public/css/theme/' . $file_css;
+          $theme_css = file_get_contents($theme_css . '.css');
         }
-        elseif ($file_css === self::$page) {
-          $path_css = 'public/css/page/' . $file_css;
-        }
-        elseif ($file_css === self::$admin) {
-          $path_css = 'public/css/page/' . $file_css;
-        }
-        else {
-          continue;
-        }
+        // elseif ($file_css === self::$page) {
+        //   $view_css = 'public/css/page/' . $file_css;
+        //   $view_css = file_get_contents($view_css . '.css');
+        // }
+        // elseif ($file_css === self::$admin) {
+        //   $view_css = 'public/css/page/' . $file_css;
+        //   $view_css = file_get_contents($view_css . '.css');
+        // }
+        // else {
+        //   continue;
+        // }
 
-        if (! file_exists($path_css . '.css')) {
-          continue;
-        }
-
-        $load_css .= file_get_contents($path_css . '.css');
+        // if (! file_exists($view_css . '.css')) {
+        //   continue;
+        // }
       endforeach;
 
-      if (empty($load_css)) {
-        return null;
-      }
+      // if (empty($load_css)) {
+      //   return null;
+      // }
 
-      $load_css = str_replace('{{url}}', URL, $load_css);
-      $load_css = preg_replace('/\/\*(.*?)*\*\//', '', trim($load_css));
-      $load_css = str_replace("\n", '', $load_css);
-      $load_css = str_replace(' {', '{', $load_css);
-      $load_css = str_replace('  ', '', $load_css);
+      // $theme_css = str_replace('{{section}}', $view_css, $theme_css);
 
-      file_put_contents('storage/temp/minify/main.css', $load_css);
+      // pr($theme_css);
+
+      $theme_css = str_replace('{{url}}', URL, $theme_css);
+      $theme_css = preg_replace('/\/\*(.*?)*\*\//', '', trim($theme_css));
+      $theme_css = str_replace("\n", '', $theme_css);
+      $theme_css = str_replace(' {', '{', $theme_css);
+      $theme_css = str_replace('  ', '', $theme_css);
+
+      file_put_contents('storage/temp/minify/main.css', $theme_css);
 
       return 'storage/temp/minify/main.css';
     }
@@ -138,15 +144,15 @@ class View
         if ($file_js === 'main') {
           $path_js = 'public/javascript/theme/' . $file_js . '.js';
         }
-        elseif ($file_js === self::$page) {
-          $path_js = 'public/javascript/page/' . $file_js . '.js';
-        }
-        elseif ($file_js === self::$admin) {
-          $path_js = 'public/javascript/admin/' . $file_js . '.js';
-        }
-        else {
-          continue;
-        }
+        // elseif ($file_js === self::$page) {
+        //   $path_js = 'public/javascript/page/' . $file_js . '.js';
+        // }
+        // elseif ($file_js === self::$admin) {
+        //   $path_js = 'public/javascript/admin/' . $file_js . '.js';
+        // }
+        // else {
+        //   continue;
+        // }
 
         if (! file_exists($path_js)) {
           continue;
@@ -168,6 +174,26 @@ class View
 
       return 'storage/temp/minify/main.js';
     }
+  }
+
+  private function sbs_css($sbs_css)
+  {
+    $sbs_css = str_replace('{{url}}', URL, $sbs_css);
+    $sbs_css = preg_replace('/\/\*(.*?)*\*\//', '', trim($sbs_css));
+    $sbs_css = str_replace("\n", '', $sbs_css);
+    $sbs_css = str_replace(' {', '{', $sbs_css);
+    $sbs_css = str_replace('  ', '', $sbs_css);
+
+    return $sbs_css;
+  }
+
+  private function sbs_js($sbs_js)
+  {
+    $sbs_js = file_get_contents($sbs_js);
+    $sbs_js = str_replace('{{url}}', URL, $sbs_js);
+    $sbs_js = preg_replace('/\/\*(.*?)*\*\//', '', trim($sbs_js));
+    $sbs_js = str_replace("\n", '', $sbs_js);
+    $sbs_js = str_replace('  ', '', $sbs_js);
   }
 
   /**
@@ -244,8 +270,13 @@ class View
       $view = self::$page;
     }
 
-    self::minify_add([$theme, $view], 'css');
-    self::minify_add([$theme, $view], 'js');
+    // self::minify_add([$theme, $view], 'css');
+    // self::minify_add([$theme, $view], 'js');
+
+    $theme_css = URL . '/public/css/theme/' . $theme . '.css';
+    $theme_js = URL . '/public/css/javascript/' . $theme . '.js';
+    $view_css = URL . '/public/css/page/' . $view . '.css';
+    $view_js = URL . '/public/javascript/page/' . $view . '.js';
 
     $theme = 'public/theme/' . $theme . '.php';
 
@@ -255,8 +286,12 @@ class View
 
     $template = self::load_file_php($theme, [
       'theme_title' => self::$title,
-      'theme_css' => self::minify_file('css'),
-      'theme_js' => self::minify_file('js'),
+      // 'theme_css' => self::minify_file('css'),
+      // 'theme_js' => self::minify_file('js'),
+      'theme_css' => $theme_css,
+      'theme_js' => $theme_js,
+      'view_css' => $view_css,
+      'view_js' => $view_js,
       'content' => $content
     ]);
 
