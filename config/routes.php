@@ -1,6 +1,6 @@
 <?php
 
-$routes = [
+define('ROUTES', [
   // Rotas da main
   ['get', '/', 'PageHome->index'],
   ['get', '/home', 'PageHome->index'],
@@ -10,6 +10,4 @@ $routes = [
   ['get', '/produto/id/{id}', 'PageProduto->see_product'],
   // Rotas do admin
   ['get', '/admin', 'AdminHome->index'],
-];
-
-define('ROUTES', $routes);
+]);

@@ -18,11 +18,18 @@ class Controller
   private string $uri;
   private string $end;
 
-  public function __construct()
+  /**
+   * Inicializa a o objeto
+   *
+   * @param boolean $api Se for API desconsidera as rotas do sistema
+   */
+  public function __construct(bool $api = false)
   {
     $this->uri = $_GET['url'] ?? '/';
     $this->http_method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-    $this->routes();
+
+    if (! $api) $this->routes();
+
     $this->router();
     $this->dispatcher();
   }
@@ -54,9 +61,7 @@ class Controller
   {
     if (defined('ROUTES')) {
       foreach (ROUTES as $linha):
-        if (empty($linha)) {
-          continue;
-        }
+        if (empty($linha)) continue;
 
         $this->addRoute($linha[0], $linha[1], $linha[2]);
       endforeach;
@@ -124,8 +129,7 @@ class Controller
    */
   public static function redirect(string $route): void
   {
-    header('Location: ' . URL . $route);
-    die;
+    header('Location: ' . URL . $route);die;
   }
 
   /**
@@ -140,9 +144,7 @@ class Controller
     $url = explode('/', $url);
     $url = array_values(array_filter($url));
 
-    if (! $url) {
-      $url[] = '/';
-    }
+    if (! $url) $url[] = '/';
 
     return $url;
   }
@@ -170,9 +172,7 @@ class Controller
     }
 
     // Verifica se há parâmetro(s)
-    if (! empty($params)) {
-      $this->params = $params;
-    }
+    if (! empty($params)) $this->params = $params;
   }
 
   /**
@@ -182,27 +182,19 @@ class Controller
    */
   private function router(): void
   {
-    // pr($this->controllers);
     $uri = $this->convertURLStrToURLArr($this->uri);
     $http_method = strtolower($this->http_method);
     $error_405 = false;
 
-    // Verifica às informações contidas no motor da rota
     foreach ($this->routes as $route):
-
-      // Converte à URL de string para array
       $get_route = $this->convertURLStrToURLArr($route['route']);
 
       // Verifica se a rota é dinâmica
       if (preg_match('/(\{[\w]+\})|(\:[\w]+)/', $route['route'])) {
-
         // Recupera os campos estáticos da rota
         $route_static_fields = array_map(function($item) {
-          if (! preg_match('/(\{[\w]+\})|(\:[\w]+)/', $item)) {
-            return $item;
-          }
+          if (! preg_match('/(\{[\w]+\})|(\:[\w]+)/', $item)) return $item;
         }, $get_route);
-
         // Elimina os campos vazios da rota e ordena de forma numerada
         $route_static_fields = array_values(array_filter($route_static_fields));
 
@@ -210,18 +202,16 @@ class Controller
         $uri_static_fields = array_intersect($route_static_fields, $uri);
 
         // Verifica se a rota e a URI tem a mesma extensão e se os campos estáticos de ambas são iguais
-        if ((count($get_route) == count($uri)) and ($uri_static_fields == $route_static_fields)) {
+        if ((count($get_route) === count($uri)) and ($uri_static_fields === $route_static_fields)) {
           // Verifica se método HTTP requisitado é o mesmo que foi definido para a rota
-          if ($route['http_method'] !== $http_method) {
-            $error_405 = true;
-          }
+          if ($route['http_method'] !== $http_method) $error_405 = true;
 
           $this->checkout($route['action'], array_diff($uri, $get_route));
         }
       }
 
       // Verifica se a rota é estática
-      if (($get_route == $uri)) {
+      if (($get_route === $uri)) {
         // Verifica se método HTTP requisitado é o mesmo que foi definido para a rota
         if ($route['http_method'] !== $http_method) {
           $error_405 = true;
@@ -229,7 +219,6 @@ class Controller
 
         $this->checkout($route['action']);
       }
-
     endforeach;
 
     if ($error_405) {
@@ -256,17 +245,14 @@ class Controller
       $error_404[] = 1;
     endforeach;
 
-    if (count($error_404) == count($this->controllers)) {
+    if (count($error_404) === count($this->controllers)) {
       $this->http_status_code = 404;
 
       return;
     }
 
-    if (! is_callable($this->controller)) {
-      if (! method_exists($this->controller, $this->method)) {
-        $this->http_status_code = 405;
-      }
-    }
+    if (! is_callable($this->controller))
+      if (! method_exists($this->controller, $this->method)) $this->http_status_code = 405;
   }
 
   /**
@@ -278,14 +264,9 @@ class Controller
   {
     http_response_code($this->http_status_code);
 
-    if ($this->http_status_code != 200) {
-      if ($this->http_status_code == 405) {
-        $message_error = 'Método não implementado';
-      }
-
-      if ($this->http_status_code == 404) {
-        $message_error = 'Pagina não encontrada';
-      }
+    if ($this->http_status_code !== 200) {
+      if ($this->http_status_code === 405) $message_error = 'Método não implementado';
+      if ($this->http_status_code === 404) $message_error = 'Pagina não encontrada';
 
       $this->end = PageErrorController::error($this->http_status_code, $message_error);
 
@@ -294,10 +275,11 @@ class Controller
 
     if ($this->callback) {
       $this->end = call_user_func_array($this->method, $this->params);
+
+      return;
     }
-    else {
-      $this->end = call_user_func_array([new $this->controller, $this->method], $this->params);
-    }
+
+    $this->end = call_user_func_array([new $this->controller, $this->method], $this->params);
   }
 
   /**
