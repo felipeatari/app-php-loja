@@ -10,7 +10,7 @@ class VariacaoModel extends Model
     'id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY',
     'tipo INT(11) NOT NUL', // Cor: 1 e Tamanho: 2
     'nome VARCHAR(255) NOT NUL',
-    'extra VARCHAR(255)',
+    'extra VARCHAR(255)', // Código RGB/Hexadecimal de cores ou tamanho
     'primary key(id)'
   ];
 }
