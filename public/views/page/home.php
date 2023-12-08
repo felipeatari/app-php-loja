@@ -19,9 +19,11 @@
   <div class="bloco-lancamentos">
     <h4>Confira nossos lançamentos</h4>
     <div class="lancamentos">
-      <?php for ($i = 1; $i <= 20; $i++): ?>
-      <div class="lancamento" onclick="location.href='produto/id/<?=$i?>'">
-        <div class="lancamento-foto-produto"></div>
+      <?php for ($i = 1; $i <= 10; $i++): ?>
+      <div class="lancamento" onclick="location.href='produto/id/<?= $i ?>'">
+        <div class="lancamento-fotos-produto">
+          <img onmouseover="entrar(this)" onmouseout="sair(this)" ontouchstart="entrar(this)" ontouchend="sair(this)" src="/storage/produtos/produto-1/img-<?= $i ?>.webp" style="width: 300px;" alt="">
+        </div>
         <p>Produto <?=$i?></p>
         <p>R$ 75,00</p>
       </div>

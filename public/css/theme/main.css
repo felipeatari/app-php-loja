@@ -225,7 +225,7 @@ section {
   cursor: pointer;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
   header {
     position: unset;
     box-shadow: none;
@@ -248,11 +248,14 @@ section {
     align-items: center;
     flex-direction: column;
   }
-  .logo {
+  .logo-desktop {
+    width: 100px;
+  }
+  .logo-mobile {
     margin-top: 20px;
   }
-  .logo img {
-    width: 160px;
+  .logo-mobile img {
+    width: 150px;
   }
   .btn-open {
     font-size: 20pt;

@@ -26,3 +26,13 @@ function avancar() {
 }
 
 setInterval(avancar, 5000);
+
+function entrar(img) {
+  img.style.width = 'auto'
+  img.style.height = '350px'
+}
+
+function sair(img) {
+  img.style.height = 'auto'
+  img.style.width = '300px'
+}

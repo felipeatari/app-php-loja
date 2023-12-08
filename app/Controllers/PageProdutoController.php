@@ -9,7 +9,7 @@ class PageProdutoController
   public function see_product($id = 0)
   {
     View::title('Produto: ' . $id);
-    View::page('ver-produto');
+    View::page('produto-ver');
 
     $produto = [
       'Produto' => [
