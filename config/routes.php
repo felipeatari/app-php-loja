@@ -8,6 +8,7 @@ define('ROUTES', [
   ['get', '/login', 'PageLogin->index'],
   ['post', '/entrar', 'PageLogin->entrar'],
   ['get', '/produto/id/{id}', 'PageProduto->see_product'],
+  ['get', '/teste', 'PageTeste->index'],
   // Rotas do admin
   ['get', '/admin', 'AdminHome->index'],
 ]);

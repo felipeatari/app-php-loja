@@ -8,19 +8,14 @@ use PDOException;
 
 class DataBase extends Singleton
 {
-  /**
-   * Recebe a conexão em caso de sucesso ou null em caso de erro ou desconexão
-   *
-   * @var mixed
-   */
-  private static mixed $pdo = null;
+  private static object|null $pdo = null;
 
-  private static string $db_host = null;
-  private static string $db_port = null;
-  private static string $db_name = null;
-  private static string $db_user = null;
-  private static string $db_passwd = null;
-  private static array $db_options = null;
+  private static string|null $db_host = null;
+  private static string|null $db_port = null;
+  private static string|null $db_name = null;
+  private static string|null $db_user = null;
+  private static string|null $db_passwd = null;
+  private static array|null $db_options = null;
 
   private static bool $db_error = false;
   private static int $db_cod_error = 0;
@@ -54,7 +49,7 @@ class DataBase extends Singleton
       self::$db_name = null;
       self::$db_user = null;
       self::$db_passwd = null;
-      self::$db_options = null;
+      self::$db_options = [];
     }
     catch (PDOException $exception) {
       self::$pdo = null;
@@ -86,9 +81,9 @@ class DataBase extends Singleton
     return self::$db_msg_error;
   }
 
-  public static function db_error_data(): array
+  public static function db_error_data(): object
   {
-    return [
+    return (object) [
       'code' => self::$db_cod_error,
       'message' => self::$db_msg_error,
     ];

@@ -4,102 +4,47 @@ namespace App\Core;
 
 use App\Source\DataBase;
 use App\Source\Response;
-use App\Source\Singleton;
 use PDOException;
 
-class Model extends Singleton
+class Model
 {
-  private static $table;
-  private static $classe;
+  private string $table;
+  private string|int $code_error;
+  private string|int $code_success;
+  private string $message_error;
+  private string $qnt_register;
 
-  public static function init(string $model): mixed
+  public function __construct()
   {
-    if (preg_match('/\_/', $model)) {
-      self::$classe = str_replace(' ', '', ucwords(str_replace('_', ' ', $model)));
-    }
-    else {
-      self::$classe = ucfirst($model);
-    }
-
-    self::$classe = 'App\\Models\\' . self::$classe . 'Model';
-
-    if (! class_exists(self::$classe)) {
-      die('Model ' . ucfirst($model) . ' não existe');
-    }
-
-    self::$table = $model;
-
-    return self::$classe::new();
+    $this->table();
   }
 
-  public function create_table()
+  private function table()
   {
-    $message = '';
-
-    try {
-      $connect = DataBase::connect();
-
-      if (DataBase::db_error()) {
-        $message = DataBase::db_msg_error();
-      }
-
-      $estrutura_tabela = call_user_func(self::$classe . '::table_structure');
-
-      $sql = 'CREATE TABLE ' . self::$table . ' (' . implode(', ', $estrutura_tabela) . ');';
-
-      $stmt = $connect->prepare($sql);
-
-      $stmt->execute();
-
-      $message = 'Tabela ' . self::$table . ' criada com sucesso';
-    }
-    catch (PDOException $e) {
-      $message = $e->getMessage();
-
-      if ($e->getCode() === '42S01') {
-        $message = 'Tabela ' . self::$table . ' já existe';
-      }
-    }
-
-    DataBase::disconnect();
-
-    die($message);
+    $this->table = static::class;
+    $this->table = str_replace('App\\Models\\', '', $this->table);
+    $this->table = str_replace('Model', '', $this->table);
+    $this->table = strtoupper($this->table);
   }
 
-  public function query(array $params = [], bool $api = false): bool|array
+  public function query(array $params = []): array|object|bool
   {
     try {
-      if (isset($params['inputs']) and is_array($params['inputs'] and ! empty($params['inputs']))) {
+      if (isset($params['inputs'])) {
         $inputs = implode(', ', $params['inputs']);
       }
       else {
         $inputs = '*';
       }
 
-      if (isset($params['inner_join']) and is_array($params['inner_join']) and ! empty($params['inner_join'])) {
+      if (isset($params['inner_join'])) {
         $join = $params['inner_join']['join'] ?? '';
         $type_join = $params['inner_join']['type_join'] ?? '';
         $primary_key = $params['inner_join']['primary_key'] ?? '';
         $foreign_key = $params['inner_join']['foreign_key'] ?? '';
         $join_id = $params['inner_join']['join_id'] ?? '';
 
-        if (empty($join)) {
-          return (! $api) ? false : Response::error(400, 'Campo "join" não informado ou o valor dele é inválido');
-        }
-
-        if (empty($type_join)) {
-          return (! $api) ? false : Response::error(400, 'Campo "type_join" não informado ou o valor dele é inválido');
-        }
-
-        if (empty($primary_key)) {
-          return (! $api) ? false : Response::error(400, 'Campo "primary_key" não informado ou o valor dele é inválido');
-        }
-
-        if (empty($foreign_key)) {
-          return (! $api) ? false : Response::error(400, 'Campo "foreign_key" não informado ou o valor dele é inválido');
-        }
-
-        if (isset($params['inner_join']['fields']) and ! empty($params['inner_join']['fields'])) {
+        if (isset($params['inner_join']['fields'])) {
           $inputs = '';
           foreach ($params['inner_join']['fields'] as $field):
             $inputs .= $field . ' ,';
@@ -111,50 +56,53 @@ class Model extends Singleton
         $type_join = strtolower($type_join);
 
         if (! empty($join_id)) {
-          $inner_join = " $type_join JOIN $join ON " . self::$table . ".$primary_key = $join.$foreign_key WHERE $primary_key = $join_id";
+          $inner_join = " $type_join JOIN $join ON " . $this->table . ".$primary_key = $join.$foreign_key WHERE $primary_key = $join_id";
         }
         else {
-          $inner_join = " $type_join JOIN $join ON " . self::$table . ".$primary_key = $join.$foreign_key";
+          $inner_join = " $type_join JOIN $join ON " . $this->table . ".$primary_key = $join.$foreign_key";
         }
       }
 
-      if (isset($params['conditions']) and is_array($params['conditions']) and ! empty($params['conditions'])) {
+      if (isset($params['conditions'])) {
         $comparisons = $params['conditions']['comparisons'] ?? [];
         $logical_operators = $params['conditions']['logical_operators'] ?? [];
 
-        if (empty($comparisons) and empty($logical_operators)) {
-          return (! $api) ? false : Response::error(400, 'Campo "comparison" e/ou "logic" não existe(m) ou inválido(s)');
-        }
-
-        if (! empty($comparisons) and count($logical_operators) === 1) {
-          return (! $api) ? false : Response::error(400, 'Para utilizar o campo "logic" é necessário passar mais campo para comparação');
-        }
-
-        if (empty($comparisons) and count($logical_operators) > 1) {
-          return (! $api) ? false : Response::error(400, 'Para utilizar mais de um campo comparação é necessário informar o campo "logic"');
-        }
-
-        if (! empty($comparisons) and count($logical_operators) > 1) {
-
-          foreach ($logical_operators as $validate):
-            if ($validate != 'and' and $validate != 'or') {
-              return (! $api) ? false : Response::error(400, 'Informe um dos operadores lógicos "and" ou "or"');
-            }
-          endforeach;
-        }
-
         $conditions = '';
 
-        $various_searches_key = array_keys($comparisons);
-        $various_searches_key = $various_searches_key[0] ?? '';
+        if (! empty($logical_operators)) {
+          $various_searches_key = array_keys($comparisons);
+          $various_searches_value = array_values($comparisons);
 
-        if (! empty($various_searches_key)) {
-          $various_searches_values = $comparisons[ $various_searches_key ];
+          $various_searches_value = array_map(function($item){
+            return '\'' . $item . '\'';
+          }, $various_searches_value);
+
+          $teste = '';
+          for ($i = 0; $i < count($various_searches_key); $i++) {
+            $opr = '';
+            if (isset($logical_operators[$i])) {
+              $opr = $logical_operators[$i];
+            }
+            $teste .= $various_searches_key[$i] . ' = ' . $various_searches_value[$i] . ' ' . $opr . ' ';
+          }
+          $conditions = ' WHERE ' . $teste;
         }
+        else {
+          $various_searches_key = array_keys($comparisons);
+          $various_searches_key = implode('', $various_searches_key);
 
-        if (isset($various_searches_values) and is_array($various_searches_values) and count($various_searches_values) >= 1) {
-          $various_searches_values = implode(', ', $comparisons[ $various_searches_key ]);
-          $conditions = ' WHERE ' . $various_searches_key . ' IN (' . $various_searches_values . ')';
+          if (! empty($various_searches_key) and count($comparisons) === 1) {
+            $various_searches_values = $comparisons[ $various_searches_key ];
+            if (isset($various_searches_values)) {
+              $comparisons[ $various_searches_key ] = array_map(function($item){
+                return '\'' . $item . '\'';
+              }, $comparisons[ $various_searches_key ]);
+
+              $various_searches_values = implode(', ', $comparisons[ $various_searches_key ]);
+
+              $conditions = ' WHERE ' . $various_searches_key . ' IN (' . $various_searches_values . ')';
+            }
+          }
         }
 
         if (empty($conditions)) {
@@ -207,24 +155,9 @@ class Model extends Singleton
 
           $conditions = " WHERE " . rtrim($conditions, " ");
         }
-
       }
 
-      if (isset($params['pagination']) and ! is_array($params['pagination'])) {
-        return (! $api) ? false : Response::error(400, 'O campo "pagination" deve ser um array');
-      }
-      elseif (isset($params['pagination']) and empty($params['pagination'])) {
-        return (! $api) ? false : Response::error(400, 'O campo "pagination" não pode ser vazio');
-      }
-      elseif (isset($params['pagination'])) {
-        if (! isset($params['pagination']['start']) or empty($params['pagination']['start'])) {
-          return (! $api) ? false : Response::error(400, 'Necessário informar ou preencher o campo "start"');
-        }
-
-        if (! isset($params['pagination']['length']) or empty($params['pagination']['length'])) {
-          return (! $api) ? false : Response::error(400, 'Necessário informar ou preencher o campo "length"');
-        }
-
+      if (isset($params['pagination'])) {
         $pagination = " LIMIT " . $params['pagination']['start'] . ", " . $params['pagination']['length'];
       }
 
@@ -241,12 +174,9 @@ class Model extends Singleton
         elseif ($params['sort'] == 'desc') {
           $order = 'DESC ';
         }
-        else {
-          return (! $api) ? false : Response::error(400, 'O parâmetro "sort" deve receber os seguintes valores: "asc" ou "desc"');
-        }
       }
 
-      $search = "SELECT $inputs FROM " . strtolower(self::$table);
+      $search = "SELECT $inputs FROM " . strtolower($this->table);
 
       if (isset($inner_join)) {
         $search .= $inner_join;
@@ -262,23 +192,25 @@ class Model extends Singleton
         $search .= $order_by . $order;
       }
 
-      if (isset($params['limit']) and ! empty($params['limit'])) {
+      if (isset($params['limit'])) {
         $search .= 'LIMIT ' . $params['limit'];
       }
 
       $connect = DataBase::connect();
 
       if (DataBase::db_error()) {
-        return (! $api) ? false : Response::error(DataBase::db_cod_error(), DataBase::db_msg_error());
+        $this->code_error = DataBase::db_cod_error();
+        $this->message_error = DataBase::db_msg_error();
+
+        return false;
       }
 
       $stmt = $connect->prepare($search);
 
-      // pr($keys);
-
       if (isset($keys)) {
         if (count((array) $keys) > 1 and count((array) $values) > 1) {
           foreach ($keys as $i => $key):
+            if (! is_string($values[$i])) continue;
             $stmt->bindParam(':' . $key, $values[$i]);
           endforeach;
         }
@@ -292,34 +224,34 @@ class Model extends Singleton
       DataBase::disconnect();
 
       if (! $stmt->rowCount()) {
-        return (! $api) ? false : Response::error(404, 'Busca não encontrada');
+        $this->code_error = 404;
+        $this->message_error = 'Não encontrado';
+
+        return false;
       }
 
-      return (! $api) ? $stmt->fetchAll() : Response::success(200, $stmt->rowCount(), $stmt->fetchAll());
+      $this->code_success = 200;
+
+      return $stmt->fetchAll();
     }
     catch (PDOException $e) {
-      return (! $api) ? false : Response::error($e->getCode(), $e->getMessage());
+      $this->code_error = $e->getCode();
+      $this->message_error = $e->getMessage();
+
+      return false;
     }
   }
 
   public function query_id(int $id = null, bool $api = false): bool|array
   {
     try {
-      if (is_null($id)) {
-        return (! $api) ? false : Response::error(400, 'Nenhum ID informado');
-      }
-
-      if (! is_numeric($id) or ! is_integer($id)) {
-        return (! $api) ? false : Response::error(400, 'O ID deve ser um número inteiro');
-      }
-
       $connect = DataBase::connect();
 
       if (DataBase::db_error()) {
         return (! $api) ? false : Response::error(DataBase::db_cod_error(), DataBase::db_msg_error());
       }
 
-      $search = "SELECT * FROM " . strtolower(self::$table) . " WHERE id = :id";
+      $search = "SELECT * FROM " . strtolower($this->table) . " WHERE id = :id";
 
       $stmt = $connect->prepare($search);
 
@@ -364,7 +296,7 @@ class Model extends Singleton
       $db_keys_dynamic = rtrim($db_keys_dynamic, ', ');
       $db_keys_dynamic .= ')';
 
-      $insert = "INSERT INTO " . self::$table . " $db_keys_fixed VALUES $db_keys_dynamic";
+      $insert = "INSERT INTO " . $this->table . " $db_keys_fixed VALUES $db_keys_dynamic";
 
       $connect = DataBase::connect();
 
@@ -426,7 +358,7 @@ class Model extends Singleton
         return (! $api) ? false : Response::error(DataBase::db_cod_error(), DataBase::db_msg_error());
       }
 
-      $update = "UPDATE " . self::$table . " SET $db_keys_fixed_and_dynamic WHERE id = :id";
+      $update = "UPDATE " . $this->table . " SET $db_keys_fixed_and_dynamic WHERE id = :id";
 
       $stmt = $connect->prepare($update);
 
@@ -475,7 +407,7 @@ class Model extends Singleton
         return (! $api) ? false : Response::error(DataBase::db_cod_error(), DataBase::db_msg_error());
       }
 
-      $delete = "DELETE FROM " . self::$table . " WHERE id = :id";
+      $delete = "DELETE FROM " . $this->table . " WHERE id = :id";
 
       $stmt = $connect->prepare($delete);
 

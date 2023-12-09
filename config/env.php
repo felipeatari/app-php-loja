@@ -4,7 +4,7 @@
 define('CHARSET', 'UTF-8');
 
 // Define a URL principal
-define('URL', 'http://10.0.0.30:8888');
+define('URL', 'http://localhost:8888');
 
 // Define as rotas do projeto
 define('HOME', URL . '/');
@@ -35,6 +35,6 @@ define('DB_OPTIONS', [
   PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
   PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
   // PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-  PDO::ATTR_FETCH_TABLE_NAMES => true,
+  // PDO::ATTR_FETCH_TABLE_NAMES => true,
   PDO::ATTR_CASE => PDO::CASE_NATURAL
 ]);

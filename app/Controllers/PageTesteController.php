@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Core\View;
 use App\Models\TesteModel;
+use App\Models\ProdutoModel;
 use App\Core\Model;
 use App\Source\DataBase;
 
@@ -32,68 +33,102 @@ class PageTesteController
 
   public function index()
   {
-    $query_categorias = Model::init('produto')->query([
-      'inner_join' => [
-        'join' => 'produto_categoria',
-        'type_join' => 'left',
-        // 'type_join' => 'inner',
-        'primary_key' => 'id',
-        'foreign_key' => 'produto_id',
-        'join_id' => '2',
-        'fields' => ['categoria_id']
-      ]
-      // 'conditions' => [
-        // 'comparisons' => [
-        //   // 'id = ' => 1, // Key e o operador de comparação (=, !=, <, >, <= e >=) separado por espaço
-        //   'produto_id' => 3, // Se for igual, o sinal de = pode ser omitido
-        // ],
-        // 'logical_operators' => ['or'], // Operador lógico: or ou and
-        // Para o campo logical_operators é necessário que a quantidade de campos a serem informados\n
-        // seja proporcional a quantidade de operadores lógicos com campos a serem associados
-        // Se ['conditions' => ['idade > ' => 18, 'peso < ' => 56, 'altura > ' => 1.5]]
-        // Então [conditions => ['logical_operators' => 'and', 'or']
-      // ],
-    ]);
+    // $connect = DataBase::connect();
+    // if (DataBase::db_error()) {
+    //   pr(DataBase::db_error_data()->message);
+    // }
+    // else {
+    //   pr($connect);
+    // }
+    // die;
+    // pr(Model::init('produto')->create_table());die;
+    // $teste = Model::init('produto')->query();
 
-    $categoria_ids = [];
-
-    foreach ($query_categorias as $categoria):
-      $categoria_ids[] = $categoria['categoria_id'];
-    endforeach;
-
-    pr($categoria_ids);
-
-    $query_categorias = Model::init('categoria')->query([
+    // foreach ($teste as $linha):
+    //   pr($linha->nome);
+    // endforeach;
+    $produto = new ProdutoModel;
+    pr($produto->query([
       'conditions' => [
         'comparisons' => [
-          'id' => ['32', '5'], // Key e o operador de comparação (=, !=, <, >, <= e >=) separado por espaço
-          'id' => $categoria_ids, // Key e o operador de comparação (=, !=, <, >, <= e >=) separado por espaço
+          'id' => [2],
+          // 'nome' => ['Camisa Long Line'],
+          'marca' => ['Lucky Jeans']
+        ],
+        'logical_operators' => [
+          // 'and',
+          'or'
         ]
       ]
-    ], true);
-
-    pr($query_categorias);
+      // 'inputs' => ['id'],
+    ]));
     die;
+    // die;
 
-    $categorias = [];
+    // $query_categorias = Model::init('produto')->query([
+    //   'inner_join' => [
+    //     'join' => 'produto_categoria',
+    //     'type_join' => 'left',
+    //     // 'type_join' => 'inner',
+    //     'primary_key' => 'id',
+    //     'foreign_key' => 'produto_id',
+    //     'join_id' => '2',
+    //     'fields' => ['categoria_id']
+    //   ],
+    //   'conditions' => [
+    //     'comparisons' => [
+    //       // 'id = ' => 1, // Key e o operador de comparação (=, !=, <, >, <= e >=) separado por espaço
+    //       'produto_id' => 3, // Se for igual, o sinal de = pode ser omitido
+    //     ],
+    //     'logical_operators' => ['or'], // Operador lógico: or ou and
+    //     // Para o campo logical_operators é necessário que a quantidade de campos a serem informados\n
+    //     // seja proporcional a quantidade de operadores lógicos com campos a serem associados
+    //     // Se ['conditions' => ['idade > ' => 18, 'peso < ' => 56, 'altura > ' => 1.5]]
+    //     // Então [conditions => ['logical_operators' => 'and', 'or']
+    //   ],
+    // ], true);
 
-    foreach ($query_categorias as $row):
-      $categorias[] = Model::init('categoria')->query_id($row['categoria_id']);
-    endforeach;
+    // pr($query_categorias);die;
 
-    pr($categorias);
-    die;
+    // $categoria_ids = [];
+
+    // foreach ($query_categorias as $categoria):
+    //   $categoria_ids[] = $categoria['categoria_id'];
+    // endforeach;
+
+    // pr($categoria_ids);
+
+    // $query_categorias = Model::init('categoria')->query([
+    //   'conditions' => [
+    //     'comparisons' => [
+    //       'id' => ['32', '5'], // Key e o operador de comparação (=, !=, <, >, <= e >=) separado por espaço
+    //       'id' => $categoria_ids, // Key e o operador de comparação (=, !=, <, >, <= e >=) separado por espaço
+    //     ]
+    //   ]
+    // ], true);
+
+    // pr($query_categorias);
+    // die;
+
+    // $categorias = [];
+
+    // foreach ($query_categorias as $row):
+    //   $categorias[] = Model::init('categoria')->query_id($row['categoria_id']);
+    // endforeach;
+
+    // pr($categorias);
+    // die;
 
     // pr(Model::init('teste')->query(['limit' => 1]));
-    pr(Model::init('produto_categoria')->query(api: true));
-    pr(Model::init('produto_categoria')->query([
-      'inner_join' => [
-        'join' => 'produto',
-        'primary_key' => 'produto_id',
-        'foreign_key' => 'id',
-        'value' => '2',
-        'fields' => ['categoria_id']
-      ]
+    // pr(Model::init('produto_categoria')->query(api: true));
+    // pr(Model::init('produto_categoria')->query([
+    //   'inner_join' => [
+    //     'join' => 'produto',
+    //     'primary_key' => 'produto_id',
+    //     'foreign_key' => 'id',
+    //     'value' => '2',
+    //     'fields' => ['categoria_id']
+    //   ]
       // 'conditions' => [
         // 'comparison' => [
         //   // 'id = ' => 1, // Key e o operador de comparação (=, !=, <, >, <= e >=) separado por espaço
@@ -105,7 +140,8 @@ class PageTesteController
         // Se ['conditions' => ['idade > ' => 18, 'peso < ' => 56, 'altura > ' => 1.5]]
         // Então [conditions => ['logic' => 'and', 'or']
       // ],
-    ]));
+    // ]));
+
     // pr(Model::init('teste')->query(api: true));
     // pr(Model::init('produto')->query_id(2));
     // pr(Model::init('categoria')->query_id(6));
@@ -133,10 +169,10 @@ class PageTesteController
 
     // pr(Model::init('produto')->insert([
     //   'ativo' => true,
-    //   'nome' => 'Camisa Social',
-    //   'descricao' => 'Camisa Social, Camisa Social, Camisa Social',
-    //   'marca' => 'Polo',
-    //   'preco' => 200.00,
+    //   'nome' => 'Camisa Oversized',
+    //   'descricao' => 'Camisa Oversized, Camisa Oversized, Camisa Oversized',
+    //   'marca' => 'Lucky Jeans',
+    //   'preco' => 90.00,
     //   'peso' => 0.700,
     //   'largura' => 0.00,
     //   'altura' => 0.00,
