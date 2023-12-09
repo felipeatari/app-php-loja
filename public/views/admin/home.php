@@ -1,2 +1,3 @@
-<h1>Admin Home</h1>
-<p><?=$teste?></p>
+<div class="home">
+<h3>Ok</h3>
+</div>

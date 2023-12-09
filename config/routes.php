@@ -11,4 +11,6 @@ define('ROUTES', [
   ['get', '/teste', 'PageTeste->index'],
   // Rotas do admin
   ['get', '/admin', 'AdminHome->index'],
+  ['get', '/admin/produto/listar', 'AdminProduto->listar'],
+  ['get', '/admin/produto/cadastrar', 'AdminProduto->cadastrar'],
 ]);
