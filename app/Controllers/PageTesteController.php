@@ -44,24 +44,33 @@ class PageTesteController
     // pr(Model::init('produto')->create_table());die;
     // $teste = Model::init('produto')->query();
 
-    // foreach ($teste as $linha):
-    //   pr($linha->nome);
-    // endforeach;
+    // $search = "SELECT * FROM produto";
+    // $connect = DataBase::connect();
+    // $stmt = $connect->prepare($search);
+
+    // $stmt->execute();
+
+    // $produtos = $stmt->fetchAll(\PDO::FETCH_CLASS, \App\Models\ProdutoModel::class);
+
     $produto = new ProdutoModel;
-    pr($produto->query([
-      'conditions' => [
-        'comparisons' => [
-          'id' => [2],
-          // 'nome' => ['Camisa Long Line'],
-          'marca' => ['Lucky Jeans']
-        ],
-        'logical_operators' => [
-          // 'and',
-          'or'
-        ]
-      ]
+    $produtos = $produto->query([
+      // 'conditions' => [
+      //   'comparisons' => [
+      //     'id' => [2],
+      //     'nome' => ['Camisa Long Line'],
+      //     'marca' => ['Lucky Jeans']
+      //   ],
+      //   'logical_operators' => [
+      //     'and',
+      //     'or'
+      //   ]
+      // ]
       // 'inputs' => ['id'],
-    ]));
+    ]);
+    pr($produtos);
+    // foreach ($produtos as $linha):
+    //   pr($linha);
+    // endforeach;
     die;
     // die;
 

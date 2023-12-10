@@ -4,27 +4,22 @@ namespace App\Core;
 
 use App\Source\DataBase;
 use App\Source\Response;
+use PDO;
 use PDOException;
 
 class Model
 {
   private string $table;
+  private string $class;
   private string|int $code_error;
   private string|int $code_success;
   private string $message_error;
   private string $qnt_register;
 
-  public function __construct()
+  public function __construct(string $entity)
   {
-    $this->table();
-  }
-
-  private function table()
-  {
-    $this->table = static::class;
-    $this->table = str_replace('App\\Models\\', '', $this->table);
-    $this->table = str_replace('Model', '', $this->table);
-    $this->table = strtoupper($this->table);
+    $this->table = $entity;
+    $this->class = static::class;
   }
 
   public function query(array $params = []): array|object|bool
@@ -232,7 +227,8 @@ class Model
 
       $this->code_success = 200;
 
-      return $stmt->fetchAll();
+      // return $stmt->fetchAll(fetch_argument: $this->class);
+      return $stmt->fetchAll(PDO::FETCH_CLASS, $this->class);
     }
     catch (PDOException $e) {
       $this->code_error = $e->getCode();
