@@ -4,214 +4,169 @@ namespace App\Core;
 
 use App\Source\DataBase;
 use App\Source\Response;
-use PDO;
+use Error;
+use ErrorException;
 use PDOException;
+use PDO;
 
 class Model
 {
+  private mixed $return;
+  private int|string $code_error = 0;
+  private string $message_error = '';
   private string $table;
-  private string $class;
-  private string|int $code_error;
-  private string|int $code_success;
-  private string $message_error;
-  private string $qnt_register;
+  private string $query = '';
+  private int $count_condition = 0;
+  protected array $fields = [];
+  private int|bool $find_id = false;
 
   public function __construct(string $entity)
   {
     $this->table = $entity;
-    $this->class = static::class;
   }
 
-  public function query(array $params = []): array|object|bool
+  public function code_error(): int|string
+  {
+    return $this->code_error;
+  }
+
+  public function message_error(): string
+  {
+    return $this->message_error;
+  }
+
+  public function find_id(int $id, array $inputs = []): Model
+  {
+    $fields = ' * ';
+
+    if (! empty($inputs)) {
+      $fields = ' ' . implode(', ', $inputs) . ' ';
+    }
+
+    $this->find_id = $id;
+    $this->query = 'SELECT' . $fields . 'FROM ' . strtolower($this->table);
+
+    return $this;
+  }
+
+  public function find(array $inputs = []): Model
+  {
+    $fields = ' * ';
+
+    if (! empty($inputs)) {
+      $fields = ' ' . implode(', ', $inputs) . ' ';
+    }
+
+    $this->query = 'SELECT' . $fields . 'FROM ' . strtolower($this->table);
+
+    return $this;
+  }
+
+  public function condition(array $conditions = [], string $operator = ''): Model
+  {
+    $conditions_keys = array_keys($conditions);
+    $conditions_values = array_values($conditions);
+
+    if (isset($conditions_keys[0]) and isset($conditions_values[0])) {
+      if (is_string($conditions_keys[0]) and is_array($conditions_values[0])) {
+        $conditions_values = $conditions_values[0];
+        $conditions_values = array_map(function($item){
+          return '\'' . $item . '\'';
+        }, $conditions_values);
+
+        $conditions_values = implode(', ', $conditions_values);
+
+        $where = ' WHERE ' . $conditions_keys[0] . ' IN (' . $conditions_values . ')';
+
+        $this->query .= $where;
+
+        return $this;
+      }
+    }
+
+    $this->count_condition++;
+
+    $conditions_values = array_map(function($item){
+      return '\'' . $item . '\'';
+    }, $conditions_values);
+
+    $comparison_signal = function($signal = '') {
+      if (mb_substr($signal, -3) === ' = ') return ' = ';
+      elseif (mb_substr($signal, -4) === ' != ') return ' != ';
+      elseif (mb_substr($signal, -3) === ' > ') return ' > ';
+      elseif (mb_substr($signal, -3) === ' < ') return ' < ';
+      elseif (mb_substr($signal, -4) === ' >= ') return ' >= ';
+      elseif (mb_substr($signal, -4) === ' <= ') return ' <= ';
+      else return ' = ';
+    };
+
+    $where = '';
+
+    for ($i = 0; $i < count($conditions_keys); $i++):
+      $signal = $comparison_signal($conditions_keys[$i]);
+      $conditions_keys[$i] = str_replace($signal, '', $conditions_keys[$i]);
+
+      $where .= $conditions_keys[$i] . $signal . $conditions_values[$i];
+    endfor;
+
+    if ($this->count_condition === 1) {
+      $where = ' WHERE ' . $where;
+    }
+
+    if (! empty($operator) and $this->count_condition > 1) {
+      $where .= ' ' . $operator . ' ';
+    }
+
+    $this->query .= $where;
+
+    return $this;
+  }
+
+  // public function join(): Model
+  // {
+  //   if (isset($join_id)) {
+  //     $inner_join = ' $type_join JOIN $join ON $table $primary_key = $join.$foreign_key WHERE $primary_key = $join_id';
+  //   }
+  //   else {
+  //     $inner_join = ' $type_join JOIN $join ON $table $primary_key = $join.$foreign_key';
+  //   }
+
+  //   return $this;
+  // }
+
+  public function order($field = 'id', $sort = 'DESC'): Model
+  {
+    $this->query .= ' ORDER BY ' . $field . ' ' . $sort;
+
+    return $this;
+  }
+
+  public function limit(int $limit = 0): Model
+  {
+    $this->query .= ' LIMIT ' . $limit;
+
+    return $this;
+  }
+
+  public function paginator(int $start = 0, int $length = 0): Model
+  {
+    $this->query .= ' LIMIT ' . $start . ', ' . $length;
+
+    return $this;
+  }
+
+  public function fetch(): array|bool
   {
     try {
-      if (isset($params['inputs'])) {
-        $inputs = implode(', ', $params['inputs']);
-      }
-      else {
-        $inputs = '*';
-      }
-
-      if (isset($params['inner_join'])) {
-        $join = $params['inner_join']['join'] ?? '';
-        $type_join = $params['inner_join']['type_join'] ?? '';
-        $primary_key = $params['inner_join']['primary_key'] ?? '';
-        $foreign_key = $params['inner_join']['foreign_key'] ?? '';
-        $join_id = $params['inner_join']['join_id'] ?? '';
-
-        if (isset($params['inner_join']['fields'])) {
-          $inputs = '';
-          foreach ($params['inner_join']['fields'] as $field):
-            $inputs .= $field . ' ,';
-          endforeach;
-
-          $inputs = rtrim($inputs, ', ');
-        }
-
-        $type_join = strtolower($type_join);
-
-        if (! empty($join_id)) {
-          $inner_join = " $type_join JOIN $join ON " . $this->table . ".$primary_key = $join.$foreign_key WHERE $primary_key = $join_id";
-        }
-        else {
-          $inner_join = " $type_join JOIN $join ON " . $this->table . ".$primary_key = $join.$foreign_key";
-        }
-      }
-
-      if (isset($params['conditions'])) {
-        $comparisons = $params['conditions']['comparisons'] ?? [];
-        $logical_operators = $params['conditions']['logical_operators'] ?? [];
-
-        $conditions = '';
-
-        if (! empty($logical_operators)) {
-          $various_searches_key = array_keys($comparisons);
-          $various_searches_value = array_values($comparisons);
-
-          $various_searches_value = array_map(function($item){
-            return '\'' . $item . '\'';
-          }, $various_searches_value);
-
-          $teste = '';
-          for ($i = 0; $i < count($various_searches_key); $i++) {
-            $opr = '';
-            if (isset($logical_operators[$i])) {
-              $opr = $logical_operators[$i];
-            }
-            $teste .= $various_searches_key[$i] . ' = ' . $various_searches_value[$i] . ' ' . $opr . ' ';
-          }
-          $conditions = ' WHERE ' . $teste;
-        }
-        else {
-          $various_searches_key = array_keys($comparisons);
-          $various_searches_key = implode('', $various_searches_key);
-
-          if (! empty($various_searches_key) and count($comparisons) === 1) {
-            $various_searches_values = $comparisons[ $various_searches_key ];
-            if (isset($various_searches_values)) {
-              $comparisons[ $various_searches_key ] = array_map(function($item){
-                return '\'' . $item . '\'';
-              }, $comparisons[ $various_searches_key ]);
-
-              $various_searches_values = implode(', ', $comparisons[ $various_searches_key ]);
-
-              $conditions = ' WHERE ' . $various_searches_key . ' IN (' . $various_searches_values . ')';
-            }
-          }
-        }
-
-        if (empty($conditions)) {
-          $comparison_signal = function($signal = '') {
-            if (mb_substr($signal, -3) == ' = ') {
-              return ' = ';
-            }
-            elseif (mb_substr($signal, -4) == ' != ') {
-              return ' != ';
-            }
-            elseif (mb_substr($signal, -3) == ' > ') {
-              return ' > ';
-            }
-            elseif (mb_substr($signal, -3) == ' < ') {
-              return ' < ';
-            }
-            elseif (mb_substr($signal, -4) == ' >= ') {
-              return ' >= ';
-            }
-            elseif (mb_substr($signal, -4) == ' <= ') {
-              return ' <= ';
-            }
-            else {
-              return ' = ';
-            }
-          };
-
-          $keys = array_keys($comparisons);
-          $values = array_values($comparisons);
-
-          $signal = '';
-          $signal_all = [];
-
-          for ($i = 0; $i < count($comparisons); $i++):
-            $signal = $comparison_signal($keys[$i]);
-            $signal_all[] = $signal;
-
-            $logical_operator = $logical_operators[$i] ?? null;
-
-            $conditions .= rtrim($keys[$i], $signal) . $signal . ":" . rtrim($keys[$i], $signal) . " " . $logical_operator . " ";
-          endfor;
-
-          for ($i = 0; $i < count($signal_all); $i++):
-            $signal = $signal_all[$i];
-
-            $keys = array_map(function($key) use($signal) {
-              return rtrim($key, " $signal ");
-            }, $keys);
-          endfor;
-
-          $conditions = " WHERE " . rtrim($conditions, " ");
-        }
-      }
-
-      if (isset($params['pagination'])) {
-        $pagination = " LIMIT " . $params['pagination']['start'] . ", " . $params['pagination']['length'];
-      }
-
-      $order_by = ' ORDER BY id ';
-      if (isset($params['order']) and $params['order'] != 'id') {
-        $order_by = ' ORDER BY ' . $params['order'] . ' ';
-      }
-
-      $order = 'DESC ';
-      if (isset($params['sort'])) {
-        if ($params['sort'] == 'asc') {
-          $order = 'ASC ';
-        }
-        elseif ($params['sort'] == 'desc') {
-          $order = 'DESC ';
-        }
-      }
-
-      $search = "SELECT $inputs FROM " . strtolower($this->table);
-
-      if (isset($inner_join)) {
-        $search .= $inner_join;
-      }
-      elseif (isset($pagination)) {
-        $search .= $pagination;
-      }
-      else {
-        if (isset($conditions)) {
-          $search .= $conditions;
-        }
-
-        $search .= $order_by . $order;
-      }
-
-      if (isset($params['limit'])) {
-        $search .= 'LIMIT ' . $params['limit'];
-      }
-
       $connect = DataBase::connect();
 
-      if (DataBase::db_error()) {
-        $this->code_error = DataBase::db_cod_error();
-        $this->message_error = DataBase::db_msg_error();
-
-        return false;
+      if ($this->find_id) {
+        $this->query .= ' WHERE :id = id';
+        $stmt = $connect->prepare($this->query);
+        $stmt->bindParam(':id', $this->find_id);
       }
-
-      $stmt = $connect->prepare($search);
-
-      if (isset($keys)) {
-        if (count((array) $keys) > 1 and count((array) $values) > 1) {
-          foreach ($keys as $i => $key):
-            if (! is_string($values[$i])) continue;
-            $stmt->bindParam(':' . $key, $values[$i]);
-          endforeach;
-        }
-        else {
-          $stmt->bindParam(':' . $keys[0], $values[0]);
-        }
+      else {
+        $stmt = $connect->prepare($this->query);
       }
 
       $stmt->execute();
@@ -220,90 +175,39 @@ class Model
 
       if (! $stmt->rowCount()) {
         $this->code_error = 404;
-        $this->message_error = 'Não encontrado';
 
         return false;
       }
-
-      $this->code_success = 200;
-
-      // return $stmt->fetchAll(fetch_argument: $this->class);
-      return $stmt->fetchAll(PDO::FETCH_CLASS, $this->class);
     }
-    catch (PDOException $e) {
+    catch (PDOException|ErrorException|Error $e) {
       $this->code_error = $e->getCode();
       $this->message_error = $e->getMessage();
 
       return false;
     }
+
+    return $stmt->fetchAll();
   }
 
-  public function query_id(int $id = null, bool $api = false): bool|array
+  public function save(): int|bool
   {
     try {
-      $connect = DataBase::connect();
+      $data = $this->fields;
 
-      if (DataBase::db_error()) {
-        return (! $api) ? false : Response::error(DataBase::db_cod_error(), DataBase::db_msg_error());
-      }
+      $data_keys = array_keys($data);
+      $data_values = array_values($data);
 
-      $search = "SELECT * FROM " . strtolower($this->table) . " WHERE id = :id";
+      $data_insert_keys = '(' . implode(', ', $data_keys) . ')';
+      $data_insert_values = array_map(fn($item)=> ':' . $item, $data_keys);
+      $data_insert_values = '(' . implode(', ', $data_insert_values) . ')';
 
-      $stmt = $connect->prepare($search);
-
-      $stmt->bindParam(':id' , $id);
-
-      $stmt->execute();
-
-      DataBase::disconnect();
-
-      if (! $stmt->rowCount()) {
-        return (! $api) ? false : Response::error(404, 'Erro ao buscar registro pelo ID ' . $id);
-      }
-
-      return (! $api) ? $stmt->fetch() : Response::success(200, $stmt->rowCount(), $stmt->fetch());
-    }
-    catch (PDOException $e) {
-      return (! $api) ? false : Response::error((int) $e->getCode(), $e->getMessage());
-    }
-  }
-
-  public function insert(array $data = [], bool $api = false): bool|array
-  {
-    try {
-      if (empty($data)) {
-        return (! $api) ? false : Response::error(400, 'Informe os dados');
-      }
-
-      $keys = array_keys($data);
-      $values = array_values($data);
-
-      $db_keys_fixed = '(';
-      $db_keys_dynamic = '(';
-
-      for ($i = 0; $i < count($data); $i++):
-        $db_keys_fixed .= $keys[$i] . ', ';
-        $db_keys_dynamic .= ':' . $keys[$i] . ', ';
-      endfor;
-
-      $db_keys_fixed = rtrim($db_keys_fixed, ', ');
-      $db_keys_fixed .= ')';
-
-      $db_keys_dynamic = rtrim($db_keys_dynamic, ', ');
-      $db_keys_dynamic .= ')';
-
-      $insert = "INSERT INTO " . $this->table . " $db_keys_fixed VALUES $db_keys_dynamic";
+      $insert = "INSERT INTO " . $this->table . " $data_insert_keys VALUES $data_insert_values";
 
       $connect = DataBase::connect();
-
-      if (DataBase::db_error()) {
-        return (! $api) ? false : Response::error(DataBase::db_cod_error(), DataBase::db_msg_error());
-      }
-
       $stmt = $connect->prepare($insert);
 
-      foreach ($keys as $i => $key):
-        $stmt->bindParam(':' . $key, $values[$i]);
+      foreach ($data_keys as $i => $key):
+        $stmt->bindParam(':' . $key, $data_values[$i]);
       endforeach;
 
       $stmt->execute();
@@ -311,114 +215,98 @@ class Model
       DataBase::disconnect();
 
       if (! $stmt->rowCount()) {
-        return (! $api) ? false : Response::error(400, 'Erro ao adicionar registro');
-      }
+        $this->code_error = 400;
 
-      return (! $api) ? true : Response::success(201, $stmt->rowCount(), ['id' => $connect->lastInsertId(), 'dados_adicionados' => $data]);
+        return false;
+      }
     }
-    catch (PDOException $e) {
-      return (! $api) ? false : Response::error($e->getCode(), $e->getMessage());
+    catch (PDOException|ErrorException|Error $e) {
+      $this->code_error = $e->getCode();
+      $this->message_error = $e->getMessage();
+
+      return false;
     }
+
+    return $connect->lastInsertId();
   }
 
-  public function update($data = [], bool $api = false): bool|array
+  public function update(int $id)
   {
     try {
-      if (! isset($data['id']) or empty($data['id'])) {
-        return (! $api) ? false : Response::error(400, 'Parâmetro "id" não informado ou vazio');
-      }
+      $data_keys = array_keys($this->fields);
+      $data_values = array_values($this->fields);
 
-      if (! is_numeric($data['id']) or ! is_integer($data['id'])) {
-        return (! $api) ? false : Response::error(400, 'O "id" deve ser um número inteiro');
-      }
+      $keys_update = [];
+      $data_keys_update = [];
+      $data_values_update = [];
 
-      if (! isset($data['data']) or empty($data['data'])) {
-        return (! $api) ? false : Response::error(400, 'Parâmetro "data" não informado ou vazio');
-      }
-
-      $keys = array_keys($data['data']);
-      $values = array_values($data['data']);
-
-      $db_keys_fixed_and_dynamic = '';
-
-      for ($i = 0; $i < count($data['data']); $i++):
-        $db_keys_fixed_and_dynamic .= $keys[$i] . ' = ';
-        $db_keys_fixed_and_dynamic .= ':' . $keys[$i] . ', ';
+      for ($i = 0; $i < count($this->fields); $i++):
+        if (empty($data_values[$i])) continue;
+        $keys_update[] = $data_keys[$i] . ' = :' . $data_keys[$i];
+        $data_values_update[] = $data_values[$i];
+        $data_keys_update[] = $data_keys[$i];
       endfor;
 
-      $db_keys_fixed_and_dynamic = rtrim($db_keys_fixed_and_dynamic, ', ');
+      $keys_update = implode(', ', $keys_update);
 
       $connect = DataBase::connect();
 
-      if (DataBase::db_error()) {
-        return (! $api) ? false : Response::error(DataBase::db_cod_error(), DataBase::db_msg_error());
-      }
-
-      $update = "UPDATE " . $this->table . " SET $db_keys_fixed_and_dynamic WHERE id = :id";
+      $update = "UPDATE " . $this->table . " SET $keys_update WHERE id = :id";
 
       $stmt = $connect->prepare($update);
 
-      if (count($keys) > 1 and count($values) > 1) {
-        foreach ($keys as $i => $key):
-          $stmt->bindParam(':' . $key, $values[$i]);
-        endforeach;
-        $stmt->bindParam(':id', $data['id']);
-      }
-      else {
-        $stmt->bindParam(':' . $keys[0], $values[0]);
-        $stmt->bindParam(':id', $data['id']);
-      }
-
-      $stmt->execute();
-
-      DataBase::disconnect();
-
-      if (! $stmt->rowCount()) {
-        return (! $api) ? false : Response::error(400, 'Erro ao editar registro');
-      }
-
-      return (! $api) ? true : Response::success(201, $stmt->rowCount(), ['id' => $data['id'], 'dados_editados' => $data['data']]);
-    }
-    catch (PDOException $e) {
-      return (! $api) ? false : Response::error($e->getCode(), $e->getMessage());
-    }
-  }
-
-  public function delete(int $id = null, bool $api = false): bool|array
-  {
-    try {
-      if (is_null($id)) {
-        return (! $api) ? false : Response::error(400, 'Nenhum ID informado');
-      }
-
-      if (! is_numeric($id) or ! is_integer($id)) {
-        return (! $api) ? false : Response::error(400, 'O "id" deve ser um número inteiro');
-      }
-
-      $connect = DataBase::connect();
-
-      DataBase::disconnect();
-
-      if (DataBase::db_error()) {
-        return (! $api) ? false : Response::error(DataBase::db_cod_error(), DataBase::db_msg_error());
-      }
-
-      $delete = "DELETE FROM " . $this->table . " WHERE id = :id";
-
-      $stmt = $connect->prepare($delete);
+      foreach ($data_keys_update as $i => $key):
+        $stmt->bindParam(':' . $key, $data_values_update[$i]);
+      endforeach;
 
       $stmt->bindParam(':id', $id);
 
       $stmt->execute();
 
-      if (! $stmt->rowCount()) {
-        return (! $api) ? false : Response::error(400, 'O registro já foi deletado ou não existe');
-      }
+      DataBase::disconnect();
 
-      return (! $api) ? true : Response::success(201, $stmt->rowCount(), ['id' => $id, 'msg' => 'Registro "' . $id . '" foi deletado']);
+      if (! $stmt->rowCount()) {
+        $this->code_error = 400;
+
+        return false;
+      }
     }
-    catch (PDOException $e) {
-      return (! $api) ? false : Response::error($e->getCode(), $e->getMessage());
+    catch (PDOException|ErrorException|Error $e) {
+      $this->code_error = $e->getCode();
+      $this->message_error = $e->getMessage();
+
+      return false;
     }
+
+    return true;
+  }
+
+  public function delete(int $id): bool|array
+  {
+    try {
+      $connect = DataBase::connect();
+
+      DataBase::disconnect();
+
+      $delete = "DELETE FROM " . $this->table . " WHERE id = :id";
+
+      $stmt = $connect->prepare($delete);
+      $stmt->bindParam(':id', $id);
+      $stmt->execute();
+
+      if (! $stmt->rowCount()) {
+        $this->code_error = 400;
+
+        return false;
+      }
+    }
+    catch (PDOException|ErrorException|Error $e) {
+      $this->code_error = $e->getCode();
+      $this->message_error = $e->getMessage();
+
+      return false;
+    }
+
+    return true;
   }
 }
