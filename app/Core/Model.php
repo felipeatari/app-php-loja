@@ -67,9 +67,6 @@ class Model
     if (isset($conditions_keys[0]) and isset($conditions_values[0])) {
       if (is_string($conditions_keys[0]) and is_array($conditions_values[0])) {
         $conditions_values = $conditions_values[0];
-        // $conditions_values = array_map(function($item){
-        //   return '\'' . $item . '\'';
-        // }, $conditions_values);
 
         $conditions_values = implode(', ', $conditions_values);
 
@@ -82,10 +79,6 @@ class Model
     }
 
     $this->count_condition++;
-
-    // $conditions_values = array_map(function($item){
-    //   return '\'' . $item . '\'';
-    // }, $conditions_values);
 
     $comparison_signal = function($signal = '') {
       if (mb_substr($signal, -3) === ' = ') return ' = ';
@@ -121,18 +114,6 @@ class Model
     return $this;
   }
 
-  // public function join(): Model
-  // {
-  //   if (isset($join_id)) {
-  //     $inner_join = ' $type_join JOIN $join ON $table $primary_key = $join.$foreign_key WHERE $primary_key = $join_id';
-  //   }
-  //   else {
-  //     $inner_join = ' $type_join JOIN $join ON $table $primary_key = $join.$foreign_key';
-  //   }
-
-  //   return $this;
-  // }
-
   public function order($field = 'id', $sort = 'DESC'): Model
   {
     $this->query .= ' ORDER BY ' . $field . ' ' . $sort;
@@ -167,6 +148,7 @@ class Model
       }
       elseif (! empty($this->conditions)) {
         $this->query = trim($this->query);
+
         $stmt = $connect->prepare($this->query);
 
         foreach ($this->conditions as $condition):

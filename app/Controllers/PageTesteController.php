@@ -36,36 +36,37 @@ class PageTesteController
     $produtos = new ProdutoModel();
 
     // pr($produtos->find_id(9)->fetch());die;
+    pr($produtos->find()->fetch());die;
 
-    $find = $produtos->find()
+    // $find = $produtos->find()
     // $find = $produtos->find(['id', 'nome'])
     // ?->condition(['id' => 4], 'OR')
-    ?->condition(['id > ' => 3], 'AND')
-    ?->condition(['id < ' => 7])
+    // ?->condition(['id > ' => 5], 'OR')
+    // ?->condition(['nome' => 'Camisa Long Line'])
     // ?->condition(['id < ' => 3], 'OR')
     // ?->condition(['nome' => 'Camisa Basica Linho 17'])
     // ?->order(sort: 'DESC')
     // ?->order()
     // ?->paginator(1, 2)
     // ?->limit(1)
-    ?->fetch();
+    // ?->fetch();
 
-    if ($produtos->code_error()) {
-      pr($produtos->code_error());
-      pr($produtos->message_error());
-      die;
-    }
+    // if ($produtos->code_error()) {
+    //   pr($produtos->code_error());
+    //   pr($produtos->message_error());
+    //   die;
+    // }
 
-    pr($find);
-    die;
+    // pr($find);
+    // die;
 
     $produtos = new ProdutoModel;
     $produtos->ativo(true);
-    $produtos->nome('Camisa Basica Linho 17');
-    $produtos->descricao('Camisa Basica Linho, Camisa Basica Linho, Camisa Basica Linho');
+    $produtos->nome('Camisa Basica Teste');
+    $produtos->descricao('Camisa Basica Teste, Camisa Basica Teste, Camisa Basica Teste');
     $produtos->marca('Baruk 2');
-    $produtos->preco(87.00);
-    $produtos->peso(0.400);
+    $produtos->preco(55.00);
+    $produtos->peso(0.200);
     $produtos->largura(11);
     $produtos->altura(3);
     $produtos->comprimento(25);
@@ -74,7 +75,7 @@ class PageTesteController
       pr([$produtos->code_error(), $produtos->message_error()]);die;
     };
 
-    // pr($find = $produtos->save());die;
+    pr($find = $produtos->save());die;
     // pr($find = $produtos->update(8));die;
     // pr($find = $produtos->delete(8));die;
 
