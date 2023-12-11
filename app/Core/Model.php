@@ -3,15 +3,11 @@
 namespace App\Core;
 
 use App\Source\DataBase;
-use App\Source\Response;
 use Error;
-use ErrorException;
 use PDOException;
-use PDO;
 
 class Model
 {
-  private mixed $return;
   private int|string $code_error = 0;
   private string $message_error = '';
   private string $table;
@@ -19,6 +15,7 @@ class Model
   private int $count_condition = 0;
   protected array $fields = [];
   private int|bool $find_id = false;
+  private array $conditions = [];
 
   public function __construct(string $entity)
   {
@@ -70,9 +67,9 @@ class Model
     if (isset($conditions_keys[0]) and isset($conditions_values[0])) {
       if (is_string($conditions_keys[0]) and is_array($conditions_values[0])) {
         $conditions_values = $conditions_values[0];
-        $conditions_values = array_map(function($item){
-          return '\'' . $item . '\'';
-        }, $conditions_values);
+        // $conditions_values = array_map(function($item){
+        //   return '\'' . $item . '\'';
+        // }, $conditions_values);
 
         $conditions_values = implode(', ', $conditions_values);
 
@@ -86,9 +83,9 @@ class Model
 
     $this->count_condition++;
 
-    $conditions_values = array_map(function($item){
-      return '\'' . $item . '\'';
-    }, $conditions_values);
+    // $conditions_values = array_map(function($item){
+    //   return '\'' . $item . '\'';
+    // }, $conditions_values);
 
     $comparison_signal = function($signal = '') {
       if (mb_substr($signal, -3) === ' = ') return ' = ';
@@ -106,11 +103,13 @@ class Model
       $signal = $comparison_signal($conditions_keys[$i]);
       $conditions_keys[$i] = str_replace($signal, '', $conditions_keys[$i]);
 
-      $where .= $conditions_keys[$i] . $signal . $conditions_values[$i];
+      $this->conditions[][$conditions_keys[$i]] = $conditions_values[$i];
+
+      $where .= $conditions_keys[$i] . $signal . ':' . $conditions_keys[$i];
     endfor;
 
     if ($this->count_condition === 1) {
-      $where = ' WHERE ' . $where;
+      $where = ' WHERE ' . $where . ' ' . $operator . ' ';
     }
 
     if (! empty($operator) and $this->count_condition > 1) {
@@ -161,9 +160,18 @@ class Model
       $connect = DataBase::connect();
 
       if ($this->find_id) {
-        $this->query .= ' WHERE :id = id';
+        $this->query .= ' WHERE id = :id';
+
         $stmt = $connect->prepare($this->query);
         $stmt->bindParam(':id', $this->find_id);
+      }
+      elseif (! empty($this->conditions)) {
+        $this->query = trim($this->query);
+        $stmt = $connect->prepare($this->query);
+
+        foreach ($this->conditions as $condition):
+          $stmt->bindParam(':' . array_keys($condition)[0], array_values($condition)[0]);
+        endforeach;
       }
       else {
         $stmt = $connect->prepare($this->query);
@@ -179,7 +187,7 @@ class Model
         return false;
       }
     }
-    catch (PDOException|ErrorException|Error $e) {
+    catch (PDOException|Error $e) {
       $this->code_error = $e->getCode();
       $this->message_error = $e->getMessage();
 
@@ -220,7 +228,7 @@ class Model
         return false;
       }
     }
-    catch (PDOException|ErrorException|Error $e) {
+    catch (PDOException|Error $e) {
       $this->code_error = $e->getCode();
       $this->message_error = $e->getMessage();
 
@@ -271,7 +279,7 @@ class Model
         return false;
       }
     }
-    catch (PDOException|ErrorException|Error $e) {
+    catch (PDOException|Error $e) {
       $this->code_error = $e->getCode();
       $this->message_error = $e->getMessage();
 
@@ -300,7 +308,7 @@ class Model
         return false;
       }
     }
-    catch (PDOException|ErrorException|Error $e) {
+    catch (PDOException|Error $e) {
       $this->code_error = $e->getCode();
       $this->message_error = $e->getMessage();
 

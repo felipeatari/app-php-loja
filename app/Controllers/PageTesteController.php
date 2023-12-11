@@ -35,21 +35,28 @@ class PageTesteController
   {
     $produtos = new ProdutoModel();
 
-    pr($produtos->find_id(9)->fetch());die;
-    // $find = $produtos->find(['id', 'preco'])
-    // $find = $produtos->find_id(8)
+    // pr($produtos->find_id(9)->fetch());die;
+
     $find = $produtos->find()
-    ?->condition(['id' => 10])
-    // ?->condition(['id' => 1], 'or')
-    // ?->condition(['id < ' => 3], 'or')
-    // ?->condition(['nome' => 'Camisa Long Line'])
-    // ?->order('preco', 'ASC')
+    // $find = $produtos->find(['id', 'nome'])
+    // ?->condition(['id' => 4], 'OR')
+    ?->condition(['id > ' => 3], 'AND')
+    ?->condition(['id < ' => 7])
+    // ?->condition(['id < ' => 3], 'OR')
+    // ?->condition(['nome' => 'Camisa Basica Linho 17'])
+    // ?->order(sort: 'DESC')
     // ?->order()
     // ?->paginator(1, 2)
     // ?->limit(1)
     ?->fetch();
+
+    if ($produtos->code_error()) {
+      pr($produtos->code_error());
+      pr($produtos->message_error());
+      die;
+    }
+
     pr($find);
-    // if ($produtos->code_error()) pr($produtos->code_error());
     die;
 
     $produtos = new ProdutoModel;
