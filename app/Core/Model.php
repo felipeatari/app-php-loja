@@ -149,7 +149,7 @@ class Model
     return $this;
   }
 
-  public function fetch(): array|bool
+  public function fetch(bool $key_object = false): array|bool
   {
     try {
       $connect = DataBase::connect();
@@ -199,6 +199,10 @@ class Model
       return false;
     }
 
+    if ($key_object) {
+      return [$this->table => $stmt->fetchAll()];
+    }
+
     return $stmt->fetchAll();
   }
 
@@ -242,7 +246,7 @@ class Model
     return $connect->lastInsertId();
   }
 
-  public function update(int $id)
+  public function update(int $id): bool
   {
     try {
       $data_keys = array_keys($this->fields);
@@ -292,7 +296,7 @@ class Model
     return true;
   }
 
-  public function delete(int $id): bool|array
+  public function delete(int $id): bool
   {
     try {
       $connect = DataBase::connect();

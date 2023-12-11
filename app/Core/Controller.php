@@ -274,12 +274,12 @@ class Controller
     }
 
     if ($this->callback) {
-      $this->end = call_user_func_array($this->method, $this->params);
+      $this->end = call_user_func_array($this->method, $this->params) ?? '';
 
       return;
     }
 
-    $this->end = call_user_func_array([new $this->controller, $this->method], $this->params);
+    $this->end = call_user_func_array([new $this->controller, $this->method], $this->params) ?? '';
   }
 
   /**

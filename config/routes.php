@@ -8,9 +8,13 @@ define('ROUTES', [
   ['get', '/login', 'PageLogin->index'],
   ['post', '/entrar', 'PageLogin->entrar'],
   ['get', '/produto/id/{id}', 'PageProduto->see_product'],
-  ['get', '/teste', 'PageTeste->index'],
   // Rotas do admin
   ['get', '/admin', 'AdminHome->index'],
   ['get', '/admin/produto/listar', 'AdminProduto->listar'],
   ['get', '/admin/produto/cadastrar', 'AdminProduto->cadastrar'],
+  // Rotas de teste
+  ['get', '/teste', 'PageTeste->index'],
+  ['get', '/teste/db/find', 'PageTeste->find'],
+  ['get', '/teste/db/save', 'PageTeste->save'],
+  ['get', '/teste/db/delete/{id}', 'PageTeste->delete'],
 ]);

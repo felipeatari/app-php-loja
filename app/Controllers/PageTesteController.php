@@ -5,8 +5,7 @@ namespace App\Controllers;
 use App\Core\View;
 use App\Models\TesteModel;
 use App\Models\ProdutoModel;
-use App\Core\Model;
-use App\Source\DataBase;
+use App\Models\CategoriaModel;
 
 class PageTesteController
 {
@@ -33,13 +32,14 @@ class PageTesteController
 
   public function index()
   {
-    $produtos = new ProdutoModel();
+    $model = new ProdutoModel();
+    // $model = new CategoriaModel();
 
-    pr($produtos->find_id(2)->fetch());die;
-    // pr($produtos->find()->fetch());die;
+    // pr($model->find_id(2)->fetch());die;
+    pr($model->find()->fetch());die;
 
-    $find = $produtos->find()
-    // $find = $produtos->find(['id', 'nome']) // Traz os campos ID e nome
+    $find = $model->find()
+    // $find = $model->find(['id', 'nome']) // Traz os campos ID e nome
     ?->condition(['id' => [3, 7, 9]]) // Traz todos os IDs informados
 
     // ?->condition(['id > ' => 3], 'AND') // Traz todos os IDs maior que 3 e
@@ -55,44 +55,85 @@ class PageTesteController
     ?->limit(3) // Limita a quantidade de resultados
     ?->fetch();
 
-    if ($produtos->error()) {
-      pr($produtos->code_error());
-      pr($produtos->message_error());
+    if ($model->error()) {
+      pr($model->code_error());
+      pr($model->message_error());
       die;
     }
 
-    // pr($find);die;
+    // pr($find);
 
     foreach ($find as $object):
       pr('ID: ' . $object->id);
       pr('Nome: ' . $object->nome);
       pr('<hr>');
-    endforeach;die;
+    endforeach;
 
-    $produtos = new ProdutoModel;
-    $produtos->ativo(true);
-    $produtos->nome('Camisa Basica Teste');
-    $produtos->descricao('Camisa Basica Teste, Camisa Basica Teste, Camisa Basica Teste');
-    $produtos->marca('Baruk 2');
-    $produtos->preco(55.00);
-    $produtos->peso(0.200);
-    $produtos->largura(11);
-    $produtos->altura(3);
-    $produtos->comprimento(25);
-
-    if ($produtos->code_error()) {
-      pr([$produtos->code_error(), $produtos->message_error()]);die;
-    };
-
-    pr($find = $produtos->save());die;
-    // pr($find = $produtos->update(8));die;
-    // pr($find = $produtos->delete(8));die;
     die;
   }
 
-  public function api()
+  public function find()
   {
-    header('Content-Type: application/json');
-    die(json_encode(['status' => true]));
+    $produto = new ProdutoModel();
+    $categoria = new CategoriaModel();
+
+    // $produtos = $produto->find()
+    // ->limit(3)
+    // ->condition([])
+    // ->fetch(true);
+
+    $categorias = $categoria->find()
+    ->condition(['parent_id' => 16])
+    // ->limit(3)
+    ->fetch(true);
+
+    // pr($produtos);
+    pr($categorias);
+
+    // foreach ($produtos['produto'] as $object):
+    //   pr($object);
+      // pr('ID: ' . $object->id);
+      // pr('Nome: ' . $object->nome);
+      // pr('<hr>');
+    // endforeach;
+
+    die;
+  }
+
+  public function save(int $id = 0)
+  {
+    $model = new ProdutoModel;
+    $model->nome('Camisa Social');
+    $model->categoria_id(12);
+
+    // $model = new CategoriaModel;
+    // $model->nome('mauricinho');
+    // $model->parent_id(18);
+
+    if ($id > 0) {
+      pr($model->update($id));
+    }
+    else {
+      pr($model->save());
+    }
+
+    if ($model->error()) {
+      pr([$model->code_error(), $model->message_error()]);
+    };
+
+    die;
+  }
+
+  public function delete(int $id)
+  {
+    $model = new ProdutoModel;
+    // $model = new CategoriaModel;
+
+    pr($model->delete($id));
+
+    if ($model->error()) {
+      pr([$model->code_error(), $model->message_error()]);die;
+    };
+    die;
   }
 }
