@@ -6,21 +6,21 @@ use App\Core\Model;
 
 class ProdutoModel extends Model
 {
-  protected array $fields = [
-    'ativo' => false,
-    'nome' => '',
-    'descricao' => '',
-    'marca' => '',
-    'preco' => 0.00,
-    'peso' => 0.000,
-    'largura' => 0.00,
-    'altura' => 0.00,
-    'comprimento' => 0.00,
-  ];
-
   public function __construct()
   {
     parent::__construct('produto');
+
+    $this->fields = [
+      'ativo' => false,
+      'nome' => '',
+      'descricao' => '',
+      'marca' => '',
+      'preco' => 0.00,
+      'peso' => 0.000,
+      'largura' => 0.00,
+      'altura' => 0.00,
+      'comprimento' => 0.00,
+    ];
   }
 
   public function ativo(bool $ativo)

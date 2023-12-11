@@ -8,19 +8,31 @@ use PDOException;
 
 class Model
 {
-  private int|string $code_error = 0;
-  private string $message_error = '';
-  private string $table;
+  private bool $error = false;
+  private int|string $code_error;
+  private string $message_error;
   private string $query = '';
   private int $count_condition = 0;
   protected array $fields = [];
-  private int|bool $find_id = false;
+  private array $find_id = [];
   private array $conditions = [];
-  private array $conditions_2 = [];
 
-  public function __construct(string $entity)
+  public function __construct(
+    private string $table
+  )
   {
-    $this->table = $entity;
+  }
+
+  public function error(): bool
+  {
+    return $this->error;
+  }
+
+  public function set_error(int|string $code, string $message = ''): void
+  {
+    $this->error = true;
+    $this->code_error = $code;
+    $this->message_error = $message;
   }
 
   public function code_error(): int|string
@@ -41,7 +53,8 @@ class Model
       $fields = ' ' . implode(', ', $inputs) . ' ';
     }
 
-    $this->find_id = $id;
+    $this->find_id[] = true;
+    $this->find_id[] = $id;
     $this->query = 'SELECT' . $fields . 'FROM ' . strtolower($this->table);
 
     return $this;
@@ -141,11 +154,18 @@ class Model
     try {
       $connect = DataBase::connect();
 
-      if ($this->find_id) {
+      if (isset($this->find_id[0]) and is_bool($this->find_id[0]) and $this->find_id[0]) {
+
+        if (! isset($this->find_id[1]) or ! is_int($this->find_id[1]) or empty($this->find_id[1])) {
+          $this->set_error(404, 'ID error');
+
+          return false;
+        }
+
         $this->query .= ' WHERE id = :id';
 
         $stmt = $connect->prepare($this->query);
-        $stmt->bindParam(':id', $this->find_id);
+        $stmt->bindParam(':id', $this->find_id[1]);
       }
       elseif (! empty($this->conditions)) {
         $stmt = $connect->prepare($this->query);
@@ -168,14 +188,13 @@ class Model
       DataBase::disconnect();
 
       if (! $stmt->rowCount()) {
-        $this->code_error = 404;
+        $this->set_error(404, 'Not Found');
 
         return false;
       }
     }
     catch (PDOException|Error $e) {
-      $this->code_error = $e->getCode();
-      $this->message_error = $e->getMessage();
+      $this->set_error($e->getCode(), $e->getMessage());
 
       return false;
     }
@@ -209,14 +228,13 @@ class Model
       DataBase::disconnect();
 
       if (! $stmt->rowCount()) {
-        $this->code_error = 400;
+        $this->set_error(400, 'Not Save');
 
         return false;
       }
     }
     catch (PDOException|Error $e) {
-      $this->code_error = $e->getCode();
-      $this->message_error = $e->getMessage();
+      $this->set_error($e->getCode(), $e->getMessage());
 
       return false;
     }
@@ -260,14 +278,13 @@ class Model
       DataBase::disconnect();
 
       if (! $stmt->rowCount()) {
-        $this->code_error = 400;
+        $this->set_error(400, 'Not Update');
 
         return false;
       }
     }
     catch (PDOException|Error $e) {
-      $this->code_error = $e->getCode();
-      $this->message_error = $e->getMessage();
+      $this->set_error($e->getCode(), $e->getMessage());
 
       return false;
     }
@@ -289,14 +306,13 @@ class Model
       $stmt->execute();
 
       if (! $stmt->rowCount()) {
-        $this->code_error = 400;
+        $this->set_error(400,  'Not Delete');
 
         return false;
       }
     }
     catch (PDOException|Error $e) {
-      $this->code_error = $e->getCode();
-      $this->message_error = $e->getMessage();
+      $this->set_error($e->getCode(), $e->getMessage());
 
       return false;
     }

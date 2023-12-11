@@ -35,30 +35,39 @@ class PageTesteController
   {
     $produtos = new ProdutoModel();
 
-    // pr($produtos->find_id(9)->fetch());die;
-    pr($produtos->find()->fetch());die;
+    pr($produtos->find_id(2)->fetch());die;
+    // pr($produtos->find()->fetch());die;
 
-    // $find = $produtos->find()
-    // $find = $produtos->find(['id', 'nome'])
-    // ?->condition(['id' => 4], 'OR')
-    // ?->condition(['id > ' => 5], 'OR')
-    // ?->condition(['nome' => 'Camisa Long Line'])
-    // ?->condition(['id < ' => 3], 'OR')
-    // ?->condition(['nome' => 'Camisa Basica Linho 17'])
-    // ?->order(sort: 'DESC')
-    // ?->order()
-    // ?->paginator(1, 2)
-    // ?->limit(1)
-    // ?->fetch();
+    $find = $produtos->find()
+    // $find = $produtos->find(['id', 'nome']) // Traz os campos ID e nome
+    ?->condition(['id' => [3, 7, 9]]) // Traz todos os IDs informados
 
-    // if ($produtos->code_error()) {
-    //   pr($produtos->code_error());
-    //   pr($produtos->message_error());
-    //   die;
-    // }
+    // ?->condition(['id > ' => 3], 'AND') // Traz todos os IDs maior que 3 e
+    // ?->condition(['id < ' => 7]) // Todos os IDs menor que 7
 
-    // pr($find);
-    // die;
+    // ?->condition(['id' => 8], 'OR') // Traz o ID 4 ou
+    // ?->condition(['nome' => 'Camisa Long Line']) // A camisa de nome 'Camisa Long Line'
+
+    ?->order() // Se não passar nada traz em ordem decrescente
+    // ?->order('nome', 'ASC') // Ordena por nome em ordem acescente
+
+    // ?->paginator(1, 2) // Parâmetro 1 é de onde começa e o 2 é a quantidade por página
+    ?->limit(3) // Limita a quantidade de resultados
+    ?->fetch();
+
+    if ($produtos->error()) {
+      pr($produtos->code_error());
+      pr($produtos->message_error());
+      die;
+    }
+
+    // pr($find);die;
+
+    foreach ($find as $object):
+      pr('ID: ' . $object->id);
+      pr('Nome: ' . $object->nome);
+      pr('<hr>');
+    endforeach;die;
 
     $produtos = new ProdutoModel;
     $produtos->ativo(true);
@@ -78,9 +87,6 @@ class PageTesteController
     pr($find = $produtos->save());die;
     // pr($find = $produtos->update(8));die;
     // pr($find = $produtos->delete(8));die;
-
-    // pr((new ProdutoModel)->find()->fetch());
-
     die;
   }
 
