@@ -93,25 +93,6 @@ class Model
 
     $where = '';
 
-    // pr($this->count_condition);
-    // $conditions_keys_count[] = $conditions_keys;
-    // foreach ($conditions_keys as $condition):
-    //   // pr($i);
-    //   pr($condition = $this->count_condition . '_' . $condition);
-    //   // $i++;
-    // endforeach;
-
-    // pr(count($conditions_keys));die;
-
-    // // pr(count($conditions_keys));
-    // pr($conditions_keys[0]);
-    // // $c = 1;
-    // for ($i = 0; $i < count($conditions_keys); $i++):
-    //   // $conditions_keys[$i] = $c . '_' . $conditions_keys[$i];
-    //   pr($i);
-    //   // $c++;
-    // endfor;
-
     for ($i = 0; $i < count($conditions_keys); $i++):
       $signal = $comparison_signal($conditions_keys[$i]);
       $conditions_keys[$i] = str_replace($signal, '', $conditions_keys[$i]);
