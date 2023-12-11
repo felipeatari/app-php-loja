@@ -16,6 +16,7 @@ class Model
   protected array $fields = [];
   private int|bool $find_id = false;
   private array $conditions = [];
+  private array $conditions_2 = [];
 
   public function __construct(string $entity)
   {
@@ -92,13 +93,32 @@ class Model
 
     $where = '';
 
+    // pr($this->count_condition);
+    // $conditions_keys_count[] = $conditions_keys;
+    // foreach ($conditions_keys as $condition):
+    //   // pr($i);
+    //   pr($condition = $this->count_condition . '_' . $condition);
+    //   // $i++;
+    // endforeach;
+
+    // pr(count($conditions_keys));die;
+
+    // // pr(count($conditions_keys));
+    // pr($conditions_keys[0]);
+    // // $c = 1;
+    // for ($i = 0; $i < count($conditions_keys); $i++):
+    //   // $conditions_keys[$i] = $c . '_' . $conditions_keys[$i];
+    //   pr($i);
+    //   // $c++;
+    // endfor;
+
     for ($i = 0; $i < count($conditions_keys); $i++):
       $signal = $comparison_signal($conditions_keys[$i]);
       $conditions_keys[$i] = str_replace($signal, '', $conditions_keys[$i]);
 
       $this->conditions[][$conditions_keys[$i]] = $conditions_values[$i];
 
-      $where .= $conditions_keys[$i] . $signal . ':' . $conditions_keys[$i];
+      $where .= $conditions_keys[$i] . $signal . ':' . $conditions_keys[$i] . '_' . $this->count_condition;
     endfor;
 
     if ($this->count_condition === 1) {
@@ -147,12 +167,15 @@ class Model
         $stmt->bindParam(':id', $this->find_id);
       }
       elseif (! empty($this->conditions)) {
-        $this->query = trim($this->query);
-
         $stmt = $connect->prepare($this->query);
 
+        $i = 1;
         foreach ($this->conditions as $condition):
-          $stmt->bindParam(':' . array_keys($condition)[0], array_values($condition)[0]);
+          $key = array_keys($condition);
+          $value = array_values($condition);
+
+          $stmt->bindParam(':' . $key[0] . '_' . $i, $value[0]);
+          $i++;
         endforeach;
       }
       else {
