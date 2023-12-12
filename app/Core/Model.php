@@ -13,6 +13,7 @@ class Model
   private string $message_error;
   private string $query = '';
   private int $count_condition = 0;
+  protected array $query_fields = [];
   protected array $fields = [];
   private array $find_id = [];
   private array $conditions = [];
@@ -47,28 +48,28 @@ class Model
 
   public function find_id(int $id, array $inputs = []): Model
   {
-    $fields = ' * ';
+    $query_fields = ' * ';
 
     if (! empty($inputs)) {
-      $fields = ' ' . implode(', ', $inputs) . ' ';
+      $query_fields = ' ' . implode(', ', $inputs) . ' ';
     }
 
     $this->find_id[] = true;
     $this->find_id[] = $id;
-    $this->query = 'SELECT' . $fields . 'FROM ' . strtolower($this->table);
+    $this->query = 'SELECT' . $query_fields . 'FROM ' . strtolower($this->table);
 
     return $this;
   }
 
   public function find(array $inputs = []): Model
   {
-    $fields = ' * ';
+    $query_fields = ' * ';
 
     if (! empty($inputs)) {
-      $fields = ' ' . implode(', ', $inputs) . ' ';
+      $query_fields = ' ' . implode(', ', $inputs) . ' ';
     }
 
-    $this->query = 'SELECT' . $fields . 'FROM ' . strtolower($this->table);
+    $this->query = 'SELECT' . $query_fields . 'FROM ' . strtolower($this->table);
 
     return $this;
   }
@@ -149,7 +150,7 @@ class Model
     return $this;
   }
 
-  public function fetch(bool $key_object = false): array|bool
+  public function fetch(bool $all = false): object|array|bool
   {
     try {
       $connect = DataBase::connect();
@@ -199,11 +200,16 @@ class Model
       return false;
     }
 
-    if ($key_object) {
-      return [$this->table => $stmt->fetchAll()];
+    if ($all) {
+      return $stmt->fetchAll();
     }
 
-    return $stmt->fetchAll();
+    return $stmt->fetch();
+  }
+
+  public function field(string $key, string|int|float $value)
+  {
+    $this->fields[$key] = $value;
   }
 
   public function save(): int|bool

@@ -3,26 +3,17 @@
 namespace App\Models;
 
 use App\Core\Model;
+use App\Models\CategoriaModel;
 
 class ProdutoModel extends Model
 {
   public function __construct()
   {
     parent::__construct('produto');
-
-    $this->fields = [
-      'nome' => '',
-      'categoria_id' => '',
-    ];
   }
 
-  public function nome(string $nome)
+  public function categoria(int $categoria_id)
   {
-    $this->fields['nome'] = $nome;
-  }
-
-  public function categoria_id(int $categoria_id)
-  {
-    $this->fields['categoria_id'] = $categoria_id;
+    return (new CategoriaModel)->find_id($categoria_id)->fetch();
   }
 }

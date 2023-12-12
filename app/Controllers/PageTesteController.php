@@ -74,21 +74,46 @@ class PageTesteController
 
   public function find()
   {
-    $produto = new ProdutoModel();
-    $categoria = new CategoriaModel();
+    $produtos = new ProdutoModel();
+    // $categoria = new CategoriaModel();
 
-    // $produtos = $produto->find()
+    $find_produtos = $produtos->find()
     // ->limit(3)
     // ->condition([])
     // ->fetch(true);
 
-    $categorias = $categoria->find()
-    ->condition(['parent_id' => 16])
+    // $categorias = $categoria->find()
+    // ->condition(['parent_id' => 16])
     // ->limit(3)
     ->fetch(true);
 
-    // pr($produtos);
-    pr($categorias);
+    // $produto->categoria(12);
+
+    $data = [];
+
+    foreach ($find_produtos as $produto):
+      pr($produto);
+      // $categoria_id = $produto->categoria_id;
+
+      // if (! $categoria_id) continue;
+
+      // $categoria = $produtos->categoria($categoria_id);
+
+      // $data[] = [
+      //   'categoria' => $categoria,
+      //   'produto' => $produto,
+      // ];
+    endforeach;die;
+
+    foreach ($data as $row):
+      pr($row['categoria']->nome);
+      pr($row['produto']->nome);
+      pr('<hr>');
+    endforeach;
+
+    // pr($data);
+    die;
+    // pr($categorias);
 
     // foreach ($produtos['produto'] as $object):
     //   pr($object);
@@ -102,9 +127,17 @@ class PageTesteController
 
   public function save(int $id = 0)
   {
+    $model = new CategoriaModel;
+    $model->field('nome', 'mauricinho');
+    $model->field('parent_id', 18);
+    $categoria_id = $model->save();
+
     $model = new ProdutoModel;
-    $model->nome('Camisa Social');
-    $model->categoria_id(12);
+    $model->field('nome', 'Camisa Social');
+    // $model->field('categoria_id', $categoria_id);
+    // $model->categoria_id = 12;
+
+    // pr($model->nome = 'Felipe');
 
     // $model = new CategoriaModel;
     // $model->nome('mauricinho');
