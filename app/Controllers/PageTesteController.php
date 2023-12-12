@@ -35,7 +35,13 @@ class PageTesteController
     $model = new ProdutoModel();
     // $model = new CategoriaModel();
 
-    // pr($model->find_id(2)->fetch());die;
+    pr($model->find_id(2, simple: true));
+    if ($model->error) {
+      pr($model->code_error);
+      pr($model->message_error);
+      die;
+    }
+    die;
     pr($model->find()->fetch());die;
 
     $find = $model->find()
@@ -55,9 +61,9 @@ class PageTesteController
     ?->limit(3) // Limita a quantidade de resultados
     ?->fetch();
 
-    if ($model->error()) {
-      pr($model->code_error());
-      pr($model->message_error());
+    if ($model->error) {
+      pr($model->code_error);
+      pr($model->message_error);
       die;
     }
 
@@ -74,6 +80,16 @@ class PageTesteController
 
   public function find()
   {
+    pr((new ProdutoModel())
+    ->query_join([
+      'inputs' => [
+        // 'produto' => ['nome', 'categoria_id'],
+        'categoria' => ['nome'],
+      ],
+      'limit' => 2
+    ])
+    ->joins(['categoria' => 'categoria_id'])
+  );die;
     $produtos = new ProdutoModel();
     // $categoria = new CategoriaModel();
 
@@ -87,7 +103,7 @@ class PageTesteController
     // ->limit(3)
     ->fetch(true);
 
-    // $produto->categoria(12);
+    // $produto->get_categoria(12);
 
     $data = [];
 
@@ -97,13 +113,14 @@ class PageTesteController
 
       // if (! $categoria_id) continue;
 
-      // $categoria = $produtos->categoria($categoria_id);
+      // $categoria = $produtos->get_categoria($categoria_id);
 
       // $data[] = [
       //   'categoria' => $categoria,
       //   'produto' => $produto,
       // ];
-    endforeach;die;
+    endforeach;
+    die;
 
     foreach ($data as $row):
       pr($row['categoria']->nome);
@@ -150,8 +167,8 @@ class PageTesteController
       pr($model->save());
     }
 
-    if ($model->error()) {
-      pr([$model->code_error(), $model->message_error()]);
+    if ($model->error) {
+      pr([$model->code_error, $model->message_error]);
     };
 
     die;
@@ -164,8 +181,8 @@ class PageTesteController
 
     pr($model->delete($id));
 
-    if ($model->error()) {
-      pr([$model->code_error(), $model->message_error()]);die;
+    if ($model->error) {
+      pr([$model->code_error, $model->message_error]);die;
     };
     die;
   }

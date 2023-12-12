@@ -8,26 +8,20 @@ use PDOException;
 
 class Model
 {
-  private bool $error = false;
-  private int|string $code_error;
-  private string $message_error;
+  public bool $error = false;
+  public int|string $code_error;
+  public string $message_error;
   private string $query = '';
   private int $count_condition = 0;
   protected array $query_fields = [];
   protected array $fields = [];
-  private array $find_id = [];
   private array $conditions = [];
+  private array $query_join = [];
 
   public function __construct(
-    private string $table
+    protected string $table
   )
-  {
-  }
-
-  public function error(): bool
-  {
-    return $this->error;
-  }
+  {}
 
   public function set_error(int|string $code, string $message = ''): void
   {
@@ -36,36 +30,49 @@ class Model
     $this->message_error = $message;
   }
 
-  public function code_error(): int|string
+  public function find_id(int $id, array $inputs = [], bool $simple = true): object|array|bool
   {
-    return $this->code_error;
-  }
+    try {
+      $query_fields = ' * ';
 
-  public function message_error(): string
-  {
-    return $this->message_error;
-  }
+      if (!empty($inputs)) {
+        $query_fields = ' ' . implode(', ', $inputs) . ' ';
+      }
 
-  public function find_id(int $id, array $inputs = []): Model
-  {
-    $query_fields = ' * ';
+      $query = 'SELECT' . $query_fields . 'FROM ' . strtolower($this->table) . ' WHERE id = :id';
 
-    if (! empty($inputs)) {
-      $query_fields = ' ' . implode(', ', $inputs) . ' ';
+      $connect = DataBase::connect();
+
+      $stmt = $connect->prepare($query);
+      $stmt->bindParam(':id', $id);
+
+      $stmt->execute();
+
+      DataBase::disconnect();
+
+      if (!$stmt->rowCount()) {
+        $this->set_error(404, 'Not Found');
+
+        return false;
+      }
+    } catch (PDOException | Error $e) {
+      $this->set_error($e->getCode(), $e->getMessage());
+
+      return false;
     }
 
-    $this->find_id[] = true;
-    $this->find_id[] = $id;
-    $this->query = 'SELECT' . $query_fields . 'FROM ' . strtolower($this->table);
+    if ($simple) {
+      return $stmt->fetch();
+    }
 
-    return $this;
+    return $stmt->fetchAll();
   }
 
   public function find(array $inputs = []): Model
   {
     $query_fields = ' * ';
 
-    if (! empty($inputs)) {
+    if (!empty($inputs)) {
       $query_fields = ' ' . implode(', ', $inputs) . ' ';
     }
 
@@ -95,7 +102,7 @@ class Model
 
     $this->count_condition++;
 
-    $comparison_signal = function($signal = '') {
+    $comparison_signal = function ($signal = '') {
       if (mb_substr($signal, -3) === ' = ') return ' = ';
       elseif (mb_substr($signal, -4) === ' != ') return ' != ';
       elseif (mb_substr($signal, -3) === ' > ') return ' > ';
@@ -107,7 +114,7 @@ class Model
 
     $where = '';
 
-    for ($i = 0; $i < count($conditions_keys); $i++):
+    for ($i = 0; $i < count($conditions_keys); $i++) :
       $signal = $comparison_signal($conditions_keys[$i]);
       $conditions_keys[$i] = str_replace($signal, '', $conditions_keys[$i]);
 
@@ -120,7 +127,7 @@ class Model
       $where = ' WHERE ' . $where . ' ' . $operator . ' ';
     }
 
-    if (! empty($operator) and $this->count_condition > 1) {
+    if (!empty($operator) and $this->count_condition > 1) {
       $where .= ' ' . $operator . ' ';
     }
 
@@ -155,32 +162,18 @@ class Model
     try {
       $connect = DataBase::connect();
 
-      if (isset($this->find_id[0]) and is_bool($this->find_id[0]) and $this->find_id[0]) {
-
-        if (! isset($this->find_id[1]) or ! is_int($this->find_id[1]) or empty($this->find_id[1])) {
-          $this->set_error(404, 'ID error');
-
-          return false;
-        }
-
-        $this->query .= ' WHERE id = :id';
-
-        $stmt = $connect->prepare($this->query);
-        $stmt->bindParam(':id', $this->find_id[1]);
-      }
-      elseif (! empty($this->conditions)) {
+      if (! empty($this->conditions)) {
         $stmt = $connect->prepare($this->query);
 
         $i = 1;
-        foreach ($this->conditions as $condition):
+        foreach ($this->conditions as $condition) :
           $key = array_keys($condition);
           $value = array_values($condition);
 
           $stmt->bindParam(':' . $key[0] . '_' . $i, $value[0]);
           $i++;
         endforeach;
-      }
-      else {
+      } else {
         $stmt = $connect->prepare($this->query);
       }
 
@@ -188,13 +181,12 @@ class Model
 
       DataBase::disconnect();
 
-      if (! $stmt->rowCount()) {
+      if (!$stmt->rowCount()) {
         $this->set_error(404, 'Not Found');
 
         return false;
       }
-    }
-    catch (PDOException|Error $e) {
+    } catch (PDOException | Error $e) {
       $this->set_error($e->getCode(), $e->getMessage());
 
       return false;
@@ -205,6 +197,54 @@ class Model
     }
 
     return $stmt->fetch();
+  }
+
+  public function query_join(array $query_join): Model
+  {
+    $this->query_join = $query_join;
+
+    return $this;
+  }
+
+  private function join($table, $foreign_key, $fields = [])
+  {
+    $model = 'App\\Models\\' . ucfirst($table) . 'Model';
+
+    return (new $model)->find_id($foreign_key, $fields);
+  }
+
+  public function joins(array $joins = [])
+  {
+    $inputs_join = strtolower(str_replace('Model', '', substr(self::class, 11)));
+    $inputs_join = $this->query_join['inputs'][$inputs_join] ?? [];
+    $limit = $this->query_join['limit'] ?? 0;
+
+
+    if ($limit > 0) {
+      $query_join = $this->find($inputs_join)->limit($limit)->fetch(true);
+    }
+    else {
+      $query_join = $this->find($inputs_join)->fetch(true);
+    }
+
+    $result_join = [];
+
+    foreach ($query_join as $i => $join):
+
+      $result_join[$i][$this->table] = $join;
+
+      if ($joins) {
+        foreach ($joins as $table => $foreign_key):
+          $foreign_key = $join->$foreign_key;
+
+          if (! $foreign_key) continue;
+
+          $result_join[$i][$table] = $this->join($table, $foreign_key, $this->query_join['inputs'][$table] ?? []);
+        endforeach;
+      }
+    endforeach;
+
+    return $result_join;
   }
 
   public function field(string $key, string|int|float $value)
@@ -221,7 +261,7 @@ class Model
       $data_values = array_values($data);
 
       $data_insert_keys = '(' . implode(', ', $data_keys) . ')';
-      $data_insert_values = array_map(fn($item)=> ':' . $item, $data_keys);
+      $data_insert_values = array_map(fn ($item) => ':' . $item, $data_keys);
       $data_insert_values = '(' . implode(', ', $data_insert_values) . ')';
 
       $insert = "INSERT INTO " . $this->table . " $data_insert_keys VALUES $data_insert_values";
@@ -229,7 +269,7 @@ class Model
       $connect = DataBase::connect();
       $stmt = $connect->prepare($insert);
 
-      foreach ($data_keys as $i => $key):
+      foreach ($data_keys as $i => $key) :
         $stmt->bindParam(':' . $key, $data_values[$i]);
       endforeach;
 
@@ -237,13 +277,12 @@ class Model
 
       DataBase::disconnect();
 
-      if (! $stmt->rowCount()) {
+      if (!$stmt->rowCount()) {
         $this->set_error(400, 'Not Save');
 
         return false;
       }
-    }
-    catch (PDOException|Error $e) {
+    } catch (PDOException | Error $e) {
       $this->set_error($e->getCode(), $e->getMessage());
 
       return false;
@@ -262,7 +301,7 @@ class Model
       $data_keys_update = [];
       $data_values_update = [];
 
-      for ($i = 0; $i < count($this->fields); $i++):
+      for ($i = 0; $i < count($this->fields); $i++) :
         if (empty($data_values[$i])) continue;
         $keys_update[] = $data_keys[$i] . ' = :' . $data_keys[$i];
         $data_values_update[] = $data_values[$i];
@@ -277,7 +316,7 @@ class Model
 
       $stmt = $connect->prepare($update);
 
-      foreach ($data_keys_update as $i => $key):
+      foreach ($data_keys_update as $i => $key) :
         $stmt->bindParam(':' . $key, $data_values_update[$i]);
       endforeach;
 
@@ -287,13 +326,12 @@ class Model
 
       DataBase::disconnect();
 
-      if (! $stmt->rowCount()) {
+      if (!$stmt->rowCount()) {
         $this->set_error(400, 'Not Update');
 
         return false;
       }
-    }
-    catch (PDOException|Error $e) {
+    } catch (PDOException | Error $e) {
       $this->set_error($e->getCode(), $e->getMessage());
 
       return false;
@@ -315,13 +353,12 @@ class Model
       $stmt->bindParam(':id', $id);
       $stmt->execute();
 
-      if (! $stmt->rowCount()) {
+      if (!$stmt->rowCount()) {
         $this->set_error(400,  'Not Delete');
 
         return false;
       }
-    }
-    catch (PDOException|Error $e) {
+    } catch (PDOException | Error $e) {
       $this->set_error($e->getCode(), $e->getMessage());
 
       return false;
