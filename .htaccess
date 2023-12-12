@@ -11,3 +11,14 @@ RewriteCond %{REQUEST_FILENAME} !-l
 
 # REGRA REWRITE QUE ENVIA TUDO PARA O INDEX
 RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+
+# PREVINE LER ARQUIVOS *.php
+<Files *.php>
+    Order Deny,Allow
+    Deny from all
+</Files>
+
+<Files index.php>
+    Order Allow,Deny
+    Allow from all
+</Files>

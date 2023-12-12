@@ -2,7 +2,7 @@
 
 namespace App\Core;
 
-use App\Source\DataBase;
+use App\Components\DataBase;
 use Error;
 use PDOException;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Source;
+namespace App\Components;
 
 class Log
 {
