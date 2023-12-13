@@ -8,14 +8,14 @@ use PDOException;
 
 class DataBase extends Singleton
 {
-  private static object|null $pdo = null;
+  private static ?object $pdo = null;
 
-  private static string|null $db_host = null;
-  private static string|null $db_port = null;
-  private static string|null $db_name = null;
-  private static string|null $db_user = null;
-  private static string|null $db_passwd = null;
-  private static array|null $db_options = null;
+  private static ?string $db_host = null;
+  private static ?string $db_port = null;
+  private static ?string $db_name = null;
+  private static ?string $db_user = null;
+  private static ?string $db_passwd = null;
+  private static ?array $db_options = null;
 
   private static bool $db_error = false;
   private static int $db_cod_error = 0;
@@ -24,7 +24,7 @@ class DataBase extends Singleton
   /**
    * Realiza a conexão
    */
-  public static function connect(): object|null
+  public static function connect(): ?object
   {
     self::$db_host = DB_HOST;
     self::$db_port = DB_PORT;
