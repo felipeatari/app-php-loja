@@ -245,8 +245,6 @@ class AppController
 
     $error_404 = [];
 
-    // pr($this->controllers);die;
-
     foreach ($this->controllers as $controller):
       if (is_callable($controller) or class_exists($controller)) {
         $this->controller = $controller;
