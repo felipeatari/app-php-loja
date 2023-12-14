@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Core;
+namespace Source\Model;
 
-use App\Components\DataBase;
+use Source\Model\DataBase;
 use Error;
 use PDOException;
 
-class Model
+class AppModel
 {
   public bool $error = false;
   public int|string $code_error;
@@ -208,7 +208,7 @@ class Model
 
   private function join($table, $foreign_key, $fields = [])
   {
-    $model = 'App\\Models\\' . ucfirst($table) . 'Model';
+    $model = 'Source\\Model\\Models\\' . ucfirst($table) . 'Model';
 
     return (new $model)->find_id($foreign_key, $fields);
   }

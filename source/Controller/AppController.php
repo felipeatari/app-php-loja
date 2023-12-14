@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Core;
+namespace Source\Controller;
 
-use App\Controllers\PageErrorController;
+use Source\Controller\Controllers\PageErrorController;
 use Closure;
 
-class Controller
+class AppController
 {
   private array $controllers = [];
   private array $params = [];
@@ -167,7 +167,7 @@ class Controller
     }
     else {
       $action = explode('->', $action);
-      $this->controllers[] = 'App\\Controllers\\' . ucfirst($action[0]) . 'Controller';
+      $this->controllers[] = 'Source\\Controller\\Controllers\\' . ucfirst($action[0]) . 'Controller';
       $this->method = $action[1];
     }
 

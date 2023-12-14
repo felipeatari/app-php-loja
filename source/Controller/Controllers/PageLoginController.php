@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Controllers;
+namespace Source\Controller\Controllers;
 
-use App\Core\View;
+use Source\View\AppView;
 
 class PageLoginController
 {
   public function index()
   {
-    View::title('Tela de Login');
-    View::page('login');
+    AppView::title('Tela de Login');
+    AppView::page('login');
 
-    return View::render();
+    return AppView::render();
   }
 
   public function entrar()

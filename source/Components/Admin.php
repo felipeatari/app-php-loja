@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Components;
+namespace Source\Components;
 
-use App\Core\View;
+use Source\View\AppView;
 
 abstract class Admin
 {
@@ -15,17 +15,17 @@ abstract class Admin
 
   public function title(string $title)
   {
-    View::title($title);
+    AppView::title($title);
   }
 
   public function admin(string $admin)
   {
-    View::admin($admin);
+    AppView::admin($admin);
   }
 
   public function content(array $vars_dynamic = [])
   {
-    $content = View::render($vars_dynamic);
-    View::template('admin', $content);die;
+    $content = AppView::render($vars_dynamic);
+    AppView::template('admin', $content);die;
   }
 }

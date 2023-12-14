@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Controllers;
+namespace Source\Controller\Controllers;
 
-use App\Core\View;
+use Source\View\AppView;
 
 class PageErrorController
 {
   public static function error($code, $message)
   {
-    View::title('Erro ' . $code);
-    View::error('error');
+    AppView::title('Erro ' . $code);
+    AppView::error('error');
 
     http_response_code($code);
 
-    return View::render([
+    return AppView::render([
       'code' => $code,
       'message' => $message
     ]);
