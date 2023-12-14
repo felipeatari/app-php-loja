@@ -86,6 +86,7 @@ class PageTesteController
         // 'produto' => ['nome', 'categoria_id'],
         'categoria' => ['nome'],
       ],
+      'condition' => ['id' => 3],
       'limit' => 2
     ])
     ->joins(['categoria' => 'categoria_id'])

@@ -2,7 +2,7 @@
 
 namespace Src\Controller;
 
-use Src\Controller\Controllers\PageErrorController;
+use Src\Controller\Controllers\Page\PageErrorController;
 use Closure;
 
 class AppController

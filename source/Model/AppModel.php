@@ -68,7 +68,7 @@ class AppModel
     return $stmt->fetchAll();
   }
 
-  public function find(array $inputs = []): Model
+  public function find(array $inputs = []): AppModel
   {
     $query_fields = ' * ';
 
@@ -81,7 +81,7 @@ class AppModel
     return $this;
   }
 
-  public function condition(array $conditions = [], string $operator = ''): Model
+  public function condition(array $conditions = [], string $operator = ''): AppModel
   {
     $conditions_keys = array_keys($conditions);
     $conditions_values = array_values($conditions);
@@ -136,21 +136,21 @@ class AppModel
     return $this;
   }
 
-  public function order($field = 'id', $sort = 'DESC'): Model
+  public function order($field = 'id', $sort = 'DESC'): AppModel
   {
     $this->query .= ' ORDER BY ' . $field . ' ' . $sort;
 
     return $this;
   }
 
-  public function limit(int $limit = 0): Model
+  public function limit(int $limit = 0): AppModel
   {
     $this->query .= ' LIMIT ' . $limit;
 
     return $this;
   }
 
-  public function paginator(int $start = 0, int $length = 0): Model
+  public function paginator(int $start = 0, int $length = 0): AppModel
   {
     $this->query .= ' LIMIT ' . $start . ', ' . $length;
 
@@ -199,7 +199,7 @@ class AppModel
     return $stmt->fetch();
   }
 
-  public function query_join(array $query_join): Model
+  public function query_join(array $query_join): AppModel
   {
     $this->query_join = $query_join;
 
@@ -217,15 +217,20 @@ class AppModel
   {
     $inputs_join = strtolower(str_replace('Model', '', substr(self::class, 11)));
     $inputs_join = $this->query_join['inputs'][$inputs_join] ?? [];
+    $condition = $this->query_join['condition'] ?? [];
     $limit = $this->query_join['limit'] ?? 0;
 
+    $query_join = $this->find($inputs_join);
+
+    if (! empty($condition)) {
+      $query_join = $query_join->condition($condition);
+    }
 
     if ($limit > 0) {
-      $query_join = $this->find($inputs_join)->limit($limit)->fetch(true);
+      $query_join = $query_join->limit($limit);
     }
-    else {
-      $query_join = $this->find($inputs_join)->fetch(true);
-    }
+
+    $query_join = $query_join->fetch(true);
 
     $result_join = [];
 
