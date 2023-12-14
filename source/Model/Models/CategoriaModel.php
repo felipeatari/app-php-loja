@@ -1,8 +1,8 @@
 <?php
 
-namespace Source\Model\Models;
+namespace Src\Model\Models;
 
-use Source\Model\AppModel;
+use Src\Model\AppModel;
 
 class CategoriaModel extends AppModel
 {

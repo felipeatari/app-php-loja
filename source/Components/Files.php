@@ -1,6 +1,6 @@
 <?php
 
-namespace Source\Components;
+namespace Src\Components;
 
 class Files
 {

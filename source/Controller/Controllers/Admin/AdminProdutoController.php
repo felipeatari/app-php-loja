@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controllers;
+namespace Src\Controller\Controllers\Admin;
 
-use App\Source\Admin;
+use Src\Controller\Admin;
 
 class AdminProdutoController extends Admin
 {

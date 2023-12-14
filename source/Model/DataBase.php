@@ -1,8 +1,8 @@
 <?php
 
-namespace Source\Model;
+namespace Src\Model;
 
-use Source\Components\Singleton;
+use Src\Components\Singleton;
 use PDO;
 use PDOException;
 

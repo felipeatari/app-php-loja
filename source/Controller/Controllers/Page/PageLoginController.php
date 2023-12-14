@@ -1,8 +1,8 @@
 <?php
 
-namespace Source\Controller\Controllers;
+namespace Src\Controller\Controllers\Page;
 
-use Source\View\AppView;
+use Src\View\AppView;
 
 class PageLoginController
 {

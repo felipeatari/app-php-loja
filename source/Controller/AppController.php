@@ -1,8 +1,8 @@
 <?php
 
-namespace Source\Controller;
+namespace Src\Controller;
 
-use Source\Controller\Controllers\PageErrorController;
+use Src\Controller\Controllers\PageErrorController;
 use Closure;
 
 class AppController
@@ -167,7 +167,17 @@ class AppController
     }
     else {
       $action = explode('->', $action);
-      $this->controllers[] = 'Source\\Controller\\Controllers\\' . ucfirst($action[0]) . 'Controller';
+
+      $namespace = '';
+
+      if (substr(ucfirst($action[0]), 0, 5) === 'Admin') {
+        $namespace = 'Src\\Controller\\Controllers\\Admin\\';
+      }
+      elseif (substr(ucfirst($action[0]), 0, 4) === 'Page') {
+        $namespace = 'Src\\Controller\\Controllers\\Page\\';
+      }
+
+      $this->controllers[] = $namespace . ucfirst($action[0]) . 'Controller';
       $this->method = $action[1];
     }
 
@@ -234,6 +244,8 @@ class AppController
     }
 
     $error_404 = [];
+
+    // pr($this->controllers);die;
 
     foreach ($this->controllers as $controller):
       if (is_callable($controller) or class_exists($controller)) {

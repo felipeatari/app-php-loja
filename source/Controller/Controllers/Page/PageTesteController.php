@@ -1,11 +1,11 @@
 <?php
 
-namespace Source\Controller\Controllers;
+namespace Src\Controller\Controllers\Page;
 
-use Source\View\AppView;
-use Source\Model\Models\TesteModel;
-use Source\Model\Models\ProdutoModel;
-use Source\Model\Models\CategoriaModel;
+use Src\View\AppView;
+use Src\Model\Models\TesteModel;
+use Src\Model\Models\ProdutoModel;
+use Src\Model\Models\CategoriaModel;
 
 class PageTesteController
 {

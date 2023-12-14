@@ -1,8 +1,8 @@
 <?php
 
-namespace Source\Components;
+namespace Src\Controller;
 
-use Source\View\AppView;
+use Src\View\AppView;
 
 abstract class Admin
 {
