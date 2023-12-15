@@ -206,18 +206,21 @@ class AppModel
     return $this;
   }
 
-  private function join($table, $foreign_key, $fields = [])
+  private function join($table, $foreign_key, $fields = [], $condition = [])
   {
     $model = 'Src\\Model\\Models\\' . ucfirst($table) . 'Model';
+
+    if (! empty($condition)) {
+      return (new $model)->find($fields)->condition($condition)->fetch(true);
+    }
 
     return (new $model)->find_id($foreign_key, $fields);
   }
 
   public function joins(array $joins = [])
   {
-    $inputs_join = strtolower(str_replace('Model', '', substr(self::class, 11)));
-    $inputs_join = $this->query_join['inputs'][$inputs_join] ?? [];
-    $condition = $this->query_join['condition'] ?? [];
+    $inputs_join = $this->query_join['inputs'][$this->table] ?? [];
+    $condition = $this->query_join['condition'][$this->table] ?? [];
     $limit = $this->query_join['limit'] ?? 0;
 
     $query_join = $this->find($inputs_join);
@@ -236,15 +239,34 @@ class AppModel
 
     foreach ($query_join as $i => $join):
 
-      $result_join[$i][$this->table] = $join;
-
       if ($joins) {
         foreach ($joins as $table => $foreign_key):
           $foreign_key = $join->$foreign_key;
 
           if (! $foreign_key) continue;
 
-          $result_join[$i][$table] = $this->join($table, $foreign_key, $this->query_join['inputs'][$table] ?? []);
+          if (isset($this->query_join['condition'][$table])) {
+
+            if (! in_array('id', $this->query_join['inputs'][$table])) {
+              array_push($this->query_join['inputs'][$table], 'id');
+              $remove_id = true;
+            }
+
+            $find = $this->join($table, $foreign_key, $this->query_join['inputs'][$table] ?? [], $this->query_join['condition'][$table]);
+
+            if ($find[0]->id !== $foreign_key) continue;
+
+            if (isset($remove_id)) {
+              unset($find[0]->id);
+            }
+
+            $result_join[$i][$this->table] = $join;
+            $result_join[$i][$table] = $find[0];
+          }
+          else {
+            $result_join[$i][$this->table] = $join;
+            $result_join[$i][$table] = $this->join($table, $foreign_key, $this->query_join['inputs'][$table] ?? []);
+          }
         endforeach;
       }
     endforeach;
