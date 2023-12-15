@@ -86,61 +86,68 @@ class Teste
         // 'produto' => ['nome', 'categoria_id'],
         'categoria' => ['nome'],
       ],
-      'condition' => ['id' => 3],
-      'limit' => 2
-    ])
-    ->joins(['categoria' => 'categoria_id'])
+      'condition' => [
+        // 'produto' => ['id' => 3],
+        'categoria' => ['id' => 29],
+        // 'sku' => ['nome' => 'Teste'],
+      ],
+      // 'limit' => 2
+    ])->joins([
+      'categoria' => 'categoria_id',
+      // 'sku' => 'sku_id'
+      ])
   );die;
-    $produtos = new ProdutoModel();
-    // $categoria = new CategoriaModel();
 
-    $find_produtos = $produtos->find()
-    // ->limit(3)
-    // ->condition([])
-    // ->fetch(true);
+  $produtos = new ProdutoModel();
+  // $categoria = new CategoriaModel();
 
-    // $categorias = $categoria->find()
-    // ->condition(['parent_id' => 16])
-    // ->limit(3)
-    ->fetch(true);
+  $find_produtos = $produtos->find()
+  // ->limit(3)
+  // ->condition([])
+  // ->fetch(true);
 
-    // $produto->get_categoria(12);
+  // $categorias = $categoria->find()
+  // ->condition(['parent_id' => 16])
+  // ->limit(3)
+  ->fetch(true);
 
-    $data = [];
+  // $produto->get_categoria(12);
 
-    foreach ($find_produtos as $produto):
-      pr($produto);
-      // $categoria_id = $produto->categoria_id;
+  $data = [];
 
-      // if (! $categoria_id) continue;
+  foreach ($find_produtos as $produto):
+    pr($produto);
+    // $categoria_id = $produto->categoria_id;
 
-      // $categoria = $produtos->get_categoria($categoria_id);
+    // if (! $categoria_id) continue;
 
-      // $data[] = [
-      //   'categoria' => $categoria,
-      //   'produto' => $produto,
-      // ];
-    endforeach;
-    die;
+    // $categoria = $produtos->get_categoria($categoria_id);
 
-    foreach ($data as $row):
-      pr($row['categoria']->nome);
-      pr($row['produto']->nome);
-      pr('<hr>');
-    endforeach;
+    // $data[] = [
+    //   'categoria' => $categoria,
+    //   'produto' => $produto,
+    // ];
+  endforeach;
+  die;
 
-    // pr($data);
-    die;
-    // pr($categorias);
+  foreach ($data as $row):
+    pr($row['categoria']->nome);
+    pr($row['produto']->nome);
+    pr('<hr>');
+  endforeach;
 
-    // foreach ($produtos['produto'] as $object):
-    //   pr($object);
-      // pr('ID: ' . $object->id);
-      // pr('Nome: ' . $object->nome);
-      // pr('<hr>');
-    // endforeach;
+  // pr($data);
+  die;
+  // pr($categorias);
 
-    die;
+  // foreach ($produtos['produto'] as $object):
+  //   pr($object);
+    // pr('ID: ' . $object->id);
+    // pr('Nome: ' . $object->nome);
+    // pr('<hr>');
+  // endforeach;
+
+  die;
   }
 
   public function save(int $id = 0)
