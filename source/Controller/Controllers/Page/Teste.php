@@ -7,7 +7,7 @@ use Src\Model\Models\TesteModel;
 use Src\Model\Models\ProdutoModel;
 use Src\Model\Models\CategoriaModel;
 
-class PageTesteController
+class Teste
 {
   public function teste()
   {

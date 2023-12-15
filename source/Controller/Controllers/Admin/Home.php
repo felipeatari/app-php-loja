@@ -2,9 +2,9 @@
 
 namespace Src\Controller\Controllers\Admin;
 
-use Src\Controller\Admin;
+use Src\Controller\AppAdmin;
 
-class AdminHomeController extends Admin
+class Home extends AppAdmin
 {
   public function index()
   {

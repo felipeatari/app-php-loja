@@ -2,9 +2,9 @@
 
 namespace Src\Controller\Controllers\Admin;
 
-use Src\Controller\Admin;
+use Src\Controller\AppAdmin;
 
-class AdminProdutoController extends Admin
+class Produto extends AppAdmin
 {
   public function listar()
   {

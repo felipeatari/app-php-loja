@@ -4,7 +4,7 @@ namespace Src\Controller\Controllers\Page;
 
 use Src\View\AppView;
 
-class PageLoginController
+class Login
 {
   public function index()
   {

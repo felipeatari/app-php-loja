@@ -4,7 +4,7 @@ namespace Src\Controller\Controllers\Page;
 
 use Src\View\AppView;
 
-class PageErrorController
+class Error
 {
   public static function error($code, $message)
   {

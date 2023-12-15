@@ -4,7 +4,7 @@ namespace Src\Controller;
 
 use Src\View\AppView;
 
-abstract class Admin
+abstract class AppAdmin
 {
   public function __construct()
   {

@@ -4,7 +4,7 @@ namespace Src\Controller\Controllers\Page;
 
 use Src\View\AppView;
 
-class PageProdutoController
+class Produto
 {
   public function see_product($id = 0)
   {
