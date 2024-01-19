@@ -2,7 +2,7 @@
 
 namespace Src\Controllers;
 
-use Src\App\Admin;
+use Src\Components\Admin;
 
 class AdminProduto extends Admin
 {
