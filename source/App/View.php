@@ -1,8 +1,8 @@
 <?php
 
-namespace Src\View;
+namespace Src\App;
 
-class AppView
+class View
 {
   private static string $title = '';
   private static string $page = '';

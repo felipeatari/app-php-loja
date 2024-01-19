@@ -1,10 +1,10 @@
 <?php
 
-namespace Src\Controller;
+namespace Src\Components;
 
-use Src\View\AppView;
+use Src\App\View;
 
-abstract class AppAdmin
+abstract class Admin
 {
   public function __construct()
   {
@@ -15,17 +15,17 @@ abstract class AppAdmin
 
   public function title(string $title)
   {
-    AppView::title($title);
+    View::title($title);
   }
 
   public function admin(string $admin)
   {
-    AppView::admin($admin);
+    View::admin($admin);
   }
 
   public function content(array $vars_dynamic = [])
   {
-    $content = AppView::render($vars_dynamic);
-    AppView::template('admin', $content);die;
+    $content = View::render($vars_dynamic);
+    View::template('admin', $content);die;
   }
 }

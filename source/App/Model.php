@@ -1,12 +1,12 @@
 <?php
 
-namespace Src\Model;
+namespace Src\App;
 
 use Src\Model\DataBase;
 use Error;
 use PDOException;
 
-class AppModel
+class Model
 {
   public bool $error = false;
   public int|string $code_error;

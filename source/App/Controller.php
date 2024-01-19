@@ -1,11 +1,11 @@
 <?php
 
-namespace Src\Controller;
+namespace Src\App;
 
-use Src\Controller\Controllers\Page\Error;
+use Src\Controllers\PageError;
 use Closure;
 
-class AppController
+class Controller
 {
   private array $controllers = [];
   private array $params = [];
@@ -168,17 +168,9 @@ class AppController
     else {
       $action = explode('->', $action);
 
-      $namespace = '';
       $controller = ucfirst($action[0]);
 
-      if (substr($controller, -5) === 'Admin') {
-        $controller = str_replace('Admin', '', $controller);
-        $namespace = 'Src\\Controller\\Controllers\\Admin\\' . $controller;
-      }
-      elseif (substr($controller, -4) === 'Page') {
-        $controller = str_replace('Page', '', $controller);
-        $namespace = 'Src\\Controller\\Controllers\\Page\\' . $controller;
-      }
+      $namespace = 'Src\\Controllers\\' . $controller;
 
       $this->controllers[] = $namespace;
       $this->method = $action[1];
@@ -281,7 +273,7 @@ class AppController
       if ($this->http_status_code === 405) $message_error = 'Método não implementado';
       if ($this->http_status_code === 404) $message_error = 'Pagina não encontrada';
 
-      $this->end = Error::error($this->http_status_code, $message_error);
+      $this->end = PageError::error($this->http_status_code, $message_error);
 
       return;
     }

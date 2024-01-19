@@ -1,10 +1,10 @@
 <?php
 
-namespace Src\Controller\Controllers\Admin;
+namespace Src\Controllers;
 
-use Src\Controller\AppAdmin;
+use Src\App\Admin;
 
-class Produto extends AppAdmin
+class AdminProduto extends Admin
 {
   public function listar()
   {

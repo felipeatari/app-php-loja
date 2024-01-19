@@ -2,6 +2,6 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$end = (new Src\Controller\AppController)->end();
+$end = (new Src\App\Controller)->end();
 
-Src\View\AppView::template(content: $end);
+Src\App\View::template(content: $end);

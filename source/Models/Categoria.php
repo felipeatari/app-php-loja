@@ -1,10 +1,10 @@
 <?php
 
-namespace Src\Model\Models;
+namespace Src\Models;
 
-use Src\Model\AppModel;
+use Src\App\Model;
 
-class CategoriaModel extends AppModel
+class Categoria extends Model
 {
   public function __construct()
   {

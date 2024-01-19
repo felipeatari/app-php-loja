@@ -1,13 +1,13 @@
 <?php
 
-namespace Src\Controller\Controllers\Page;
+namespace Src\Controllers;
 
-use Src\View\AppView;
-use Src\Model\Models\TesteModel;
-use Src\Model\Models\ProdutoModel;
-use Src\Model\Models\CategoriaModel;
+use Src\App\View;
+use Src\Models\Teste;
+use Src\Models\Produto;
+use Src\Models\Categoria;
 
-class Teste
+class PageTeste
 {
   public function teste()
   {

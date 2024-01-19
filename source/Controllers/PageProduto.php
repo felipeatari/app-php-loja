@@ -1,15 +1,15 @@
 <?php
 
-namespace Src\Controller\Controllers\Page;
+namespace Src\Controllers;
 
-use Src\View\AppView;
+use Src\App\View;
 
-class Produto
+class PageProduto
 {
   public function see_product($id = 0)
   {
-    AppView::title('Produto: ' . $id);
-    AppView::page('produto-ver');
+    View::title('Produto: ' . $id);
+    View::page('produto-ver');
 
     $produto = [
       'Produto' => [
@@ -21,7 +21,7 @@ class Produto
       'Sku' => [],
     ];
 
-    return AppView::render(['id' => $id, 'produto' => $produto]);
+    return View::render(['id' => $id, 'produto' => $produto]);
   }
 
   public function list_category()

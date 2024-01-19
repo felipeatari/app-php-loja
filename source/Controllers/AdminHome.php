@@ -1,10 +1,10 @@
 <?php
 
-namespace Src\Controller\Controllers\Admin;
+namespace Src\Controllers;
 
-use Src\Controller\AppAdmin;
+use Src\App\Admin;
 
-class Home extends AppAdmin
+class AdminHome extends Admin
 {
   public function index()
   {
