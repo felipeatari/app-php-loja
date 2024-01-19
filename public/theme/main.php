@@ -42,16 +42,16 @@
             <li><a class="item-menu-desktop item-princiapl-menu-desktop" href="<?= HOME ?>">Home</a></li>
             <li class="abrir-opcoes"><a class="item-menu-desktop item-princiapl-menu-desktop" href="#">Camisas</a>
               <ul class="opcoes-abertas">
-                <li class="item-submenu-desktop-border-bottom"><a class="item-submenu-desktop" href="<?= URL ?>/produtos/camisa/t-shirt">T-Shirt</a></li>
-                <li class="item-submenu-desktop-border-bottom"><a class="item-submenu-desktop" href="<?= URL ?>/produtos/camisa/long-line">Long Line</a></li>
-                <li><a class="item-submenu-desktop" href="<?= URL ?>/produtos/camisa/oversize">Oversize</a></li>
+                <li class="item-submenu-desktop-border-bottom"><a class="item-submenu-desktop" href="<?= URL ?>/produtos?cat=camisa&tipo=t-shirt">T-Shirt</a></li>
+                <li class="item-submenu-desktop-border-bottom"><a class="item-submenu-desktop" href="<?= URL ?>/produtos?cat=camisa&tipo=long-line">Long Line</a></li>
+                <li><a class="item-submenu-desktop" href="<?= URL ?>/produtos?cat=camisa&tipo=oversize">Oversize</a></li>
               </ul>
             </li>
             <li class="abrir-opcoes"><a class="item-menu-desktop item-princiapl-menu-desktop" href="#">Shorts</a>
               <ul class="opcoes-abertas">
-                <li class="item-submenu-desktop-border-bottom"><a class="item-submenu-desktop" href="<?= URL ?>/produtos/short/mauricinho">Mauricinho</a></li>
-                <li class="item-submenu-desktop-border-bottom"><a class="item-submenu-desktop" href="<?= URL ?>/produtos/short/basico">basico</a></li>
-                <li><a class="item-submenu-desktop" href="<?= URL ?>/produtos/short/jeans">Jeans</a></li>
+                <li class="item-submenu-desktop-border-bottom"><a class="item-submenu-desktop" href="<?= URL ?>/produtos?cat=short&tipo=mauricinho">Mauricinho</a></li>
+                <li class="item-submenu-desktop-border-bottom"><a class="item-submenu-desktop" href="<?= URL ?>/produtos?cat=short&tipo=basico">basico</a></li>
+                <li><a class="item-submenu-desktop" href="<?= URL ?>/produtos?cat=short&tipo=jeans">Jeans</a></li>
               </ul>
             </li>
             <li><a class="item-menu-desktop item-princiapl-menu-desktop" href="#">Calças</a></li>

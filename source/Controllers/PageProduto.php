@@ -6,6 +6,16 @@ use Src\App\View;
 
 class PageProduto
 {
+  public function full_products()
+  {
+    $cat = $_GET['cat'] ?? '';
+    $tipo = $_GET['tipo'] ?? '';
+
+    if (empty($cat) or empty($tipo)) return 'error';
+
+    return '<br><br>Categoria: ' . $cat . ' - Tipo: ' . $tipo . '<br><br><br><br>';
+  }
+
   public function see_product($id = 0)
   {
     View::title('Produto: ' . $id);
