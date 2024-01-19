@@ -40,11 +40,11 @@
         <nav class="menu-desktop">
           <ul class="items-menu-desktop">
             <li><a class="item-menu-desktop item-princiapl-menu-desktop" href="<?= HOME ?>">Home</a></li>
-            <li class="abrir-opcoes"><a class="item-menu-desktop item-princiapl-menu-desktop" href="#">Camisas</a>
+            <li class="abrir-opcoes"><a class="item-menu-desktop item-princiapl-menu-desktop" href="#">Camisetas</a>
               <ul class="opcoes-abertas">
-                <li class="item-submenu-desktop-border-bottom"><a class="item-submenu-desktop" href="<?= URL ?>/produtos?cat=camisa&tipo=t-shirt">T-Shirt</a></li>
+                <li class="item-submenu-desktop-border-bottom"><a class="item-submenu-desktop" href="<?= URL ?>/produtos?cat=camiseta&tipo=t-shirt">T-Shirt</a></li>
                 <li class="item-submenu-desktop-border-bottom"><a class="item-submenu-desktop" href="<?= URL ?>/produtos?cat=camisa&tipo=long-line">Long Line</a></li>
-                <li><a class="item-submenu-desktop" href="<?= URL ?>/produtos?cat=camisa&tipo=oversize">Oversize</a></li>
+                <li><a class="item-submenu-desktop" href="<?= URL ?>/produtos?cat=camiseta&tipo=oversize">Oversize</a></li>
               </ul>
             </li>
             <li class="abrir-opcoes"><a class="item-menu-desktop item-princiapl-menu-desktop" href="#">Shorts</a>
@@ -84,11 +84,11 @@
           <ul class="items-menu-mobile">
             <p id="btn-close" class="btn-close">X</p>
             <li><a class="item-menu-mobile item-princiapl-menu-mobile" href="<?= HOME ?>">Home</a></li>
-            <li class="abrir-opcoes"><a class="item-menu-mobile item-princiapl-menu-mobile" href="#">Camisas</a>
+            <li class="abrir-opcoes"><a class="item-menu-mobile item-princiapl-menu-mobile" href="#">Camisetas</a>
               <ul class="opcoes-abertas">
-                <li class="item-submenu-mobile-border-bottom"><a class="item-submenu-mobile" href="<?= URL ?>/produtos/camisa/t-shirt">T-Shirt</a></li>
-                <li class="item-submenu-mobile-border-bottom"><a class="item-submenu-mobile" href="<?= URL ?>/produtos/camisa/long-line">Long Line</a></li>
-                <li><a class="item-submenu-mobile" href="<?= URL ?>/produtos/camisa/oversize">Oversize</a></li>
+                <li class="item-submenu-mobile-border-bottom"><a class="item-submenu-mobile" href="<?= URL ?>/produtos/camiseta/t-shirt">T-Shirt</a></li>
+                <li class="item-submenu-mobile-border-bottom"><a class="item-submenu-mobile" href="<?= URL ?>/produtos/camiseta/long-line">Long Line</a></li>
+                <li><a class="item-submenu-mobile" href="<?= URL ?>/produtos/camiseta/oversize">Oversize</a></li>
               </ul>
             </li>
             <li class="abrir-opcoes"><a class="item-menu-mobile item-princiapl-menu-mobile" href="#">Shorts</a>

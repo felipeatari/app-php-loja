@@ -9,7 +9,7 @@ abstract class Admin
   public function __construct()
   {
     if (! isset($_SESSION['admin'])) {
-      header('Location: ' . URL . '/login');
+      // header('Location: ' . URL . '/login');
     }
   }
 

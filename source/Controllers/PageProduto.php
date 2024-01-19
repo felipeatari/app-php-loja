@@ -13,6 +13,8 @@ class PageProduto
 
     if (empty($cat) or empty($tipo)) return 'error';
 
+    View::title(ucfirst($cat) . 's ' . ucfirst($tipo));
+
     return '<br><br>Categoria: ' . $cat . ' - Tipo: ' . $tipo . '<br><br><br><br>';
   }
 
