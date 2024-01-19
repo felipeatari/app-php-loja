@@ -37,6 +37,7 @@ header {
   top: 0;
   z-index: 1;
   position: fixed;
+  background-color: blueviolet;
 }
 
 /* Conteúdo Dinâmico */
