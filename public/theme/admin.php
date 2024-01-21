@@ -11,6 +11,7 @@
 <body>
   <div class="container">
     <header>
+      <h3>Dashboard</h3>
     </header>
     <!-- Carrega o conteúdo dinâmico -->
     <section class="content-dinamic">

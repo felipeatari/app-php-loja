@@ -13,17 +13,17 @@ abstract class Admin
     // }
   }
 
-  public function title(string $title)
+  protected function title(string $title)
   {
     View::title($title);
   }
 
-  public function admin(string $admin)
+  protected function admin(string $admin)
   {
     View::admin($admin);
   }
 
-  public function content(array $vars_dynamic = [])
+  protected function content(array $vars_dynamic = [])
   {
     $content = View::render($vars_dynamic);
     View::template('admin', $content);die;
