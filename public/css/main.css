@@ -12,7 +12,7 @@ a {
 }
 @font-face {
   font-family: Poppins-SemiBold;
-  src: url(/public/assets/fonts/Poppins-SemiBold.ttf);
+  src: url(/resources/assets/fonts/Poppins-SemiBold.ttf);
 }
 html, body {
   font-family: Poppins-SemiBold;

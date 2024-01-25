@@ -5,9 +5,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
-  <link rel="stylesheet" href="<?= $theme_css ?>">
+  <link rel="stylesheet" href="<?= $layout_css ?>">
   <link rel="stylesheet" href="<?= $view_css ?>">
-  <title><?= $theme_title ?></title>
+  <title><?= $layout_title ?></title>
 </head>
 <body>
   <div class="container">
@@ -15,7 +15,7 @@
       <div class="bloco-header-desktop">
         <div class="topo">
           <!-- Logo -->
-          <a href="<?= URL ?>"><img width="150px" src="<?= URL ?>/storage/theme/logo.png" alt=""></a>
+          <a href="<?= URL ?>"><img width="150px" src="<?= URL ?>/storage/layout/logo.png" alt=""></a>
           <!-- Social e Rastreio -->
           <div class="social-e-rastreio">
             <svg class="social-icones social-icones-facebook" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z" /></svg>
@@ -61,7 +61,7 @@
       </div>
       <div class="bloco-header-mobile">
         <!-- Logo -->
-        <a href="<?= URL ?>" class="logo-mobile"><img src="<?= URL ?>/storage/theme/logo.png" alt=""></a>
+        <a href="<?= URL ?>" class="logo-mobile"><img src="<?= URL ?>/storage/layout/logo.png" alt=""></a>
         <div class="topo">
           <i id="btn-open" class="btn-open fas fa-bars"></i>
           <svg class="social-icones social-icones-facebook" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z" /></svg>
@@ -107,7 +107,7 @@
     <!-- Carrega o conteúdo dinâmico -->
     <section class="content-dinamic"><?= $content ?></section>
     <!-- Carrega todo o JavaScript do site -->
-    <script src="<?= $theme_js ?>"></script>
+    <script src="<?= $layout_js ?>"></script>
     <script src="<?= $view_js ?>"></script>
     <footer class="rodape">
       <p>Luky Store Oficial © Todos os direitos reservados <br><br>

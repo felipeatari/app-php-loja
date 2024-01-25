@@ -67,13 +67,13 @@ class View
   public static function render(array $vars_dynamic = []): ?string
   {
     if (self::$page) {
-      $view = 'public/views/page/' . self::$page . '.php';
+      $view = 'resources/views/main.' . self::$page . '.php';
     }
     elseif (self::$admin) {
-      $view = 'public/views/admin/' . self::$admin . '.php';
+      $view = 'resources/views/admin.' . self::$admin . '.php';
     }
     elseif (self::$error) {
-      $view = 'public/views/error/' . self::$error . '.php';
+      $view = 'resources/views/' . self::$error . '.php';
     }
     else {
       return null;
@@ -91,28 +91,28 @@ class View
    *
    * @return string
    */
-  public static function template(string $theme = 'main', ?string $content = '')
+  public static function template(string $layout = 'main', ?string $content = '')
   {
-    if ($theme === 'admin') {
+    if ($layout === 'admin') {
       $view = self::$admin;
     }
     else {
       $view = self::$page;
     }
 
-    $theme_css = URL . '/public/css/theme/' . $theme . '.css';
-    $theme_js = URL . '/public/javascript/theme/' . $theme . '.js';
-    $view_css = URL . '/public/css/page/' . $view . '.css';
-    $view_js = URL . '/public/javascript/page/' . $view . '.js';
+    $layout_css = URL . '/public/css/' . $layout . '.css';
+    $layout_js = URL . '/public/js/layout/' . $layout . '.js';
+    $view_css = URL . '/resources/css/main.' . $view . '.css';
+    $view_js = URL . '/resources/js/main.' . $view . '.js';
 
-    $theme = 'public/theme/' . $theme . '.php';
+    $layout = 'public/layout/' . $layout . '.php';
 
-    if (! file_exists($theme)) return null;
+    if (! file_exists($layout)) return null;
 
-    $template = self::load_file_php($theme, [
-      'theme_title' => self::$title,
-      'theme_css' => $theme_css,
-      'theme_js' => $theme_js,
+    $template = self::load_file_php($layout, [
+      'layout_title' => self::$title,
+      'layout_css' => $layout_css,
+      'layout_js' => $layout_js,
       'view_css' => $view_css,
       'view_js' => $view_js,
       'content' => $content
