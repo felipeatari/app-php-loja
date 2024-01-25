@@ -6,7 +6,6 @@ require_once __DIR__ . '/routes/web.php';
 
 $end = (new App\Components\Controller())
 ?->routes($routes)
-?->router()
 ?->dispatcher();
 
 App\Components\View::template(content: $end);

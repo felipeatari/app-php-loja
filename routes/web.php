@@ -2,13 +2,12 @@
 
 $routes = [
   // Rotas da main
-  ['get', '/', 'PageHome->index'],
-  ['get', '/home', 'PageHome->index'],
-  ['get', '/teste', 'PageTeste->index'],
-  ['get', '/login', 'PageLogin->index'],
-  ['post', '/entrar', 'PageLogin->entrar'],
-  ['get', '/produtos', 'PageProduto->full_products'],
-  ['get', '/produto/id/{id}', 'PageProduto->see_product'],
+  ['get', '/', 'MainHome->index'],
+  ['get', '/teste', 'MainTeste->index'],
+  ['get', '/login', 'MainLogin->index'],
+  ['post', '/entrar', 'MainLogin->entrar'],
+  ['get', '/produtos', 'MainProduto->full_products'],
+  ['get', '/produto/id/{id}', 'MainProduto->see_product'],
   // Rotas do admin
   ['get', '/admin', 'AdminHome->index'],
   ['get', '/admin/produto/listar', 'AdminProduto->listar'],

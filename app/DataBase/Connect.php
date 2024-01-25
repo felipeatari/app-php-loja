@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Components;
+namespace App\DataBase;
 
 use App\Components\Singleton;
 use PDO;
 use PDOException;
 
-class DataBase extends Singleton
+class Connect extends Singleton
 {
   private static ?object $pdo = null;
 
@@ -24,7 +24,7 @@ class DataBase extends Singleton
   /**
    * Realiza a conexão
    */
-  public static function connect(): ?object
+  public static function on(): ?object
   {
     self::$db_host = DB_HOST;
     self::$db_port = DB_PORT;
@@ -61,7 +61,7 @@ class DataBase extends Singleton
     return self::$pdo;
   }
 
-  public static function disconnect()
+  public static function off()
   {
     self::$pdo = null;
   }

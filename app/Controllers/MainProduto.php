@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Components\View;
 
-class PageProduto
+class MainProduto
 {
   public function full_products()
   {
@@ -21,7 +21,7 @@ class PageProduto
   public function see_product($id = 0)
   {
     View::title('Produto: ' . $id);
-    View::page('produto-ver');
+    View::main('produto-ver');
 
     $produto = [
       'Produto' => [

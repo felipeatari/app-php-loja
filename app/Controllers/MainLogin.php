@@ -4,12 +4,12 @@ namespace App\Controllers;
 
 use App\Components\View;
 
-class PageLogin
+class MainLogin
 {
   public function index()
   {
     View::title('Tela de Login');
-    View::page('login');
+    View::main('login');
 
     return View::render();
   }

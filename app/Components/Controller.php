@@ -2,7 +2,7 @@
 
 namespace App\Components;
 
-use App\Controllers\PageError;
+use App\Controllers\Error;
 use Closure;
 
 class Controller
@@ -21,8 +21,6 @@ class Controller
   {
     $this->uri = $_GET['url'] ?? '/';
     $this->http_method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-
-    // $this->routes($routes);
   }
 
   private function addRoute(string $http_method, string $route, mixed $action)
@@ -192,6 +190,8 @@ class Controller
    */
   public function dispatcher()
   {
+    $this->router();
+
     http_response_code($this->http_status_code);
 
     if ($this->http_status_code !== 200) {
@@ -199,10 +199,10 @@ class Controller
       if ($this->http_status_code === 404) $message_error = 'Pagina não encontrada';
 
       if ($this->callback) {
-        return $message_error;
+        return 'Error callback ' . $this->http_status_code;
       }
 
-      return PageError::error($this->http_status_code, $message_error);
+      return Error::error($this->http_status_code, $message_error);
     }
 
     if ($this->callback) {

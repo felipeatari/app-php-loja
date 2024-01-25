@@ -5,7 +5,7 @@ namespace App\Components;
 class View
 {
   private static string $title = '';
-  private static string $page = '';
+  private static string $main = '';
   private static string $admin = '';
   private static string $error = '';
 
@@ -21,9 +21,9 @@ class View
     self::$title = $title;
   }
 
-  public static function page(string $page = ''): void
+  public static function main(string $main = ''): void
   {
-    self::$page = $page;
+    self::$main = $main;
   }
 
   public static function admin(string $admin = ''): void
@@ -66,8 +66,8 @@ class View
    */
   public static function render(array $vars_dynamic = []): ?string
   {
-    if (self::$page) {
-      $view = 'resources/views/main.' . self::$page . '.php';
+    if (self::$main) {
+      $view = 'resources/views/main.' . self::$main . '.php';
     }
     elseif (self::$admin) {
       $view = 'resources/views/admin.' . self::$admin . '.php';
@@ -97,7 +97,7 @@ class View
       $view = self::$admin;
     }
     else {
-      $view = self::$page;
+      $view = self::$main;
     }
 
     $layout_css = URL . '/public/css/' . $layout . '.css';

@@ -4,12 +4,12 @@ namespace App\Controllers;
 
 use App\Components\View;
 
-class PageHome
+class MainHome
 {
   public function index()
   {
     View::title('Pagina Home');
-    View::page('home');
+    View::main('home');
 
     return View::render();
   }

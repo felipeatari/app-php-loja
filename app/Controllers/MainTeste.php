@@ -7,7 +7,7 @@ use App\Models\Teste;
 use App\Models\Produto;
 use App\Models\Categoria;
 
-class PageTeste
+class MainTeste
 {
   public function teste()
   {
