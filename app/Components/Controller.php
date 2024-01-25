@@ -1,8 +1,8 @@
 <?php
 
-namespace Src\App;
+namespace App\Components;
 
-use Src\Controllers\PageError;
+use App\Controllers\PageError;
 use Closure;
 
 class Controller
@@ -170,7 +170,7 @@ class Controller
 
       $controller = ucfirst($action[0]);
 
-      $namespace = 'Src\\Controllers\\' . $controller;
+      $namespace = 'App\\Controllers\\' . $controller;
 
       $this->controllers[] = $namespace;
       $this->method = $action[1];

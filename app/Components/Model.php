@@ -1,8 +1,8 @@
 <?php
 
-namespace Src\App;
+namespace App\Components;
 
-use Src\Model\DataBase;
+use App\Components\DataBase;
 use Error;
 use PDOException;
 

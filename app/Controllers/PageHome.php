@@ -1,8 +1,8 @@
 <?php
 
-namespace Src\Controllers;
+namespace App\Controllers;
 
-use Src\App\View;
+use App\Components\View;
 
 class PageHome
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Src\Models;
+namespace App\Models;
 
-use Src\App\Model;
+use App\Components\Model;
 
 class Sku extends Model
 {
