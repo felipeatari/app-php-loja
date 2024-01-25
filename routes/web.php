@@ -1,6 +1,6 @@
 <?php
 
-define('ROUTES', [
+$routes = [
   // Rotas da main
   ['get', '/', 'PageHome->index'],
   ['get', '/home', 'PageHome->index'],
@@ -18,4 +18,4 @@ define('ROUTES', [
   ['get', '/teste/db/find', 'Teste->find'],
   ['get', '/teste/db/save', 'Teste->save'],
   ['get', '/teste/db/delete/{id}', 'Teste->delete'],
-]);
+];

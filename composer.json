@@ -6,7 +6,6 @@
     "files":[
       "config/config.php",
       "config/env.php",
-      "config/routes.php",
       "tests/config/debug.php"
     ]
   },
