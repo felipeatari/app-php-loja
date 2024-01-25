@@ -18,4 +18,8 @@ $routes = [
   ['get', '/teste/db/find', 'Teste->find'],
   ['get', '/teste/db/save', 'Teste->save'],
   ['get', '/teste/db/delete/{id}', 'Teste->delete'],
+
+  ['get', '/api', function(){
+    die('Welcome to API!');
+  }],
 ];

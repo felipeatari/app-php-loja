@@ -16,74 +16,35 @@ class Controller
   private mixed $controller;
   private mixed $method;
   private string $uri;
-  private string $end;
 
-  public function __construct(array $routes = [], bool $api)
+  public function __construct(array $routes = [])
   {
     $this->uri = $_GET['url'] ?? '/';
     $this->http_method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
-    if (! $api) $this->routes($routes);
+    // $this->routes($routes);
   }
 
-  /**
-   * Gurda todas as rotas
-   *
-   * @param string $http_method Recebe o endpoint
-   * @param string $route Recebe o endpoint
-   * @param mixed $action Recebe o Controller@método ou um callback
-   *
-   * @return array Atributo $routes
-   */
-  private function addRoute(string $http_method, string $route, mixed $action): array
+  private function addRoute(string $http_method, string $route, mixed $action)
   {
-    return $this->routes[] = [
+    $this->routes[] = [
       'http_method' => $http_method,
       'route' => $route,
       'action' => $action
     ];
   }
 
-  /**
-   * Carrega as rotas GET do sistema
-   *
-   * @return void
-   */
-  private function routes(array $routes = []): void
+  public function routes(array $routes = []): ?Controller
   {
-    if (! empty($routes) and is_array($routes)) {
-      foreach ($routes as $linha):
-        if (empty($linha)) continue;
-
-        $this->addRoute($linha[0], $linha[1], $linha[2]);
-      endforeach;
+    if (empty($routes) or ! is_array($routes)) {
+      return null;
     }
-  }
 
-  public function get(string $route, string|Closure $action): Controller
-  {
-    $this->addRoute('get', $route, $action);
+    foreach ($routes as $linha):
+      if (empty($linha)) continue;
 
-    return $this;
-  }
-
-  public function post(string $route, string|Closure $action): Controller
-  {
-    $this->addRoute('post', $route, $action);
-
-    return $this;
-  }
-
-  public function put(string $route, string|Closure $action): Controller
-  {
-    $this->addRoute('put', $route, $action);
-
-    return $this;
-  }
-
-  public function delete(string $route, string|Closure $action): Controller
-  {
-    $this->addRoute('delete', $route, $action);
+      $this->addRoute($linha[0], $linha[1], $linha[2]);
+    endforeach;
 
     return $this;
   }
@@ -148,14 +109,8 @@ class Controller
     if (! empty($params)) $this->params = $params;
   }
 
-  /**
-   * Valida as rotas do projeto
-   *
-   * @return void
-   */
-  public function router(): void
+  public function router(): ?Controller
   {
-    // pr($this->routes);die;
     $uri = $this->convertURLStrToURLArr($this->uri);
     $http_method = strtolower($this->http_method);
     $error_405 = false;
@@ -198,13 +153,13 @@ class Controller
     if ($error_405) {
       $this->http_status_code = 405;
 
-      return;
+      return null;
     }
 
     if (empty($this->controllers)) {
       $this->http_status_code = 404;
 
-      return;
+      return null;
     }
 
     $error_404 = [];
@@ -222,11 +177,14 @@ class Controller
     if (count($error_404) === count($this->controllers)) {
       $this->http_status_code = 404;
 
-      return;
+      return null;
     }
 
-    if (! is_callable($this->controller))
+    if (! is_callable($this->controller)) {
       if (! method_exists($this->controller, $this->method)) $this->http_status_code = 405;
+    }
+
+    return $this;
   }
 
   /**
@@ -234,8 +192,6 @@ class Controller
    */
   public function dispatcher()
   {
-    $this->router();
-
     http_response_code($this->http_status_code);
 
     if ($this->http_status_code !== 200) {
