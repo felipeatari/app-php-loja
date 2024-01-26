@@ -17,7 +17,7 @@ class Controller
   private string|Closure $method;
   private string $uri;
 
-  public function __construct(array $routes = [])
+  public function __construct()
   {
     $this->uri = $_GET['url'] ?? '/';
     $this->http_method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
@@ -47,19 +47,39 @@ class Controller
     ];
   }
 
-  public function routes(array $routes = []): ?Controller
+  public function get(string $route, string|Closure $action)
   {
-    if (empty($routes) or ! is_array($routes)) {
-      return null;
-    }
+    $this->add_route('get', $route, $action);
+  }
 
-    foreach ($routes as $linha):
-      if (empty($linha)) continue;
+  public function post(string $route, string|Closure $action)
+  {
+    $this->add_route('post', $route, $action);
+  }
 
-      $this->add_route($linha[0], $linha[1], $linha[2]);
-    endforeach;
+  public function put(string $route, string|Closure $action)
+  {
+    $this->add_route('put', $route, $action);
+  }
 
-    return $this;
+  public function patch(string $route, string|Closure $action)
+  {
+    $this->add_route('patch', $route, $action);
+  }
+
+  public function delete(string $route, string|Closure $action)
+  {
+    $this->add_route('delete', $route, $action);
+  }
+
+  public function head(string $route, string|Closure $action)
+  {
+    $this->add_route('head', $route, $action);
+  }
+
+  public function options(string $route, string|Closure $action)
+  {
+    $this->add_route('options', $route, $action);
   }
 
   private function make_router(string|Closure $action, array $params = []): void
@@ -172,13 +192,17 @@ class Controller
       if ($this->http_status_code === 404) $message_error = 'Pagina não encontrada';
 
       if ($this->callback) {
-        return 'Error callback ' . $this->http_status_code;
+        $this->api = true;
+
+        return Error::error_api($this->http_status_code, $message_error);
       }
 
       return Error::error($this->http_status_code, $message_error);
     }
 
     if ($this->callback) {
+      $this->api = true;
+
       return call_user_func_array($this->method, $this->params) ?? '';
     }
 

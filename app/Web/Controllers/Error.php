@@ -21,11 +21,12 @@ class Error
 
   public static function error_api($code, $message)
   {
+    header('Content-Type: application/json');
     http_response_code($code);
 
-    return json_encode([
+    die(json_encode([
       'code' => $code,
       'message' => $message
-    ]);
+    ]));
   }
 }

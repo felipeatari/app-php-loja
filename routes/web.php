@@ -1,24 +1,27 @@
 <?php
 
-$routes = [
-  // Rotas da main
-  ['get', '/', 'MainHome->index'],
-  ['get', '/teste', 'MainTeste->index'],
-  ['get', '/login', 'MainLogin->index'],
-  ['post', '/entrar', 'MainLogin->entrar'],
-  ['get', '/produtos', 'MainProduto->full_products'],
-  ['get', '/produto/id/{id}', 'MainProduto->see_product'],
-  // Rotas do admin
-  ['get', '/admin', 'AdminHome->index'],
-  ['get', '/admin/produto/listar', 'AdminProduto->listar'],
-  ['get', '/admin/produto/cadastrar', 'AdminProduto->cadastrar'],
-  // Rotas de teste
-  ['get', '/teste', 'Teste->index'],
-  ['get', '/teste/db/find', 'Teste->find'],
-  ['get', '/teste/db/save', 'Teste->save'],
-  ['get', '/teste/db/delete/{id}', 'Teste->delete'],
+// Rotas da main
+$web->get('/', 'MainHome->index');
+$web->get('/teste', 'MainTeste->index');
+$web->get('/login', 'MainLogin->index');
+$web->get('/produtos', 'MainProduto->full_products');
+$web->get('/produto/id/{id}', 'MainProduto->see_product');
+$web->post('/entrar', function(){
+  pr($_GET);
+  pr($_POST);
+  die;
+});
 
-  ['get', '/api/v1/teste', function(){
-    return (new App\Web\Controllers\ApiTeste)->index();
-  }],
-];
+// Rotas do admin
+$web->get('/admin', 'AdminHome->index');
+$web->get('/admin/produto/listar', 'AdminProduto->listar');
+$web->get('/admin/produto/cadastrar', 'AdminProduto->cadastrar');
+
+// Rotas de teste
+$web->get('/teste', 'Teste->index');
+$web->get('/teste/db/find', 'Teste->find');
+$web->get('/teste/db/save', 'Teste->save');
+$web->get('/teste/db/delete/{id}', 'Teste->delete');
+$web->get('/api/v1/teste', function(){
+  return (new App\Web\Controllers\ApiTeste)->index();
+});

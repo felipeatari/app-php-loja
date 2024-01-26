@@ -1,10 +1,3 @@
-<div class="login">
-  <form action="<?=URL . '/entrar'?>" method="POST">
-    <div>Login: <input type="text" name="login" id="login"></div>
-    <div>Senha: <input type="text" name="senha" id="senha"></div>
-    <input type="submit" value="enviar">
-  </form>
-</div>
 <style>
   .login{
     display: flex;
@@ -21,3 +14,10 @@
     margin-bottom: 3px;
   }
 </style>
+<div class="login">
+  <form action="<?=URL . '/entrar'?>" method="POST">
+    <div>Login: <input type="text" name="login" id="login"></div>
+    <div>Senha: <input type="text" name="senha" id="senha"></div>
+    <input type="submit" value="enviar">
+  </form>
+</div>
