@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Components;
+namespace App\Web;
 
-use App\Controllers\Error;
+use App\Web\Controllers\Error;
 use Closure;
 
 class Controller
@@ -97,7 +97,7 @@ class Controller
 
       $controller = ucfirst($action[0]);
 
-      $namespace = 'App\\Controllers\\' . $controller;
+      $namespace = 'App\\Web\\Controllers\\' . $controller;
 
       $this->controllers[] = $namespace;
       $this->method = $action[1];
@@ -151,13 +151,13 @@ class Controller
     if ($error_405) {
       $this->http_status_code = 405;
 
-      return null;
+      return $this;
     }
 
     if (empty($this->controllers)) {
       $this->http_status_code = 404;
 
-      return null;
+      return $this;
     }
 
     $error_404 = [];
@@ -175,7 +175,7 @@ class Controller
     if (count($error_404) === count($this->controllers)) {
       $this->http_status_code = 404;
 
-      return null;
+      return $this;
     }
 
     if (! is_callable($this->controller)) {
@@ -190,8 +190,6 @@ class Controller
    */
   public function dispatcher()
   {
-    $this->router();
-
     http_response_code($this->http_status_code);
 
     if ($this->http_status_code !== 200) {

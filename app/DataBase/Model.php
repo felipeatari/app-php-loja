@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components;
+namespace App\DataBase;
 
 use App\Components\DataBase;
 use Error;

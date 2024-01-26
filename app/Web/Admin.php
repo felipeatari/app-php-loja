@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components;
+namespace App\Web;
 
 use App\Components\View;
 
