@@ -2,7 +2,7 @@
 
 namespace App\Web\Controllers;
 
-use App\Components\Admin;
+use App\Web\Admin;
 
 class AdminProduto extends Admin
 {

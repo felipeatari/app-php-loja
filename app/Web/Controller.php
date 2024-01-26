@@ -107,7 +107,7 @@ class Controller
     if (! empty($params)) $this->params = $params;
   }
 
-  public function router(): ?Controller
+  public function router(bool $return_null = false): ?Controller
   {
     $uri = $this->convertURLStrToURLArr($this->uri);
     $http_method = strtolower($this->http_method);
@@ -151,11 +151,15 @@ class Controller
     if ($error_405) {
       $this->http_status_code = 405;
 
+      if ($return_null) return null;
+
       return $this;
     }
 
     if (empty($this->controllers)) {
       $this->http_status_code = 404;
+
+      if ($return_null) return null;
 
       return $this;
     }
@@ -174,6 +178,8 @@ class Controller
 
     if (count($error_404) === count($this->controllers)) {
       $this->http_status_code = 404;
+
+      if ($return_null) return null;
 
       return $this;
     }
