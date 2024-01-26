@@ -2,7 +2,7 @@
 
 namespace App\Components;
 
-class View
+class Template
 {
   private static string $title = '';
   private static string $main = '';
@@ -91,7 +91,7 @@ class View
    *
    * @return string
    */
-  public static function template(string $layout = 'main', ?string $content = '')
+  public static function load(string $layout = 'main', ?string $content = '')
   {
     if ($layout === 'admin') {
       $view = self::$admin;

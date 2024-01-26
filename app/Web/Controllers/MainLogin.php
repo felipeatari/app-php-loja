@@ -2,16 +2,16 @@
 
 namespace App\Web\Controllers;
 
-use App\Components\View;
+use App\Components\Template;
 
 class MainLogin
 {
   public function index()
   {
-    View::title('Tela de Login');
-    View::main('login');
+    Template::title('Tela de Login');
+    Template::main('login');
 
-    return View::render();
+    return Template::render();
   }
 
   public function entrar()

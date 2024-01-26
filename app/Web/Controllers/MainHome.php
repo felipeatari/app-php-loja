@@ -2,15 +2,15 @@
 
 namespace App\Web\Controllers;
 
-use App\Components\View;
+use App\Components\Template;
 
 class MainHome
 {
   public function index()
   {
-    View::title('Pagina Home');
-    View::main('home');
+    Template::title('Pagina Home');
+    Template::main('home');
 
-    return View::render();
+    return Template::render();
   }
 }

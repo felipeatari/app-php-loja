@@ -2,18 +2,18 @@
 
 namespace App\Web\Controllers;
 
-use App\Components\View;
+use App\Components\Template;
 
 class Error
 {
   public static function error($code, $message)
   {
-    View::title('Erro ' . $code);
-    View::error('error');
+    Template::title('Erro ' . $code);
+    Template::error('error');
 
     http_response_code($code);
 
-    return View::render([
+    return Template::render([
       'code' => $code,
       'message' => $message
     ]);

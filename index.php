@@ -10,4 +10,4 @@ require_once __DIR__ . '/routes/web.php';
 
 $end = $web?->on()?->dispatcher();
 
-App\Components\View::template(content: $end);
+App\Components\Template::load(content: $end);

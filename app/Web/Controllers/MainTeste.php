@@ -2,7 +2,7 @@
 
 namespace App\Web\Controllers;
 
-use App\Components\View;
+use App\Components\Template;
 use App\Models\Teste;
 use App\Models\Produto;
 use App\Models\Categoria;

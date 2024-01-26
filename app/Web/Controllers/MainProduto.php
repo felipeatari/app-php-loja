@@ -2,7 +2,7 @@
 
 namespace App\Web\Controllers;
 
-use App\Components\View;
+use App\Components\Template;
 
 class MainProduto
 {
@@ -13,15 +13,15 @@ class MainProduto
 
     if (empty($cat) or empty($tipo)) return 'error';
 
-    View::title(ucfirst($cat) . 's ' . ucfirst($tipo));
+    Template::title(ucfirst($cat) . 's ' . ucfirst($tipo));
 
     return '<br><br>Categoria: ' . $cat . ' - Tipo: ' . $tipo . '<br><br><br><br>';
   }
 
   public function see_product($id = 0)
   {
-    View::title('Produto: ' . $id);
-    View::main('produto-ver');
+    Template::title('Produto: ' . $id);
+    Template::main('produto-ver');
 
     $produto = [
       'Produto' => [
@@ -33,7 +33,7 @@ class MainProduto
       'Sku' => [],
     ];
 
-    return View::render(['id' => $id, 'produto' => $produto]);
+    return Template::render(['id' => $id, 'produto' => $produto]);
   }
 
   public function list_category()

@@ -2,7 +2,7 @@
 
 namespace App\Web;
 
-use App\Components\View;
+use App\Components\Template;
 
 abstract class Admin
 {
@@ -15,17 +15,17 @@ abstract class Admin
 
   protected function title(string $title)
   {
-    View::title($title);
+    Template::title($title);
   }
 
   protected function admin(string $admin)
   {
-    View::admin($admin);
+    Template::admin($admin);
   }
 
   protected function content(array $vars_dynamic = [])
   {
-    $content = View::render($vars_dynamic);
-    View::template('admin', $content);die;
+    $content = Template::render($vars_dynamic);
+    Template::load('admin', $content);die;
   }
 }
