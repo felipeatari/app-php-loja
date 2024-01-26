@@ -18,7 +18,7 @@ $routes = [
   ['get', '/teste/db/save', 'Teste->save'],
   ['get', '/teste/db/delete/{id}', 'Teste->delete'],
 
-  ['get', '/api', function(){
-    die('Welcome to API!');
+  ['get', '/api/v1/teste', function(){
+    return (new App\Web\Controllers\ApiTeste)->index();
   }],
 ];

@@ -13,8 +13,8 @@ class Controller
   private bool $callback = false;
   private int $http_status_code = 200;
   private string $http_method;
-  private mixed $controller;
-  private mixed $method;
+  private string|Closure $controller;
+  private string|Closure $method;
   private string $uri;
 
   public function __construct(array $routes = [])
@@ -23,7 +23,22 @@ class Controller
     $this->http_method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
   }
 
-  private function addRoute(string $http_method, string $route, mixed $action)
+  public static function redirect(string $route): void
+  {
+    header('Location: ' . URL . $route);die;
+  }
+
+  private function convert_URL_str_to_URL_arr(string $url = null): array
+  {
+    $url = explode('/', $url);
+    $url = array_values(array_filter($url));
+
+    if (! $url) $url[] = '/';
+
+    return $url;
+  }
+
+  private function add_route(string $http_method, string $route, string|Closure $action)
   {
     $this->routes[] = [
       'http_method' => $http_method,
@@ -41,50 +56,13 @@ class Controller
     foreach ($routes as $linha):
       if (empty($linha)) continue;
 
-      $this->addRoute($linha[0], $linha[1], $linha[2]);
+      $this->add_route($linha[0], $linha[1], $linha[2]);
     endforeach;
 
     return $this;
   }
 
-  /**
-   * Direciona para alguma rota especifica
-   *
-   * @param string $route Recebe o endpoint
-   *
-   * @return void
-   */
-  public static function redirect(string $route): void
-  {
-    header('Location: ' . URL . $route);die;
-  }
-
-  /**
-   * Converte a URL de string para array
-   *
-   * @param string $url recebe a URL
-   *
-   * @return array
-   */
-  private function convertURLStrToURLArr(string $url = null): array
-  {
-    $url = explode('/', $url);
-    $url = array_values(array_filter($url));
-
-    if (! $url) $url[] = '/';
-
-    return $url;
-  }
-
-  /**
-   * Verifica se é ou existe controller, closure, método ou parâmetros
-   *
-   * @param mixed $action Recebe o Controller@método
-   * @param array $params Recebe um array de parâmetros
-   *
-   * @return void
-   */
-  private function checkout(mixed $action, array $params = []): void
+  private function make_router(string|Closure $action, array $params = []): void
   {
     // Verifica se é uma closure/callable ou um(a) classe/controller
     if (is_callable($action)) {
@@ -109,19 +87,19 @@ class Controller
 
   public function router(): Controller
   {
-    $uri = $this->convertURLStrToURLArr($this->uri);
+    $uri = $this->convert_URL_str_to_URL_arr($this->uri);
     $http_method = strtolower($this->http_method);
     $error_405 = false;
 
     foreach ($this->routes as $route):
-      $get_route = $this->convertURLStrToURLArr($route['route']);
+      $uri_route = $this->convert_URL_str_to_URL_arr($route['route']);
 
       // Verifica se a rota é dinâmica
       if (preg_match('/(\{[\w]+\})|(\:[\w]+)/', $route['route'])) {
         // Recupera os campos estáticos da rota
         $route_static_fields = array_map(function($item) {
           if (! preg_match('/(\{[\w]+\})|(\:[\w]+)/', $item)) return $item;
-        }, $get_route);
+        }, $uri_route);
         // Elimina os campos vazios da rota e ordena de forma numerada
         $route_static_fields = array_values(array_filter($route_static_fields));
 
@@ -129,22 +107,22 @@ class Controller
         $uri_static_fields = array_intersect($route_static_fields, $uri);
 
         // Verifica se a rota e a URI tem a mesma extensão e se os campos estáticos de ambas são iguais
-        if ((count($get_route) === count($uri)) and ($uri_static_fields === $route_static_fields)) {
+        if ((count($uri_route) === count($uri)) and ($uri_static_fields === $route_static_fields)) {
           // Verifica se método HTTP requisitado é o mesmo que foi definido para a rota
           if ($route['http_method'] !== $http_method) $error_405 = true;
 
-          $this->checkout($route['action'], array_diff($uri, $get_route));
+          $this->make_router($route['action'], array_diff($uri, $uri_route));
         }
       }
 
       // Verifica se a rota é estática
-      if (($get_route === $uri)) {
+      if (($uri_route === $uri)) {
         // Verifica se método HTTP requisitado é o mesmo que foi definido para a rota
         if ($route['http_method'] !== $http_method) {
           $error_405 = true;
         }
 
-        $this->checkout($route['action']);
+        $this->make_router($route['action']);
       }
     endforeach;
 
@@ -185,9 +163,6 @@ class Controller
     return $this;
   }
 
-  /**
-   * Carrega o conteúdo do controller
-   */
   public function dispatcher()
   {
     http_response_code($this->http_status_code);
