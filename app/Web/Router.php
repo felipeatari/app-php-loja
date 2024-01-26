@@ -5,7 +5,7 @@ namespace App\Web;
 use App\Web\Controllers\Error;
 use Closure;
 
-class Controller
+class Router
 {
   private array $controllers = [];
   private array $params = [];
@@ -105,7 +105,7 @@ class Controller
     if (! empty($params)) $this->params = $params;
   }
 
-  public function router(): Controller
+  public function on(): Router
   {
     $uri = $this->convert_URL_str_to_URL_arr($this->uri);
     $http_method = strtolower($this->http_method);
