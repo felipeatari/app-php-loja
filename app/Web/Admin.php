@@ -26,6 +26,6 @@ abstract class Admin
   protected function content(array $vars_dynamic = [])
   {
     $content = Template::render($vars_dynamic);
-    Template::load('admin', $content);die;
+    Template::layout('admin', $content);die;
   }
 }

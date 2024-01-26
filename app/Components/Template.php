@@ -85,13 +85,13 @@ class Template
   }
 
   /**
-   * Método responsável por carregar todo o template
+   * Método responsável por carregar o layout
    *
    * @param string $content Recebe o conteúdo da página
    *
    * @return string
    */
-  public static function load(string $layout = 'main', ?string $content = '')
+  public static function layout(string $layout = 'main', ?string $content = '')
   {
     if ($layout === 'admin') {
       $view = self::$admin;
