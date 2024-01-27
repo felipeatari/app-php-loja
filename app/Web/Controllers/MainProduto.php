@@ -33,7 +33,7 @@ class MainProduto
       'Sku' => [],
     ];
 
-    return Template::render(['id' => $id, 'produto' => $produto]);
+    return Template::view(['id' => $id, 'produto' => $produto]);
   }
 
   public function list_category()

@@ -11,7 +11,7 @@ class MainLogin
     Template::title('Tela de Login');
     Template::main('login');
 
-    return Template::render();
+    return Template::view();
   }
 
   public function entrar()

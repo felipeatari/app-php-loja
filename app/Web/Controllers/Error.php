@@ -13,7 +13,7 @@ class Error
 
     http_response_code($code);
 
-    return Template::render([
+    return Template::view([
       'code' => $code,
       'message' => $message
     ]);

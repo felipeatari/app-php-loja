@@ -57,14 +57,14 @@ class Template
   }
 
   /**
-   * Método responsável por renderizar o HTML
+   * Método responsável por renderizar a view
    *
    * @param string $extension Extensão do arquivo da visão: .php ou .html
    * @param array $vars_dynamic Dados que serão carregados dinamicamente
    *
    * @return string Página com os campos substituídos
    */
-  public static function render(array $vars_dynamic = []): ?string
+  public static function view(array $vars_dynamic = []): ?string
   {
     if (self::$main) {
       $view = 'resources/views/main.' . self::$main . '.php';

@@ -11,6 +11,6 @@ class MainHome
     Template::title('Pagina Home');
     Template::main('home');
 
-    return Template::render();
+    return Template::view();
   }
 }
