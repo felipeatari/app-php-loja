@@ -55,6 +55,7 @@ section {
 }
 
 header h3 {
+  margin-left: 50px;
   color: rgb(244, 239, 234);
 }
 
@@ -63,7 +64,7 @@ header h3 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* background-color: rgb(233, 233, 235); */
+  background-color: rgb(243, 243, 243);
   /* background-color: #232b39; */
   border-right: 1px solid rgb(222, 221, 221);
 }

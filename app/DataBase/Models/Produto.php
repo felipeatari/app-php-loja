@@ -1,8 +1,8 @@
 <?php
 
-namespace App\DataBase\Models;
+namespace App\Database\Models;
 
-use App\Components\Model;
+use App\Database\Model;
 
 class Produto extends Model
 {

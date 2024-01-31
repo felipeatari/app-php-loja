@@ -16,12 +16,11 @@ $web->post('/entrar', function(){
 $web->get('/admin', 'AdminHome->index');
 $web->get('/admin/produto/listar', 'AdminProduto->listar');
 $web->get('/admin/produto/cadastrar', 'AdminProduto->cadastrar');
+$web->post('/admin/produto/salvar', 'AdminProduto->salvar');
 
 // Rotas de teste
 $web->get('/teste', 'Teste->index');
 $web->get('/teste/db/find', 'Teste->find');
 $web->get('/teste/db/save', 'Teste->save');
 $web->get('/teste/db/delete/{id}', 'Teste->delete');
-$web->get('/api/v1/teste', function(){
-  return (new App\Web\Controllers\ApiTeste)->index();
-});
+$web->get('/api/v1/teste', fn()=> (new App\Web\Controllers\ApiTeste)->index());

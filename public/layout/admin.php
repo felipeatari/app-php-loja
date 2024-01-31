@@ -12,7 +12,7 @@
 <body>
   <div class="container">
     <header>
-      <h3>Dashboard</h3>
+      <h3>Dashboard - Lucky Store</h3>
     </header>
     <!-- Carrega o conteúdo dinâmico -->
     <section class="content-dinamic">
@@ -22,6 +22,7 @@
         </div> -->
         <nav class="menu-admin">
           <ul class="menu-admin-bg">
+            <li><a href="<?= URL ?>/admin"><h1>Home</h1></a></li>
             <li class="menu-admin-titulo">
               <h1>Produtos</h1>
               <ul class="menu-admin-items">

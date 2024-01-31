@@ -2,7 +2,7 @@
 
 namespace App\Database;
 
-use App\Components\Database;
+use App\Database\Connect;
 use Error;
 use PDOException;
 
@@ -41,14 +41,14 @@ class Model
 
       $query = 'SELECT' . $query_fields . 'FROM ' . strtolower($this->table) . ' WHERE id = :id';
 
-      $connect = DataBase::connect();
+      $connect = Connect::on();
 
       $stmt = $connect->prepare($query);
       $stmt->bindParam(':id', $id);
 
       $stmt->execute();
 
-      DataBase::disconnect();
+      Connect::off();
 
       if (!$stmt->rowCount()) {
         $this->set_error(404, 'Not Found');
@@ -160,7 +160,7 @@ class Model
   public function fetch(bool $all = false): object|array|bool
   {
     try {
-      $connect = DataBase::connect();
+      $connect = Connect::on();
 
       if (! empty($this->conditions)) {
         $stmt = $connect->prepare($this->query);
@@ -179,7 +179,7 @@ class Model
 
       $stmt->execute();
 
-      DataBase::disconnect();
+      Connect::off();
 
       if (!$stmt->rowCount()) {
         $this->set_error(404, 'Not Found');
@@ -293,7 +293,7 @@ class Model
 
       $insert = "INSERT INTO " . $this->table . " $data_insert_keys VALUES $data_insert_values";
 
-      $connect = DataBase::connect();
+      $connect = Connect::on();
       $stmt = $connect->prepare($insert);
 
       foreach ($data_keys as $i => $key) :
@@ -302,7 +302,7 @@ class Model
 
       $stmt->execute();
 
-      DataBase::disconnect();
+      Connect::off();
 
       if (!$stmt->rowCount()) {
         $this->set_error(400, 'Not Save');
@@ -337,7 +337,7 @@ class Model
 
       $keys_update = implode(', ', $keys_update);
 
-      $connect = DataBase::connect();
+      $connect = Connect::on();
 
       $update = "UPDATE " . $this->table . " SET $keys_update WHERE id = :id";
 
@@ -351,7 +351,7 @@ class Model
 
       $stmt->execute();
 
-      DataBase::disconnect();
+      Connect::off();
 
       if (!$stmt->rowCount()) {
         $this->set_error(400, 'Not Update');
@@ -370,9 +370,9 @@ class Model
   public function delete(int $id): bool
   {
     try {
-      $connect = DataBase::connect();
+      $connect = Connect::on();
 
-      DataBase::disconnect();
+      Connect::off();
 
       $delete = "DELETE FROM " . $this->table . " WHERE id = :id";
 

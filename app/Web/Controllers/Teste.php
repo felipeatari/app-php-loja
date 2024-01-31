@@ -3,9 +3,9 @@
 namespace App\Web\Controllers;
 
 use App\Components\Template;
-use App\Models\Teste;
-use App\Models\Produto;
-use App\Models\Categoria;
+// use App\Models\Teste;
+use App\DataBase\Models\Produto;
+// use App\Models\Categoria;
 
 class Teste
 {
@@ -80,25 +80,25 @@ class Teste
 
   public function find()
   {
-    pr((new ProdutoModel())
-    ->query_join([
-      'inputs' => [
-        // 'produto' => ['nome', 'categoria_id'],
-        'categoria' => ['nome'],
-      ],
-      'condition' => [
-        // 'produto' => ['id' => 3],
-        'categoria' => ['id' => 29],
-        // 'sku' => ['nome' => 'Teste'],
-      ],
-      // 'limit' => 2
-    ])->joins([
-      'categoria' => 'categoria_id',
-      // 'sku' => 'sku_id'
-      ])
-  );die;
+  //   pr((new Produto())
+  //   ->query_join([
+  //     'inputs' => [
+  //       // 'produto' => ['nome', 'categoria_id'],
+  //       'categoria' => ['nome'],
+  //     ],
+  //     'condition' => [
+  //       // 'produto' => ['id' => 3],
+  //       'categoria' => ['id' => 29],
+  //       // 'sku' => ['nome' => 'Teste'],
+  //     ],
+  //     // 'limit' => 2
+  //   ])->joins([
+  //     'categoria' => 'categoria_id',
+  //     // 'sku' => 'sku_id'
+  //     ])
+  // );die;
 
-  $produtos = new ProdutoModel();
+  $produtos = new Produto();
   // $categoria = new CategoriaModel();
 
   $find_produtos = $produtos->find()
@@ -112,6 +112,8 @@ class Teste
   ->fetch(true);
 
   // $produto->get_categoria(12);
+
+  pr($find_produtos);die;
 
   $data = [];
 
