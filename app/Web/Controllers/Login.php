@@ -4,7 +4,7 @@ namespace App\Web\Controllers;
 
 use App\Components\Template;
 
-class MainLogin
+class Login
 {
   public function index()
   {

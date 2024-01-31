@@ -1,11 +1,11 @@
 <?php
 
 // Rotas da main
-$web->get('/', 'MainHome->index');
-$web->get('/teste', 'MainTeste->index');
-$web->get('/login', 'MainLogin->index');
-$web->get('/produtos', 'MainProduto->full_products');
-$web->get('/produto/id/{id}', 'MainProduto->see_product');
+$web->get('/', 'Home->index');
+$web->get('/teste', 'Teste->index');
+$web->get('/login', 'Login->index');
+$web->get('/produtos', 'Produto->full_products');
+$web->get('/produto/id/{id}', 'Produto->see_product');
 $web->post('/entrar', function(){
   pr($_GET);
   pr($_POST);

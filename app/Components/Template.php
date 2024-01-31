@@ -67,10 +67,10 @@ class Template
   public static function view(array $vars_dynamic = []): ?string
   {
     if (self::$main) {
-      $view = 'resources/views/main.' . self::$main . '.php';
+      $view = 'resources/views/' . self::$main . '.php';
     }
     elseif (self::$admin) {
-      $view = 'resources/views/admin.' . self::$admin . '.php';
+      $view = 'resources/views/' . self::$admin . '.php';
     }
     elseif (self::$error) {
       $view = 'resources/views/' . self::$error . '.php';
@@ -100,10 +100,10 @@ class Template
       $view = self::$main;
     }
 
-    $layout_css = URL . '/public/css/' . $layout . '.css';
-    $layout_js = URL . '/public/js/layout/' . $layout . '.js';
-    $view_css = URL . '/resources/css/main.' . $view . '.css';
-    $view_js = URL . '/resources/js/main.' . $view . '.js';
+    $layout_css = '/public/css/' . $layout . '.css';
+    $layout_js = '/public/js/layout/' . $layout . '.js';
+    $view_css = '/resources/css/' . $view . '.css';
+    $view_js = '/resources/js/' . $view . '.js';
 
     $layout = 'public/layout/' . $layout . '.php';
 

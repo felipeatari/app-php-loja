@@ -4,7 +4,7 @@ namespace App\Web\Controllers;
 
 use App\Components\Template;
 
-class MainProduto
+class Produto
 {
   public function full_products()
   {
