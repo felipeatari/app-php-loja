@@ -1,8 +1,8 @@
 <?php
 
-namespace App\DataBase;
+namespace App\Database;
 
-use App\Components\DataBase;
+use App\Components\Database;
 use Error;
 use PDOException;
 
@@ -68,7 +68,7 @@ class Model
     return $stmt->fetchAll();
   }
 
-  public function find(array $inputs = []): AppModel
+  public function find(array $inputs = []): Model
   {
     $query_fields = ' * ';
 
@@ -81,7 +81,7 @@ class Model
     return $this;
   }
 
-  public function condition(array $conditions = [], string $operator = ''): AppModel
+  public function condition(array $conditions = [], string $operator = ''): Model
   {
     $conditions_keys = array_keys($conditions);
     $conditions_values = array_values($conditions);
@@ -136,21 +136,21 @@ class Model
     return $this;
   }
 
-  public function order($field = 'id', $sort = 'DESC'): AppModel
+  public function order($field = 'id', $sort = 'DESC'): Model
   {
     $this->query .= ' ORDER BY ' . $field . ' ' . $sort;
 
     return $this;
   }
 
-  public function limit(int $limit = 0): AppModel
+  public function limit(int $limit = 0): Model
   {
     $this->query .= ' LIMIT ' . $limit;
 
     return $this;
   }
 
-  public function paginator(int $start = 0, int $length = 0): AppModel
+  public function paginator(int $start = 0, int $length = 0): Model
   {
     $this->query .= ' LIMIT ' . $start . ', ' . $length;
 
@@ -199,7 +199,7 @@ class Model
     return $stmt->fetch();
   }
 
-  public function query_join(array $query_join): AppModel
+  public function query_join(array $query_join): Model
   {
     $this->query_join = $query_join;
 

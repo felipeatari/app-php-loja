@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataBase;
+namespace App\Database;
 
 use App\Components\Singleton;
 use PDO;
