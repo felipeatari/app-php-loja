@@ -100,12 +100,12 @@ class Template
       $view = self::$main;
     }
 
-    $layout_css = '/public/css/' . $layout . '.css';
-    $layout_js = '/public/js/layout/' . $layout . '.js';
+    $layout_css = '/resources/css/' . $layout . '.css';
+    $layout_js = '/resources/js/' . $layout . '.js';
     $view_css = '/resources/css/' . $view . '.css';
     $view_js = '/resources/js/' . $view . '.js';
 
-    $layout = 'public/layout/' . $layout . '.php';
+    $layout = 'resources/layouts/' . $layout . '.php';
 
     if (! file_exists($layout)) return null;
 
@@ -123,6 +123,6 @@ class Template
     $template = preg_replace('/\s+/', ' ', trim($template));
     $template = str_replace('> <', '><', $template);
 
-    echo $template;
+    echo $template;die;
   }
 }
