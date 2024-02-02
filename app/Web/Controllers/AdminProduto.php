@@ -7,6 +7,14 @@ use App\DataBase\Models\Produto;
 
 class AdminProduto extends Admin
 {
+  public function index()
+  {
+    parent::title('Admin Produto');
+    parent::admin('admin-produto');
+
+    parent::content();
+  }
+
   public function listar()
   {
     parent::title('Lista Produto');
