@@ -7,10 +7,10 @@ use App\DataBase\Models\Produto;
 
 class AdminProduto extends Admin
 {
-  public function index()
+  public function Categoria()
   {
-    parent::title('Admin Produto');
-    parent::admin('admin-produto');
+    parent::title('Admin Produto Categoria');
+    parent::admin('admin-produto-categoria');
 
     parent::content();
   }

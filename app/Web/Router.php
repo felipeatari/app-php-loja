@@ -194,10 +194,10 @@ class Router
       if ($this->callback) {
         $this->api = true;
 
-        return Error::error_api($this->http_status_code, $message_error);
+        die(Error::error_api($this->http_status_code, $message_error));
       }
 
-      return Error::error($this->http_status_code, $message_error);
+      die(Error::error($this->http_status_code, $message_error));
     }
 
     if ($this->callback) {

@@ -26,9 +26,7 @@
           <ul class="menu-admin-bg">
             <li><a href="<?= URL ?>/admin"><p class="menu-admin-bg-titulo">Home</p></a></li>
             <li class="menu-admin-titulo">
-              <!-- <p class="menu-admin-bg-titulo">Produtos</p>
-             -->
-            <li><a href="<?= URL ?>/admin/produto"><p class="menu-admin-bg-titulo">Produto</p></a></li>
+              <p class="menu-admin-bg-titulo">Produtos</p>
 
               <ul class="menu-admin-items">
                 <a href="<?= URL ?>/admin/produto/listar"><li class="menu-admin-bg-selecionar-item">Listar</li></a>
