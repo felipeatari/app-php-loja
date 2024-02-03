@@ -91,16 +91,11 @@ header {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  padding: 3px;
-  border: 1px solid black;
-  width: 25px;
-  height: 25px;
   border-radius: 50%;
 }
 .conta-icone {
-  fill: rgb(0, 0, 0);
-  height: 14px;
-  width: 14px;
+  height: 19px;
+  width: 19px;
 }
 .conta-texto {
   font-size: 8pt;
@@ -120,6 +115,9 @@ header {
 }
 .carrinho-qnt-produtos {
   font-size: 10pt;
+}
+.logo-home-main {
+  width: 17px;
 }
 
 /* Bloco Menu Desktop */
