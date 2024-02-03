@@ -15,7 +15,7 @@ a {
   src: url(/resources/assets/fonts/Poppins-SemiBold.ttf);
 }
 html, body {
-  font-family: Poppins-SemiBold;
+  font-family: Roboto, Poppins-SemiBold;
   scroll-behavior: smooth;
   width: 100%;
   height: 100vh;

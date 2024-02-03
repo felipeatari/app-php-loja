@@ -21,6 +21,26 @@ html, body {
   height: 100vh;
 }
 
+.logo-home-admin {
+  width: 22px;
+  fill: white;
+}
+.menu-admin-logo {
+  /* background-color: red; */
+  width: 100%;
+  /* height: 30px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border-top: 1px solid rgb(153, 153, 153); */
+  border-bottom: 1px solid rgb(153, 153, 153);
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.menu-admin-logo a {
+  /* margin-bottom: 50px; */
+}
+
 .coluna-esquerda {
   width: 339px;
   display: flex;
@@ -36,7 +56,7 @@ html, body {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 90px;
+  margin-bottom: 60px;
   font-size: 20pt;
   color: #4972ba;
 }
@@ -56,11 +76,9 @@ html, body {
 .menu-admin h3 {
   margin-bottom: 30px;
 }
-.menu-admin-bg {
-  /* margin-bottom: 20px; */
-}
+
 .menu-admin-bg li {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 .logo-admin {
   width: 100px;
@@ -71,12 +89,14 @@ html, body {
 .menu-admin-titulo:hover .menu-admin-items {
   display: flex;
 }
+
 .menu-admin-bg-titulo:hover {
   background-color: #0a111d;
 }
+
 .menu-admin-items {
   display: none;
-  width: 250px;
+  width: 100%;
   /* position: absolute; */
   flex-direction: column;
   background-color: #040a14;
@@ -93,11 +113,11 @@ html, body {
 }
 .menu-admin-bg-selecionar-item:hover {
   background-color: #01173e;
-  /* color: #6363b5; */
 }
 
 .footer {
   text-align: center;
   font-size: 8pt;
   padding: 10px;
+  background-color: rgb(233, 233, 233);
 }
