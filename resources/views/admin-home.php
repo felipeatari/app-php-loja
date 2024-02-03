@@ -1,3 +1,3 @@
 <div class="home">
-<h3>Ok</h3>
+  <h3>Pagina Home do Dashboard</h3>
 </div>
