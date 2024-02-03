@@ -100,10 +100,10 @@ class Template
       $view = self::$main;
     }
 
-    $layout_css = '/resources/css/' . $layout . '.css';
-    $layout_js = '/resources/js/' . $layout . '.js';
-    $view_css = '/resources/css/' . $view . '.css';
-    $view_js = '/resources/js/' . $view . '.js';
+    $layout_css = '/resources/layouts/css/' . $layout . '.css';
+    $layout_js = '/resources/layouts/js/' . $layout . '.js';
+    $view_css = '/resources/views/css/' . $view . '.css';
+    $view_js = '/resources/views/js/' . $view . '.js';
 
     $layout = 'resources/layouts/' . $layout . '.php';
 
