@@ -15,6 +15,7 @@ $web->post('/entrar', function(){
 // Rotas do admin
 $web->get('/admin', 'AdminHome->index');
 $web->get('/admin/produto/categorias', 'AdminProduto->categoria');
+$web->post('/admin/produto/categorias', 'AdminProduto->categoria');
 $web->get('/admin/produto/listar', 'AdminProduto->listar');
 $web->get('/admin/produto/cadastrar', 'AdminProduto->cadastrar');
 $web->post('/admin/produto/salvar', 'AdminProduto->salvar');

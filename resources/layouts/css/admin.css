@@ -68,7 +68,7 @@ html, body {
 }
 .coluna-direita {
   width: 100%;
-  padding: 10px;
+  /* padding: 10px; */
   background-color: rgb(255, 255, 255);
 }
 .menu-admin {
@@ -93,11 +93,13 @@ html, body {
 
 .menu-admin-bg-titulo:hover {
   background-color: #0a111d;
+  width: 150px;
 }
 
 .menu-admin-items {
   display: none;
-  width: 100%;
+  /* width: 100%; */
+  width: 150px;
   /* position: absolute; */
   flex-direction: column;
   background-color: #040a14;
@@ -106,6 +108,7 @@ html, body {
 .menu-admin-items a li {
   margin: 5px;
   padding: 5px;
+  width: 140px;
 }
 
 .menu-admin-bg-selecionar-item {
@@ -114,6 +117,7 @@ html, body {
 }
 .menu-admin-bg-selecionar-item:hover {
   background-color: #01173e;
+  width: 130px;
 }
 
 .footer {

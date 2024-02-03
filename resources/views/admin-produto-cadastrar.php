@@ -4,6 +4,7 @@
     <div class="inputs1">Nome: <input type="text" name="nome" id=""></div>
     <div class="inputs1">Descrição: <input type="text" name="descricao" id=""></div>
     <div class="inputs1">Preço: <input type="text" name="preco" id=""></div>
+    <div class="inputs1">Peso: <input type="text" name="peso" id=""></div>
     <div class="inputs1">
       Categoria:
       <select name="" id="">
@@ -14,7 +15,7 @@
       <option value="">Calça</option>
     </select>
     </div>
-    <br><input type="submit" value="salvar-produto">
+    <br><button type="submit">salvar</button>
   </form>
 </div>
 <style>
@@ -44,5 +45,6 @@
   }
   select {
     width: 300px;
+    height: 25px;
   }
 </style>

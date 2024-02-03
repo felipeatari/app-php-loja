@@ -109,6 +109,7 @@ class Router
   {
     $uri = $this->convert_URL_str_to_URL_arr($this->uri);
     $http_method = strtolower($this->http_method);
+    $http_method_route = [];
     $error_405 = false;
 
     foreach ($this->routes as $route):
@@ -129,7 +130,14 @@ class Router
         // Verifica se a rota e a URI tem a mesma extensão e se os campos estáticos de ambas são iguais
         if ((count($uri_route) === count($uri)) and ($uri_static_fields === $route_static_fields)) {
           // Verifica se método HTTP requisitado é o mesmo que foi definido para a rota
-          if ($route['http_method'] !== $http_method) $error_405 = true;
+          if ($route['http_method'] !== $http_method) {
+            if ($route['http_method'] !== $http_method) {
+              $error_405 = true;
+            }
+            else {
+              $http_method_route[] = $http_method;
+            }
+          }
 
           $this->make_router($route['action'], array_diff($uri, $uri_route));
         }
@@ -141,10 +149,17 @@ class Router
         if ($route['http_method'] !== $http_method) {
           $error_405 = true;
         }
+        else {
+          $http_method_route[] = $http_method;
+        }
 
         $this->make_router($route['action']);
       }
     endforeach;
+
+    if (in_array($http_method, $http_method_route)) {
+      $error_405 = false;
+    }
 
     if ($error_405) {
       $this->http_status_code = 405;
@@ -162,6 +177,7 @@ class Router
 
     foreach ($this->controllers as $controller):
       if (is_callable($controller) or class_exists($controller)) {
+
         $this->controller = $controller;
 
         continue;
