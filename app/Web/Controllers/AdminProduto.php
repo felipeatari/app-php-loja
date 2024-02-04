@@ -3,6 +3,7 @@
 namespace App\Web\Controllers;
 
 use App\Web\Admin;
+use App\Web\Router;
 use App\DataBase\Models\Produto;
 use App\DataBase\Models\Categoria;
 
@@ -16,11 +17,23 @@ class AdminProduto extends Admin
     $content = [];
 
     if (isset($_GET['action']) and $_GET['action'] === 'criar') {
-      $content = $this->categoria_criar($_POST);
+      $this->categoria_criar($_POST);
     }
-    else {
-      $content = ['categorias' => (new Categoria())->find()->fetch(true)];
+    elseif (isset($_GET['action']) and $_GET['action'] === 'editar') {
+      $this->categoria_editar($_POST);
+
+      Router::redirect('/admin/produto/categorias');
     }
+    elseif (isset($_GET['action']) and $_GET['action'] === 'apagar') {
+      $_GET['id'] = (int) $_GET['id'] ?? 0;
+      if ($_GET['id'] > 0) {
+        (new Categoria())->delete($_GET['id']);
+
+        Router::redirect('/admin/produto/categorias');
+      }
+    }
+
+    $content = ['categorias' => (new Categoria())->find()->fetch(true)];
 
     parent::content($content);
   }
@@ -28,21 +41,34 @@ class AdminProduto extends Admin
   private function categoria_criar($dados)
   {
     if (! isset($dados['nome']) or empty($dados['nome'])) {
-      return [
-        'message' => 'Campo "nome" deve ser informado ou preenchido',
-        'type_message' => 'error'
-      ];
+      return;
     }
 
-    $model_categoria = [
-      'parent_id' => $dados['parent_id'] ?? '',
-      'nome' => $dados['nome'],
-    ];
+    $dados['parent_id'] = (int) $dados['parent_id'] ?? 0;
 
-    return [
-      'message' => 'Categoria criada com sucesso',
-      'type_message' => 'error'
-    ];
+    $categoria = new Categoria;
+    $categoria->field('nome', $dados['nome']);
+    $categoria->field('parent_id', $dados['parent_id']);
+    $categoria->save();
+  }
+
+  private function categoria_editar($dados)
+  {
+    if (! isset($dados['id']) or empty($dados['id'])) {
+      return;
+    }
+
+    if (! isset($dados['nome']) or empty($dados['nome'])) {
+      return;
+    }
+
+    $dados['id'] = (int) $dados['id'] ?? 0;
+    $dados['parent_id'] = (int) $dados['parent_id'] ?? 0;
+
+    $categoria = new Categoria;
+    $categoria->field('nome', $dados['nome']);
+    $categoria->field('parent_id', $dados['parent_id']);
+    $categoria->update($dados['id']);
   }
 
   public function listar()

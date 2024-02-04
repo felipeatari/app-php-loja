@@ -35,7 +35,7 @@ class Model
     try {
       $query_fields = ' * ';
 
-      if (!empty($inputs)) {
+      if (! empty($inputs)) {
         $query_fields = ' ' . implode(', ', $inputs) . ' ';
       }
 
@@ -50,7 +50,7 @@ class Model
 
       Connect::off();
 
-      if (!$stmt->rowCount()) {
+      if (! $stmt->rowCount()) {
         $this->set_error(404, 'Not Found');
 
         return false;
@@ -72,7 +72,7 @@ class Model
   {
     $query_fields = ' * ';
 
-    if (!empty($inputs)) {
+    if (! empty($inputs)) {
       $query_fields = ' ' . implode(', ', $inputs) . ' ';
     }
 
@@ -127,7 +127,7 @@ class Model
       $where = ' WHERE ' . $where . ' ' . $operator . ' ';
     }
 
-    if (!empty($operator) and $this->count_condition > 1) {
+    if (! empty($operator) and $this->count_condition > 1) {
       $where .= ' ' . $operator . ' ';
     }
 
@@ -181,7 +181,7 @@ class Model
 
       Connect::off();
 
-      if (!$stmt->rowCount()) {
+      if (! $stmt->rowCount()) {
         $this->set_error(404, 'Not Found');
 
         return false;
@@ -304,7 +304,7 @@ class Model
 
       Connect::off();
 
-      if (!$stmt->rowCount()) {
+      if (! $stmt->rowCount()) {
         $this->set_error(400, 'Not Save');
 
         return false;
@@ -329,7 +329,6 @@ class Model
       $data_values_update = [];
 
       for ($i = 0; $i < count($this->fields); $i++) :
-        if (empty($data_values[$i])) continue;
         $keys_update[] = $data_keys[$i] . ' = :' . $data_keys[$i];
         $data_values_update[] = $data_values[$i];
         $data_keys_update[] = $data_keys[$i];
@@ -353,7 +352,7 @@ class Model
 
       Connect::off();
 
-      if (!$stmt->rowCount()) {
+      if (! $stmt->rowCount()) {
         $this->set_error(400, 'Not Update');
 
         return false;
@@ -380,7 +379,7 @@ class Model
       $stmt->bindParam(':id', $id);
       $stmt->execute();
 
-      if (!$stmt->rowCount()) {
+      if (! $stmt->rowCount()) {
         $this->set_error(400,  'Not Delete');
 
         return false;
