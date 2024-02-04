@@ -2,7 +2,7 @@
 
 namespace App\DataBase\Models;
 
-use App\Components\Model;
+use App\Database\Model;
 
 class Categoria extends Model
 {

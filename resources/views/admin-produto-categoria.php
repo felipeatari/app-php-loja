@@ -16,17 +16,19 @@
           <th>Parente ID</th>
           <th>Nome</th>
           <th>Editar</th>
-          <th>Excluir</th>
+          <th>Apagar</th>
         </tr>
       </thead>
       <tbody>
+        <?php foreach ($categorias as $categoria): ?>
         <tr>
-          <td>1</td>
-          <td> - </td>
-          <td>Camiseta</td>
-          <td><a href="#">editar</a></td>
-          <td><a href="#">excluir</a></td>
+          <td><?= $categoria->id ?></td>
+          <td><?= $categoria->parent_id ?></td>
+          <td><?= $categoria->nome ?></td>
+          <td><a href="<?= URL . '/admin/produto/categorias?action=editar&id=' . $categoria->id ?>">editar</a></td>
+          <td><a href="<?= URL . '/admin/produto/categorias?action=apagar&id=' . $categoria->id ?>">apagar</a></td>
         </tr>
+        <?php endforeach; ?>
       </tbody>
     </table>
   </div>
@@ -37,10 +39,10 @@
       </div>
       <div class="criar-categoria-inputs">
         <label for="criar-parent-id-categoria" class="criar-parent-id-categoria">
-          Parent ID: <input type="text" name="parent_id" id="criar-parent-id-categoria">
+          Parent ID: <input type="text" name="parent_id" id="criar-parent-id-categoria" value="<?= $_POST['parent_id'] ?? '' ?>">
         </label>
         <label for="criar-nome-categoria" class="criar-nome-categoria">
-          Nome: <input type="text" name="nome" id="criar-nome-categoria">
+          Nome: <input type="text" name="nome" id="criar-nome-categoria" value="<?= $_POST['nome'] ?? '' ?>">
         </label>
         <button type="submit">Criar</button>
       </div>
@@ -82,14 +84,18 @@
   }
 
   .content-criar-categoria {
-    /* width: 100%;
+    width: 100%;
     height: 100vh;
     position: absolute;
     margin: auto auto;
     background-color: rgba(10, 23, 55, 0.5);
-    display: none;
+    <?php if (false) { ?>
+      display: flex;
+    <?php } else { ?>
+        display: none;
+    <?php } ?>
     align-items: center;
-    justify-content: center; */
+    justify-content: center;
   }
 
   .content-criar-categoria form {

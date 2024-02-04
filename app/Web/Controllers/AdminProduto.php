@@ -4,6 +4,7 @@ namespace App\Web\Controllers;
 
 use App\Web\Admin;
 use App\DataBase\Models\Produto;
+use App\DataBase\Models\Categoria;
 
 class AdminProduto extends Admin
 {
@@ -15,16 +16,10 @@ class AdminProduto extends Admin
     $content = [];
 
     if (isset($_GET['action']) and $_GET['action'] === 'criar') {
-      $retorno = $this->categoria_criar($_POST);
-
-      if (isset($retorno['error']) and $retorno['error']) {
-        $content['message'] = $retorno['error'];
-        $content['type_message'] = $type_message = 'error';
-      }
-      elseif (isset($retorno['success']) and $retorno['success']) {
-        $content['message'] = $retorno['success'];
-        $content['type_message'] = 'success';
-      }
+      $content = $this->categoria_criar($_POST);
+    }
+    else {
+      $content = ['categorias' => (new Categoria())->find()->fetch(true)];
     }
 
     parent::content($content);
@@ -33,7 +28,10 @@ class AdminProduto extends Admin
   private function categoria_criar($dados)
   {
     if (! isset($dados['nome']) or empty($dados['nome'])) {
-      return ['error' => 'Campo "nome" deve ser informado ou preenchido'];
+      return [
+        'message' => 'Campo "nome" deve ser informado ou preenchido',
+        'type_message' => 'error'
+      ];
     }
 
     $model_categoria = [
@@ -41,7 +39,10 @@ class AdminProduto extends Admin
       'nome' => $dados['nome'],
     ];
 
-    return ['success' => 'Categoria criada com sucesso'];
+    return [
+      'message' => 'Categoria criada com sucesso',
+      'type_message' => 'error'
+    ];
   }
 
   public function listar()
