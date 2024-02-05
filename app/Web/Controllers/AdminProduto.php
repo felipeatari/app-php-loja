@@ -18,6 +18,8 @@ class AdminProduto extends Admin
 
     if (isset($_GET['action']) and $_GET['action'] === 'criar') {
       $this->categoria_criar($_POST);
+
+      Router::redirect('/admin/produto/categorias');
     }
     elseif (isset($_GET['action']) and $_GET['action'] === 'editar') {
       $this->categoria_editar($_POST);
@@ -26,6 +28,7 @@ class AdminProduto extends Admin
     }
     elseif (isset($_GET['action']) and $_GET['action'] === 'apagar') {
       $_GET['id'] = (int) $_GET['id'] ?? 0;
+
       if ($_GET['id'] > 0) {
         (new Categoria())->delete($_GET['id']);
 

@@ -59,7 +59,7 @@ html, body {
 }
 
 .menu-admin-bg-titulo {
-  font-size: 10pt;
+  font-size: 12pt;
   padding: 5px;
   color: white;
 }
@@ -68,7 +68,6 @@ html, body {
 }
 .coluna-direita {
   width: 100%;
-  /* padding: 10px; */
   background-color: rgb(255, 255, 255);
 }
 .menu-admin {
@@ -78,11 +77,11 @@ html, body {
   margin-bottom: 30px;
 }
 
-.menu-admin-bg li {
-  margin-bottom: 10px;
-}
 .logo-admin {
   width: 80px;
+}
+.menu-admin-titulo {
+  margin-bottom: 10px;
 }
 .menu-admin-titulo h1 {
   font-size: 10pt;
@@ -93,31 +92,29 @@ html, body {
 
 .menu-admin-bg-titulo:hover {
   background-color: #0a111d;
-  width: 150px;
+  width: 100%;
 }
 
 .menu-admin-items {
   display: none;
-  /* width: 100%; */
-  width: 150px;
+  width: 100%;
   /* position: absolute; */
   flex-direction: column;
   background-color: #040a14;
   padding: 5px;
 }
 .menu-admin-items a li {
-  margin: 5px;
-  padding: 5px;
-  width: 140px;
+  padding: 10px;
+  width: 100%;
 }
 
 .menu-admin-bg-selecionar-item {
-  font-size: 9pt;
+  font-size: 10pt;
   color: white;
 }
 .menu-admin-bg-selecionar-item:hover {
   background-color: #01173e;
-  width: 130px;
+  width: 100%;
 }
 
 .footer {
