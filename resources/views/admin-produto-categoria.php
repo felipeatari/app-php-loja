@@ -41,7 +41,6 @@
         </label>
         <button type="submit" id="btn-criar-categoria" class="btn-salvar">Salvar</button>
       </div>
-    </form>
   </div>
   <!-- Editar categoria -->
   <div class="content-editar-categoria">
