@@ -50,9 +50,7 @@
         <span class="btn-fechar-editar-categoria">X</span>
       </div>
       <div class="editar-categoria-inputs">
-        <label for="">
-          ID: <input type="text" name="id" id="editar-id-categoria" style="color: darkgray;" value="" readonly>
-        </label>
+        <h4 id="editar-id-categoria"></h4>
         <label for="editar-parent-id-categoria" class="editar-parent-id-categoria">
           Parent ID: <input type="text" name="parent_id" id="editar-parent-id-categoria" value="">
         </label>

@@ -73,11 +73,11 @@
 .content-criar-categoria form {
   width: 500px;
   height: 300px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
   background-color: white;
   box-shadow: 2px 2px 10px #888888;
 }
@@ -124,28 +124,38 @@
   justify-content: center;
 }
 .content-editar-categoria form {
-  margin-top: 20px;
   width: 500px;
   height: 350px;
-  background-color: white;
-  box-shadow: 2px 2px 10px #888888;
-}
-.editar-categoria-inputs {
+  margin-top: 20px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 500px;
-  height: 300px;
+  background-color: white;
+  box-shadow: 2px 2px 10px #888888;
+}
+.editar-categoria-inputs {
+  width: 400px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding-bottom: 20px;
 }
 .editar-categoria-inputs label {
+  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
   margin-top: 20px;
-  margin-bottom: 20px;
+  padding: 5px;
 }
 .editar-categoria-inputs input {
   width: 200px;
   height: 35px;
+  margin-left: 10px;
   padding: 5px;
   border: 0.5px solid #ccc;
   border-radius: 1px;
