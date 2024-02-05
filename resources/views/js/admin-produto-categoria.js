@@ -25,7 +25,8 @@ function editar(id) {
 
   content_editar_categoria.style.display = 'flex';
 
-  document.querySelector(`#editar-id-categoria`).innerHTML = `ID da Categoria: ${id}`;
+  document.querySelector(`#editar-id-categoria-ver`).innerHTML = `ID da Categoria: ${id}`;
+  document.querySelector(`#editar-id-categoria`).value = id;
   document.querySelector(`#editar-parent-id-categoria`).value = parent_id;
   document.querySelector(`#editar-nome-categoria`).value = nome;
 }

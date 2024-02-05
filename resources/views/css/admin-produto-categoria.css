@@ -91,10 +91,10 @@
   padding-bottom: 20px;
 }
 .criar-categoria-inputs label {
-  width: 100%;
+  width:  300px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   margin-bottom: 20px;
   padding: 5px;
 }

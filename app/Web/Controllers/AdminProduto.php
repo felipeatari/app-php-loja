@@ -16,6 +16,8 @@ class AdminProduto extends Admin
 
     $content = [];
 
+    // pr($_POST);die;
+
     if (isset($_GET['action']) and $_GET['action'] === 'criar') {
       $this->categoria_criar($_POST);
 

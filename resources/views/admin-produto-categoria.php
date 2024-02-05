@@ -14,9 +14,8 @@
         </tr>
       </thead>
       <tbody>
-        <?php pr($categorias); ?>
         <?php if (isset($categorias) and ! empty($categorias)) { ?>
-        <?php foreach ($categorias as $categoria) : ?>
+        <?php foreach ($categorias as $categoria): ?>
           <tr>
             <td><?= $categoria->id  ?></td>
             <td><?= $categoria->parent_id ?></td>
@@ -39,7 +38,7 @@
   </div>
   <!-- Criar categoria -->
   <div class="content-criar-categoria">
-    <form action="<?= URL . '/admin/produto/categorias?action=criar' ?>" method="post" id="form-categorias">
+    <form action="<?= URL . '/admin/produto/categorias?action=criar' ?>" method="post">
       <div class="fechar-criar-categoria">
         <span class="btn-fechar-criar-categoria">X</span>
       </div>
@@ -52,15 +51,17 @@
         </label>
         <button type="submit" id="btn-criar-categoria" class="btn-salvar">Salvar</button>
       </div>
+    </form>
   </div>
   <!-- Editar categoria -->
   <div class="content-editar-categoria">
-    <form action="<?= URL . '/admin/produto/categorias?action=editar' ?>" method="post" id="form-categorias">
+    <form action="<?= URL . '/admin/produto/categorias?action=editar' ?>" method="post">
       <div class="fechar-editar-categoria">
         <span class="btn-fechar-editar-categoria">X</span>
       </div>
       <div class="editar-categoria-inputs">
-        <h4 id="editar-id-categoria"></h4>
+        <h4 id="editar-id-categoria-ver"></h4>
+        <input type="hidden" name="id" id="editar-id-categoria" value="">
         <label for="editar-parent-id-categoria" class="editar-parent-id-categoria">
           Parent ID: <input type="text" name="parent_id" id="editar-parent-id-categoria" value="">
         </label>
