@@ -17,9 +17,6 @@ class AdminProduto extends Admin
     $content = [];
 
     if (isset($_GET['action']) and $_GET['action'] === 'criar') {
-      pr($_POST);
-      pr($_GET);
-      die;
       $this->categoria_criar($_POST);
 
       Router::redirect('/admin/produto/categorias');

@@ -39,7 +39,7 @@
   </div>
   <!-- Criar categoria -->
   <div class="content-criar-categoria">
-    <form action="<?= URL . '/admin/produto/categorias?action=criar' ?>" method="get" id="form-categorias">
+    <form action="<?= URL . '/admin/produto/categorias?action=criar' ?>" method="post" id="form-categorias">
       <div class="fechar-criar-categoria">
         <span class="btn-fechar-criar-categoria">X</span>
       </div>
