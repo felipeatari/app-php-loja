@@ -208,7 +208,7 @@ class Model
 
   private function join($table, $foreign_key, $fields = [], $condition = [])
   {
-    $model = 'Src\\Model\\Models\\' . ucfirst($table) . 'Model';
+    $model = 'App\\Database\\Models\\' . ucfirst($table);
 
     if (! empty($condition)) {
       return (new $model)->find($fields)->condition($condition)->fetch(true);
@@ -279,7 +279,7 @@ class Model
     $this->fields[$key] = $value;
   }
 
-  public function save(): int|bool
+  public function save(): bool|array
   {
     try {
       $data = $this->fields;
@@ -315,7 +315,7 @@ class Model
       return false;
     }
 
-    return $connect->lastInsertId();
+    return ['id' => $connect->lastInsertId()];
   }
 
   public function update(int $id): bool

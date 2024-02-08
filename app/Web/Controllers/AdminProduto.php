@@ -16,8 +16,6 @@ class AdminProduto extends Admin
 
     $content = [];
 
-    // pr($_POST);die;
-
     if (isset($_GET['action']) and $_GET['action'] === 'criar') {
       $this->categoria_criar($_POST);
 
@@ -90,7 +88,12 @@ class AdminProduto extends Admin
   {
     parent::title('Cadastrar Produto');
     parent::admin('admin-produto-cadastrar');
-    parent::content();
+
+    $categorias = (new Categoria())?->find()
+    ?->condition(['parent_id' => 0])
+    ?->fetch(true);
+
+    parent::content([ 'categorias' => $categorias ]);
   }
 
   public function salvar()
