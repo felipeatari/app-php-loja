@@ -1,5 +1,5 @@
 /* Reset */
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -17,8 +17,8 @@ a {
 html, body {
   scroll-behavior: smooth;
   width: 100%;
-}
-
+} */
+/*
 .container {
   display: flex;
   width: 100%;
@@ -93,17 +93,17 @@ html, body {
 .menu-admin-bg-titulo:hover {
   background-color: #0a111d;
   width: 100%;
-}
+} */
 
-.menu-admin-items {
-  display: none;
-  width: 100%;
+/* .menu-admin-items { */
+  /* display: none;
+  width: 100%; */
   /* position: absolute; */
-  flex-direction: column;
+  /* flex-direction: column;
   background-color: #040a14;
-  padding: 5px;
-}
-.menu-admin-items a li {
+  padding: 5px; */
+/* } */
+/* .menu-admin-items a li {
   padding: 10px;
   width: 100%;
 }
@@ -122,4 +122,4 @@ html, body {
   font-size: 8pt;
   padding: 10px;
   background-color: rgb(233, 233, 233);
-}
+} */
