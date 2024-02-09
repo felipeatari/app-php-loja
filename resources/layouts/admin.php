@@ -18,65 +18,37 @@
 <body>
   <!-- Carrega o conteúdo dinâmico -->
   <div class="w-full h-screen flex bg-red-300">
-
     <!-- Coluna esquerda -->
-    <div class="w-96 h-screen bg-gray-900 text-white">
-      <nav class="">
-        <div class="">
+    <div class="w-96 h-screen flex flex-col justify-between items-center bg-gray-900 p-2.5">
+      <!-- Menu -->
+      <nav class="w-full text-white">
+        <div class="flex flex-col justify-center items-center">
           <a href="<?= URL ?>"><img class="w-24" src="/resources/assets/images/logo3.png" alt=""></a>
-          <p>Dashboard</p>
+          <p class="mt-8 mb-16">Dashboard - Luky Store Oficial</p>
         </div>
         <ul class="">
-          <li class=""><a href="<?= URL ?>/admin"><svg class="w-8 fill-current text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.
-                <path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z" />
-              </svg></a></li>
-          <li class="  ">
-            <p class=""><a href="<?= URL ?>/admin">Home</a></p>
-          </li>
-          <li class="">
-            <p class="">Produtos</p>
-
-            <ul class="">
-              <a href="<?= URL ?>/admin/produto/categorias">
-                <li class="">Categorias</li>
-              </a>
-              <a href="<?= URL ?>/admin/produto/listar">
-                <li class="">Listar</li>
-              </a>
-              <a href="<?= URL ?>/admin/produto/cadastrar">
-                <li class="">Cadastrar</li>
-              </a>
-            </ul>
-          </li>
-          <li class="">
-            <p class="">Sku</p>
-            <ul class="">
-              <a href="<?= URL ?>/admin/produto/listar">
-                <li class="">Listar</li>
-              </a>
-              <a href="<?= URL ?>/admin/produto/cadastrar">
-                <li class="">Cadastrar</li>
-              </a>
-              <a href="<?= URL ?>/admin/produto/categorias">
-                <li class="">Categorias</li>
-              </a>
+          <a class="w-full flex hover:bg-slate-950 my-2 p-1 text-sm" href="<?= URL ?>/admin">Home</a>
+          <li class="group my-2">
+            <p class="w-full hover:bg-slate-950 p-1 text-sm">Produtos</p>
+            <ul class="hidden group-hover:block p-1 bg-slate-950 text-xs">
+              <a href="<?= URL ?>/admin/produto/categorias"><li class="hover:bg-sky-950 my-2 p-1">Categorias</li></a>
+              <a href="<?= URL ?>/admin/produto/listar"><li class="hover:bg-sky-950 my-2 p-1">Listar</li></a>
+              <a href="<?= URL ?>/admin/produto/cadastrar"><li class="hover:bg-sky-950 my-2 p-1">Cadastrar</li></a>
             </ul>
           </li>
         </ul>
       </nav>
-
-      <div class="">
-        <p>Luky Store Oficial</p>
-        <p>© Todos os direitos reservados</p><br>
-        <p style="font-size: 7pt;">CNPJ: 12.345.678/0001-10</p>
+      <!-- Rodapé -->
+      <div class="w-full flex flex-col items-center bg-white p-1 text-xs text-slate-950">
+        <!-- <p class="font-bold">Luky Store Oficial</p> -->
+        <p>© Todos os direitos reservados</p>
+        <p>CNPJ: 12.345.678/0001-10</p>
       </div>
     </div>
-
     <!-- Coluna direita -->
     <div class="w-full h-screen bg-neutral-100">
       <?= $content ?>
     </div>
-
     <!-- Carrega todo o JavaScript do site -->
     <script src="<?= $layout_js ?>"></script>
     <script src="<?= $view_js ?>"></script>
