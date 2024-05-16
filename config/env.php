@@ -10,7 +10,6 @@ define('URL', 'http://localhost:8888');
 define('HOME', URL . '/');
 define('SOBRE', URL . '/sobre');
 define('CONTATO', URL . '/contato');
-// define('APIBUSCAR', URL . '/api/data');
 
 // Caminho para salvar a sessão
 define('SESSION', __DIR__ . '/storage/temp/session');
