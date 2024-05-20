@@ -1,10 +1,6 @@
-# app-loja
-
-## Start Tailwind CSS:
+# Start Tailwind CSS:
 
 npx tailwindcss -i ./resources/input.css -o ./resources/style.css --watch
-
-# Comandos GIT
 
 ## Comandos GIT de configuração
 
