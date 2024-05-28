@@ -6,7 +6,7 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql
 # RUN pecl install redis;
 # RUN pecl install mongodb;
 # RUN pecl install swoole;
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+# RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 # RUN echo "extension=redis.so" >> "$PHP_INI_DIR/php.ini"
 # RUN echo "extension=mongodb.so" >> "$PHP_INI_DIR/php.ini"
 # RUN echo "extension=swoole.so" >> "$PHP_INI_DIR/php.ini"

@@ -1,6 +1,6 @@
 .DS_Store
-/tests
 /node_modules
+/tests
 /storage/temp
 *.cache
 *.log
