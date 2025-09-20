@@ -11,6 +11,7 @@ class Router
   private array $params = [];
   private array $routes = [];
   private bool $callback = false;
+  private bool $api = false;
   private int $http_status_code = 200;
   private string $http_method;
   private string|Closure $controller;
@@ -28,7 +29,7 @@ class Router
     header('Location: ' . URL . $route);die;
   }
 
-  private function convert_URL_str_to_URL_arr(string $url = null): array
+  private function convertUrlStrToUrlArr(string $url = null): array
   {
     $url = explode('/', $url);
     $url = array_values(array_filter($url));
@@ -38,7 +39,7 @@ class Router
     return $url;
   }
 
-  private function add_route(string $http_method, string $route, string|Closure $action)
+  private function addRoute(string $http_method, string $route, string|Closure $action)
   {
     $this->routes[] = [
       'http_method' => $http_method,
@@ -49,40 +50,40 @@ class Router
 
   public function get(string $route, string|Closure $action)
   {
-    $this->add_route('get', $route, $action);
+    $this->addRoute('get', $route, $action);
   }
 
   public function post(string $route, string|Closure $action)
   {
-    $this->add_route('post', $route, $action);
+    $this->addRoute('post', $route, $action);
   }
 
   public function put(string $route, string|Closure $action)
   {
-    $this->add_route('put', $route, $action);
+    $this->addRoute('put', $route, $action);
   }
 
   public function patch(string $route, string|Closure $action)
   {
-    $this->add_route('patch', $route, $action);
+    $this->addRoute('patch', $route, $action);
   }
 
   public function delete(string $route, string|Closure $action)
   {
-    $this->add_route('delete', $route, $action);
+    $this->addRoute('delete', $route, $action);
   }
 
   public function head(string $route, string|Closure $action)
   {
-    $this->add_route('head', $route, $action);
+    $this->addRoute('head', $route, $action);
   }
 
   public function options(string $route, string|Closure $action)
   {
-    $this->add_route('options', $route, $action);
+    $this->addRoute('options', $route, $action);
   }
 
-  private function make_router(string|Closure $action, array $params = []): void
+  private function makeRouter(string|Closure $action, array $params = []): void
   {
     // Verifica se é uma closure/callable ou um(a) classe/controller
     if (is_callable($action)) {
@@ -107,16 +108,22 @@ class Router
 
   public function on(): Router
   {
-    $uri = $this->convert_URL_str_to_URL_arr($this->uri);
+    $uri = $this->convertUrlStrToUrlArr($this->uri);
     $http_method = strtolower($this->http_method);
     $http_method_route = [];
-    $error_405 = false;
+    $error_404 = true;
+    $error_405 = true;
+
+    if ($uri[0] === 'api') {
+      $this->api = true;
+    }
 
     foreach ($this->routes as $route):
-      $uri_route = $this->convert_URL_str_to_URL_arr($route['route']);
+      $uri_route = $this->convertUrlStrToUrlArr($route['route']);
 
       // Verifica se a rota é dinâmica
       if (preg_match('/(\{[\w]+\})|(\:[\w]+)/', $route['route'])) {
+
         // Recupera os campos estáticos da rota
         $route_static_fields = array_map(function($item) {
           if (! preg_match('/(\{[\w]+\})|(\:[\w]+)/', $item)) return $item;
@@ -130,38 +137,37 @@ class Router
         // Verifica se a rota e a URI tem a mesma extensão e se os campos estáticos de ambas são iguais
         if ((count($uri_route) === count($uri)) and ($uri_static_fields === $route_static_fields)) {
           // Verifica se método HTTP requisitado é o mesmo que foi definido para a rota
+
+          $error_404 = false;
+
           if ($route['http_method'] !== $http_method) {
-            if ($route['http_method'] !== $http_method) {
-              $error_405 = true;
-            }
-            else {
-              $http_method_route[] = $http_method;
-            }
+
+            continue;
           }
 
-          $this->make_router($route['action'], array_diff($uri, $uri_route));
+          $error_405 = false;
+
+          $this->makeRouter($route['action'], array_diff($uri, $uri_route));
         }
       }
 
       // Verifica se a rota é estática
       if (($uri_route === $uri)) {
+        $error_404 = false;
+
         // Verifica se método HTTP requisitado é o mesmo que foi definido para a rota
         if ($route['http_method'] !== $http_method) {
-          $error_405 = true;
-        }
-        else {
-          $http_method_route[] = $http_method;
+
+          continue;
         }
 
-        $this->make_router($route['action']);
+        $error_405 = false;
+
+        $this->makeRouter($route['action']);
       }
     endforeach;
 
-    if (in_array($http_method, $http_method_route)) {
-      $error_405 = false;
-    }
-
-    if ($error_405) {
+    if (!$error_404 and $error_405) {
       $this->http_status_code = 405;
 
       return $this;
@@ -207,8 +213,7 @@ class Router
       if ($this->http_status_code === 405) $message_error = 'Método não implementado';
       if ($this->http_status_code === 404) $message_error = 'Pagina não encontrada';
 
-      if ($this->callback) {
-        $this->api = true;
+      if ($this->callback or $this->api) {
 
         die(Error::error_api($this->http_status_code, $message_error));
       }
@@ -216,8 +221,7 @@ class Router
       die(Error::error($this->http_status_code, $message_error));
     }
 
-    if ($this->callback) {
-      $this->api = true;
+    if ($this->callback or $this->api) {
 
       return call_user_func_array($this->method, $this->params) ?? '';
     }

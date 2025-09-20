@@ -4,11 +4,8 @@ namespace App\Web\Controllers;
 
 class ApiTeste
 {
-  public function index(): void
+  public function index()
   {
-    header('Content-Type: application/json');
-    http_response_code(200);
-
     $retorno = [
       'status' => 'success',
       'code' => 200,
@@ -16,8 +13,54 @@ class ApiTeste
       'data' => []
     ];
 
-    $retorno = json_encode($retorno);
+    return responseJson($retorno);
+  }
 
-    die($retorno);
+  public function get()
+  {
+    $retorno = [
+      'status' => 'success',
+      'code' => 200,
+      'message' => 'Rota GET',
+      'data' => []
+    ];
+
+    return responseJson($retorno);
+  }
+
+  public function post()
+  {
+    $retorno = [
+      'status' => 'success',
+      'code' => 200,
+      'message' => 'Rota POST',
+      'data' => []
+    ];
+
+    return responseJson($retorno);
+  }
+
+  public function put()
+  {
+    $retorno = [
+      'status' => 'success',
+      'code' => 200,
+      'message' => 'Rota PUT',
+      'data' => []
+    ];
+
+    return responseJson($retorno);
+  }
+
+  public function delete()
+  {
+    $retorno = [
+      'status' => 'success',
+      'code' => 200,
+      'message' => 'Rota DELETE',
+      'data' => []
+    ];
+
+    return responseJson($retorno);
   }
 }

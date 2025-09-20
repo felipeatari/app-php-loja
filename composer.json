@@ -6,7 +6,7 @@
     "files":[
       "config/config.php",
       "config/env.php",
-      "tests/config/debug.php"
+      "app/Helpers/globals.php"
     ]
   },
   "require": {}

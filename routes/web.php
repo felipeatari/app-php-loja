@@ -26,3 +26,13 @@ $web->get('/teste/db/find', 'Teste->find');
 $web->get('/teste/db/save', 'Teste->save');
 $web->get('/teste/db/delete/{id}', 'Teste->delete');
 $web->get('/api/v1/teste', fn()=> (new App\Web\Controllers\ApiTeste)->index());
+
+$web->get('api/teste', fn()=> (new App\Web\Controllers\ApiTeste)->get());
+$web->post('api/teste', fn()=> (new App\Web\Controllers\ApiTeste)->post());
+$web->put('api/teste', fn()=> (new App\Web\Controllers\ApiTeste)->put());
+$web->delete('api/teste', fn()=> (new App\Web\Controllers\ApiTeste)->delete());
+
+// $web->get('api/teste', 'ApiTeste->get');
+// $web->post('api/teste', 'ApiTeste->post');
+// $web->put('api/teste', 'ApiTeste->put');
+// $web->delete('api/teste', 'ApiTeste->delete');
