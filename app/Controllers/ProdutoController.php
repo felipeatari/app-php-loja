@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Web\Controllers;
+namespace App\Controllers;
 
-use App\Components\Template;
+use App\Components\View;
 
-class Produto
+class ProdutoController
 {
   public function full_products()
   {
@@ -13,15 +13,15 @@ class Produto
 
     if (empty($cat) or empty($tipo)) return 'error';
 
-    Template::title(ucfirst($cat) . 's ' . ucfirst($tipo));
+    View::title(ucfirst($cat) . 's ' . ucfirst($tipo));
 
     return '<br><br>Categoria: ' . $cat . ' - Tipo: ' . $tipo . '<br><br><br><br>';
   }
 
   public function see_product($id = 0)
   {
-    Template::title('Produto: ' . $id);
-    Template::main('produto-ver');
+    View::title('Produto: ' . $id);
+    View::main('produto-ver');
 
     $produto = [
       'Produto' => [
@@ -33,7 +33,7 @@ class Produto
       'Sku' => [],
     ];
 
-    return Template::view(['id' => $id, 'produto' => $produto]);
+    return View::view(['id' => $id, 'produto' => $produto]);
   }
 
   public function list_category()

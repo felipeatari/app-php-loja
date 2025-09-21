@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Web\Controllers;
+namespace App\Controllers;
 
-class ApiTeste
+class ApiTesteController
 {
   public function index()
   {

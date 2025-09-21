@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Web\Controllers;
+namespace App\Controllers;
 
-use App\Components\Template;
+use App\Components\View;
 
-class Login
+class LoginController
 {
   public function index()
   {
-    Template::title('Tela de Login');
-    Template::main('login');
+    View::title('Tela de Login');
+    View::main('login');
 
-    return Template::view();
+    return View::view();
   }
 
   public function entrar()

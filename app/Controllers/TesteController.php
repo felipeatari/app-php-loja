@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Web\Controllers;
+namespace App\Controllers;
 
-use App\Components\Template;
+use App\Components\View;
 // use App\Models\Teste;
 use App\DataBase\Models\Produto;
 // use App\Models\Categoria;
 
-class Teste
+class TesteController
 {
   public function teste()
   {

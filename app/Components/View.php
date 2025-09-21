@@ -2,7 +2,7 @@
 
 namespace App\Components;
 
-class Template
+class View
 {
   private static string $title = '';
   private static string $main = '';

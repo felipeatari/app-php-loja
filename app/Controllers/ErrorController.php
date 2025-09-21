@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Web\Controllers;
+namespace App\Controllers;
 
-use App\Components\Template;
+use App\Components\View;
 
-class Error
+class ErrorController
 {
   public static function error($code, $message)
   {
-    Template::title('Erro ' . $code);
-    Template::error('error');
+    View::title('Erro ' . $code);
+    View::error('error');
 
     http_response_code($code);
 
-    return Template::view([
+    return View::view([
       'code' => $code,
       'message' => $message
     ]);

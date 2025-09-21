@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Web;
+namespace App\Http;
 
-use App\Web\Controllers\Error;
+use App\Controllers\ErrorController as Error;
 use Closure;
 
 class Router
@@ -12,8 +12,8 @@ class Router
   private array $routes = [];
   private bool $callback = false;
   private bool $api = false;
-  private int $http_status_code = 200;
-  private string $http_method;
+  private int $httpStatusCode = 200;
+  private string $httpMethod;
   private string|Closure $controller;
   private string|Closure $method;
   private string $uri;
@@ -21,7 +21,7 @@ class Router
   public function __construct()
   {
     $this->uri = $_GET['url'] ?? '/';
-    $this->http_method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+    $this->httpMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
   }
 
   public static function redirect(string $route): void
@@ -39,10 +39,10 @@ class Router
     return $url;
   }
 
-  private function addRoute(string $http_method, string $route, string|Closure $action)
+  private function addRoute(string $httpMethod, string $route, string|Closure $action)
   {
     $this->routes[] = [
-      'http_method' => $http_method,
+      'http_method' => $httpMethod,
       'route' => $route,
       'action' => $action
     ];
@@ -96,7 +96,7 @@ class Router
 
       $controller = ucfirst($action[0]);
 
-      $namespace = 'App\\Web\\Controllers\\' . $controller;
+      $namespace = 'App\\Controllers\\' . $controller . 'Controller';
 
       $this->controllers[] = $namespace;
       $this->method = $action[1];
@@ -109,77 +109,76 @@ class Router
   public function on(): Router
   {
     $uri = $this->convertUrlStrToUrlArr($this->uri);
-    $http_method = strtolower($this->http_method);
-    $http_method_route = [];
-    $error_404 = true;
-    $error_405 = true;
+    $httpMethod = strtolower($this->httpMethod);
+    $error404 = true;
+    $error405 = true;
 
     if ($uri[0] === 'api') {
       $this->api = true;
     }
 
     foreach ($this->routes as $route):
-      $uri_route = $this->convertUrlStrToUrlArr($route['route']);
+      $uriRoute = $this->convertUrlStrToUrlArr($route['route']);
 
       // Verifica se a rota é dinâmica
       if (preg_match('/(\{[\w]+\})|(\:[\w]+)/', $route['route'])) {
 
         // Recupera os campos estáticos da rota
-        $route_static_fields = array_map(function($item) {
+        $routeStaticFields = array_map(function($item) {
           if (! preg_match('/(\{[\w]+\})|(\:[\w]+)/', $item)) return $item;
-        }, $uri_route);
+        }, $uriRoute);
         // Elimina os campos vazios da rota e ordena de forma numerada
-        $route_static_fields = array_values(array_filter($route_static_fields));
+        $routeStaticFields = array_values(array_filter($routeStaticFields));
 
         // Recupera os campos estáticos da URI
-        $uri_static_fields = array_intersect($route_static_fields, $uri);
+        $uriStaticFields = array_intersect($routeStaticFields, $uri);
 
         // Verifica se a rota e a URI tem a mesma extensão e se os campos estáticos de ambas são iguais
-        if ((count($uri_route) === count($uri)) and ($uri_static_fields === $route_static_fields)) {
+        if ((count($uriRoute) === count($uri)) and ($uriStaticFields === $routeStaticFields)) {
           // Verifica se método HTTP requisitado é o mesmo que foi definido para a rota
 
-          $error_404 = false;
+          $error404 = false;
 
-          if ($route['http_method'] !== $http_method) {
+          if ($route['http_method'] !== $httpMethod) {
 
             continue;
           }
 
-          $error_405 = false;
+          $error405 = false;
 
-          $this->makeRouter($route['action'], array_diff($uri, $uri_route));
+          $this->makeRouter($route['action'], array_diff($uri, $uriRoute));
         }
       }
 
       // Verifica se a rota é estática
-      if (($uri_route === $uri)) {
-        $error_404 = false;
+      if (($uriRoute === $uri)) {
+        $error404 = false;
 
         // Verifica se método HTTP requisitado é o mesmo que foi definido para a rota
-        if ($route['http_method'] !== $http_method) {
+        if ($route['http_method'] !== $httpMethod) {
 
           continue;
         }
 
-        $error_405 = false;
+        $error405 = false;
 
         $this->makeRouter($route['action']);
       }
     endforeach;
 
-    if (!$error_404 and $error_405) {
-      $this->http_status_code = 405;
+    if (!$error404 and $error405) {
+      $this->httpStatusCode = 405;
 
       return $this;
     }
 
     if (empty($this->controllers)) {
-      $this->http_status_code = 404;
+      $this->httpStatusCode = 404;
 
       return $this;
     }
 
-    $error_404 = [];
+    $error404 = [];
 
     foreach ($this->controllers as $controller):
       if (is_callable($controller) or class_exists($controller)) {
@@ -189,17 +188,17 @@ class Router
         continue;
       }
 
-      $error_404[] = 1;
+      $error404[] = 1;
     endforeach;
 
-    if (count($error_404) === count($this->controllers)) {
-      $this->http_status_code = 404;
+    if (count($error404) === count($this->controllers)) {
+      $this->httpStatusCode = 404;
 
       return $this;
     }
 
     if (! is_callable($this->controller)) {
-      if (! method_exists($this->controller, $this->method)) $this->http_status_code = 405;
+      if (! method_exists($this->controller, $this->method)) $this->httpStatusCode = 405;
     }
 
     return $this;
@@ -207,18 +206,18 @@ class Router
 
   public function dispatcher()
   {
-    http_response_code($this->http_status_code);
+    http_response_code($this->httpStatusCode);
 
-    if ($this->http_status_code !== 200) {
-      if ($this->http_status_code === 405) $message_error = 'Método não implementado';
-      if ($this->http_status_code === 404) $message_error = 'Pagina não encontrada';
+    if ($this->httpStatusCode !== 200) {
+      if ($this->httpStatusCode === 405) $messageError = 'Método não implementado';
+      if ($this->httpStatusCode === 404) $messageError = 'Pagina não encontrada';
 
       if ($this->callback or $this->api) {
 
-        die(Error::error_api($this->http_status_code, $message_error));
+        die(Error::error_api($this->httpStatusCode, $messageError));
       }
 
-      die(Error::error($this->http_status_code, $message_error));
+      die(Error::error($this->httpStatusCode, $messageError));
     }
 
     if ($this->callback or $this->api) {

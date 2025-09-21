@@ -2,13 +2,13 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use App\Web\Router;
-use App\Components\Template;
+use App\Http\Router;
+use App\Components\View;
 
-$web = new App\Web\Router();
+$router = new App\Http\Router();
 
-require_once __DIR__ . '/routes/web.php';
+require_once __DIR__ . '/config/routes.php';
 
-$end = $web?->on()?->dispatcher();
+$end = $router?->on()?->dispatcher();
 
-Template::layout(content: $end);
+View::layout(content: $end);

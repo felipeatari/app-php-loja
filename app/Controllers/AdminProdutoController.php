@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Web\Controllers;
+namespace App\Controllers;
 
-use App\Web\Admin;
-use App\Web\Router;
+use App\Http\Admin;
+use App\Http\Router;
 use App\DataBase\Models\Produto;
 use App\DataBase\Models\Categoria;
 
-class AdminProduto extends Admin
+class AdminProdutoController extends Admin
 {
   public function categoria()
   {
