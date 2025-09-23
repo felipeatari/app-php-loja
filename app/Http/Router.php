@@ -17,6 +17,7 @@ class Router
   private string|Closure $controller;
   private string|Closure $method;
   private string $uri;
+  private string $prefix = '';
 
   public function __construct()
   {
@@ -27,6 +28,16 @@ class Router
   public static function redirect(string $route): void
   {
     header('Location: ' . URL . $route);die;
+  }
+
+  public function group(string $prefix = ''): void
+  {
+    $this->prefix = $prefix;
+  }
+
+  public function endGroup(): void
+  {
+    $this->prefix = '';
   }
 
   private function convertUrlStrToUrlArr(string $url = null): array
@@ -41,6 +52,10 @@ class Router
 
   private function addRoute(string $httpMethod, string $route, string|Closure $action)
   {
+    if ($this->prefix) {
+      $route = '/' . trim($this->prefix, '/') . '/' . trim($route, '/');
+    }
+
     $this->routes[] = [
       'http_method' => $httpMethod,
       'route' => $route,
@@ -48,39 +63,29 @@ class Router
     ];
   }
 
-  public function get(string $route, string|Closure $action)
+  public function get(string $route = '/', string|Closure $action)
   {
     $this->addRoute('get', $route, $action);
   }
 
-  public function post(string $route, string|Closure $action)
+  public function post(string $route = '/', string|Closure $action)
   {
     $this->addRoute('post', $route, $action);
   }
 
-  public function put(string $route, string|Closure $action)
+  public function put(string $route = '/', string|Closure $action)
   {
     $this->addRoute('put', $route, $action);
   }
 
-  public function patch(string $route, string|Closure $action)
+  public function patch(string $route = '/', string|Closure $action)
   {
     $this->addRoute('patch', $route, $action);
   }
 
-  public function delete(string $route, string|Closure $action)
+  public function delete(string $route = '/', string|Closure $action)
   {
     $this->addRoute('delete', $route, $action);
-  }
-
-  public function head(string $route, string|Closure $action)
-  {
-    $this->addRoute('head', $route, $action);
-  }
-
-  public function options(string $route, string|Closure $action)
-  {
-    $this->addRoute('options', $route, $action);
   }
 
   private function makeRouter(string|Closure $action, array $params = []): void
@@ -92,11 +97,11 @@ class Router
       $this->method = $action;
     }
     else {
-      $action = explode('->', $action);
+      $action = explode('@', $action);
 
       $controller = ucfirst($action[0]);
 
-      $namespace = 'App\\Controllers\\' . $controller . 'Controller';
+      $namespace = 'App\\Controllers\\' . $controller;
 
       $this->controllers[] = $namespace;
       $this->method = $action[1];
@@ -220,7 +225,7 @@ class Router
       die(Error::error($this->httpStatusCode, $messageError));
     }
 
-    if ($this->callback or $this->api) {
+    if ($this->callback) {
 
       return call_user_func_array($this->method, $this->params) ?? '';
     }

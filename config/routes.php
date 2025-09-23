@@ -1,38 +1,35 @@
 <?php
 
 // Rotas da main
-$router->get('/', 'Home->index');
-$router->get('/teste', 'Teste->index');
-$router->get('/login', 'Login->index');
-$router->get('/produtos', 'Produto->full_products');
-$router->get('/produto/id/{id}', 'Produto->see_product');
-$router->post('/entrar', function(){
-  pr($_GET);
-  pr($_POST);
-  die;
-});
+$router->get('/', 'HomeController@index');
+// $router->get('/teste', 'TesteController@index');
+// $router->get('/login', 'LoginController@index');
+// $router->get('/produtos', 'ProdutoController@full_products');
+// $router->get('/produto/id/{id}', 'ProdutoController@see_product');
+// $router->post('/entrar', function(){
+//   pr($_GET);
+//   pr($_POST);
+//   die;
+// });
 
 // Rotas do admin
-$router->get('/admin', 'AdminHome->index');
-$router->get('/admin/produto/categorias', 'AdminProduto->categoria');
-$router->post('/admin/produto/categorias', 'AdminProduto->categoria');
-$router->get('/admin/produto/listar', 'AdminProduto->listar');
-$router->get('/admin/produto/cadastrar', 'AdminProduto->cadastrar');
-$router->post('/admin/produto/salvar', 'AdminProduto->salvar');
+// $router->get('/admin', 'AdminHomeController@index');
+// $router->get('/admin/produto/categorias', 'AdminProdutoController@categoria');
+// $router->post('/admin/produto/categorias', 'AdminProdutoController@categoria');
+// $router->get('/admin/produto/listar', 'AdminProdutoController@listar');
+// $router->get('/admin/produto/cadastrar', 'AdminProdutoController@cadastrar');
+// $router->post('/admin/produto/salvar', 'AdminProdutoController@salvar');
 
 // Rotas de teste
-$router->get('/teste', 'Teste->index');
-$router->get('/teste/db/find', 'Teste->find');
-$router->get('/teste/db/save', 'Teste->save');
-$router->get('/teste/db/delete/{id}', 'Teste->delete');
-$router->get('/api/v1/teste', fn()=> (new App\Controllers\ApiTesteController)->index());
+// $router->get('/teste', 'TesteController@index');
+// $router->get('/teste/db/find', 'TesteController@find');
+// $router->get('/teste/db/save', 'TesteController@save');
+// $router->get('/teste/db/delete/{id}', 'TesteController@delete');
+// $router->get('/api/v1/teste', fn()=> (new App\Controllers\ApiTesteController)->index());
 
-$router->get('api/teste', fn()=> (new App\Controllers\ApiTesteController)->get());
-$router->post('api/teste', fn()=> (new App\Controllers\ApiTesteController)->post());
-$router->put('api/teste', fn()=> (new App\Controllers\ApiTesteController)->put());
-$router->delete('api/teste', fn()=> (new App\Controllers\ApiTesteController)->delete());
-
-// $router->get('api/teste', 'ApiTeste->get');
-// $router->post('api/teste', 'ApiTeste->post');
-// $router->put('api/teste', 'ApiTeste->put');
-// $router->delete('api/teste', 'ApiTeste->delete');
+$router->group('api/teste');
+$router->get('/', 'ApiTesteController@get');
+$router->post('/', 'ApiTesteController@post');
+$router->put('/', 'ApiTesteController@put');
+$router->delete('/', 'ApiTesteController@delete');
+$router->endGroup();
